@@ -57,4 +57,16 @@ public class Card {
 
         return payload;
     }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
 }

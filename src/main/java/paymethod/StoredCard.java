@@ -20,4 +20,8 @@ public class StoredCard {
 
         return payload;
     }
+
+    public String getToken() {
+        return token;
+    }
 }

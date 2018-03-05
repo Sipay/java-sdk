@@ -23,4 +23,8 @@ public class FastPay {
 
         return payload;
     }
+
+    public String getToken() {
+        return token;
+    }
 }
