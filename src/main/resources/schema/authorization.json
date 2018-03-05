@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Authorization",
+  "description": "Send a request of authorization to Sipay",
+  "type": "object",
+  "properties": {
+    "amount": {
+      "type": "integer"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "order": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,64}$"
+    },
+    "reconciliation": {
+      "type": "string",
+      "pattern": "^[0-9]{4}[a-zA-Z0-9]{0,8}$"
+    },
+    "custom_01": {
+      "type": "string"
+    },
+    "custom_02": {
+      "type": "string"
+    },
+    "token": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,128}$"
+    }
+  },
+  "required": [
+    "amount",
+    "currency"
+  ]
+}

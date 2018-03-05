@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Query",
+  "description": "Send a query to Sipay",
+  "type": "object",
+  "properties": {
+    "order": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,64}$"
+    },
+    "transaction_id": {
+      "type": "string",
+      "pattern": "^[0-9]{6,22}$"
+    }
+  },
+  "required": [
+    "transaction_id"
+  ]
+}

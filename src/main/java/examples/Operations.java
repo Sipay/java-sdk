@@ -13,7 +13,7 @@ public class Operations {
         String path = "config.properties";
         Ecommerce ecommerce = new Ecommerce(path);
 
-        String panExample = "6712009000000205";
+        String panExample = "4242424242424242";
         JSONObject payload = new JSONObject();
         payload.put("custom_01", "custom_01");
         payload.put("token", "2977e78d1e3e4c9fa6b70");
@@ -68,7 +68,7 @@ public class Operations {
 
         // region * Almacenar tarjeta en Sipay
         FastPay card6 = new FastPay("9f6f143b76f647599560e99975692628");
-//        Card card = new Card(panExample, 2018, 3);
+        // Card card = new Card(panExample, 2018, 3);
 
         JSONObject register = ecommerce.register(card, "newtoken");
         printResult(register);
