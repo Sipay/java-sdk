@@ -63,7 +63,7 @@ public class Ecommerce {
         this.mode = config.getProperty("mode");
         this.connection = Integer.parseInt(config.getProperty("connection"));
         this.process = Integer.parseInt(config.getProperty("process"));
-        this.logger = getLogger();
+        this.logger = getLogger(this.file, this.level, this.maxFileSize, this.backupFileRotation);
     }
 
     private static String capitalize(String input) {
@@ -159,14 +159,14 @@ public class Ecommerce {
         }
     }
 
-    private Logger getLogger() {
+    private Logger getLogger(String file, String level, Integer maxFileSize, Integer backupFileRotation) {
         Logger logger = Logger.getLogger(Ecommerce.class.getName());
         FileHandler fh;
 
         try {
-            fh = new FileHandler(this.file, this.maxFileSize, this.backupFileRotation, true);
+            fh = new FileHandler(file, maxFileSize, backupFileRotation, true);
             logger.addHandler(fh);
-            logger.setLevel(Level.parse(this.level.toUpperCase()));
+            logger.setLevel(Level.parse(level.toUpperCase()));
 
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
