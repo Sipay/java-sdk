@@ -3,28 +3,29 @@ package ecommerce;
 import catalogs.Currency;
 
 public class Amount {
-    String amount;
+    int amount;
     String currency;
 
     public Amount(String amount, String currency) {
         Currency currencies = new Currency();
 
-        if (Integer.parseInt(amount) <= 0) {
-            throw new java.lang.RuntimeException("Value of amount is incorrect.");
-        }
-
-        Object result = currencies.find(currency);
+        String[] result = ((String[]) currencies.find(currency));
         if (result == null) {
             throw new java.lang.RuntimeException("Value of currency is incorrect.");
         }
 
-//        StringBuilder str = new StringBuilder(amount);
-//        this.amount = str.insert(2 - 1, '.').toString();
-        this.amount = amount;
+        if (amount.matches("^([0-9]+\\.[0-9]+)$") && Character.toString(amount.charAt(Integer.parseInt(result[2]) - 1)).equals(".")) {
+            this.amount = Integer.parseInt(amount.replace(".", ""));
+        } else if (amount.matches("^([0-9]+)$")) {
+            this.amount = Integer.parseInt(amount);
+        } else {
+            throw new java.lang.RuntimeException("Value of " + amount + " is incorrect.");
+        }
+
         this.currency = currency;
     }
 
-    public Amount(Double amount, String currency) {
+    public Amount(int amount, String currency) {
         Currency currencies = new Currency();
 
         if (amount <= 0) {
@@ -36,7 +37,7 @@ public class Amount {
             throw new java.lang.RuntimeException("Value of currency is incorrect.");
         }
 
-        this.amount = Double.toString(amount);
+        this.amount = amount;
         this.currency = currency;
     }
 }

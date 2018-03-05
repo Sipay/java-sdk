@@ -185,7 +185,7 @@ public class Ecommerce {
         // Validar metodo de pago
         validatePayMethod(payMethod);
 
-        payload.put("amount", Double.parseDouble(amount.amount));
+        payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
 
         // Actualizar con los datos de la tarjeta
@@ -220,7 +220,7 @@ public class Ecommerce {
      */
     public JSONObject refund(Object method, Amount amount, JSONObject payload) {
 
-        payload.put("amount", Double.parseDouble(amount.amount));
+        payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
 
         String transactionId = ((String) payload.opt("transactionId"));
