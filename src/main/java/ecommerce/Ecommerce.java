@@ -64,130 +64,6 @@ public class Ecommerce {
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 
-    /**
-     * Send a request of authorization to Sipay.
-     *
-     * @param payMethod: payment method of authorization (it can be an object of Card, StoredCard or FastPay).
-     * @param amount:    amount of the operation.
-     * @param payload:   {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
-     *                   custom_02: custom field 2, token: if this argument is set, it register payMethod with this token}
-     * @return Authorization: object that contain response of MDWR API
-     */
-    public JSONObject authorization(Object payMethod, Amount amount, JSONObject payload) {
-        // Validar metodo de pago
-        validatePayMethod(payMethod);
-
-        payload.put("amount", Double.parseDouble(amount.amount));
-        payload.put("currency", amount.currency);
-
-//      Actualizar con los datos de la tarjeta
-        payload = updatePayload(payMethod, payload);
-
-        return send(payload, "authorization");
-    }
-
-    /**
-     * Send a request of cancellation to Sipay.
-     *
-     * @param transactionId: identificator of transaction.
-     * @return Cancellation(Response): object that contain response of MDWR API
-     */
-    public JSONObject cancellation(String transactionId) {
-
-        JSONObject payload = new JSONObject();
-        payload.put("transactiond", transactionId);
-
-        return send(payload, "cancellation");
-    }
-
-    /**
-     * Send a request of refund to Sipay.
-     *
-     * @param method:  payment method
-     * @param amount:  amount of the operation.
-     * @param payload: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
-     *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token,
-     *                 transactionId: identificator of transaction        }
-     * @return Refund: object that contain response of MDWR API.
-     */
-    public JSONObject refund(Object method, Amount amount, JSONObject payload) {
-
-        payload.put("amount", Double.parseDouble(amount.amount));
-        payload.put("currency", amount.currency);
-
-        String transactionId = ((String) payload.opt("transactionId"));
-        if (transactionId == null && method == null || transactionId != null && method != null) {
-            logger.severe("Incorrect identificator.");
-            throw new java.lang.RuntimeException("Incorrect identificator.");
-        } else if (transactionId != null) {
-            payload.put("transaction_id", transactionId);
-        } else {
-            payload = updatePayload(method, payload);
-        }
-
-        return send(payload, "refund");
-    }
-
-    /**
-     * Send a request of register to Sipay.
-     *
-     * @param card:  Card that register.
-     * @param token: token will be associate to card.
-     * @return Register: object that contain response of MDWR API.
-     */
-    public JSONObject register(Object card, String token) {
-
-        JSONObject payload = new JSONObject();
-        payload.put("token", token);
-        payload = updatePayload(card, payload);
-
-        return send(payload, "register");
-    }
-
-    /**
-     * Send a request of remove a registry of a token to Sipay.
-     *
-     * @param token: token of a card.
-     * @return Unregister: object that contain response of MDWR API.
-     */
-    public JSONObject unregister(String token) {
-
-        JSONObject payload = new JSONObject();
-        payload.put("token", token);
-
-        return send(payload, "unregister");
-    }
-
-    /**
-     * Send a request for search a card in Sipay.
-     *
-     * @param token: token of card.
-     * @return Card(Response): object that contain response of MDWR API.
-     */
-    public JSONObject card(String token) {
-
-        JSONObject payload = new JSONObject();
-        payload.put("token", token);
-
-        return send(payload, "card");
-    }
-
-    /**
-     * Send a query to Sipay.
-     *
-     * @param transactionId: identificator of transaction.
-     * @param order:         ticket of the operation.
-     * @return Query: object that contain response of MDWR API.
-     */
-    public JSONObject query(String transactionId, String order) {
-
-        JSONObject payload = new JSONObject();
-        payload.put("transaction_id", transactionId);
-        payload.put("order", order);
-
-        return send(payload, "query");
-    }
-
     private JSONObject send(JSONObject payload, String endpoint) {
 
         logger.info("Start send to endpoint " + endpoint);
@@ -294,5 +170,129 @@ public class Ecommerce {
             logger.severe(e.getMessage());
             throw new java.lang.RuntimeException(e.getMessage());
         }
+    }
+
+    /**
+     * Send a request of authorization to Sipay.
+     *
+     * @param payMethod: payment method of authorization (it can be an object of Card, StoredCard or FastPay).
+     * @param amount:    amount of the operation.
+     * @param payload:   {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
+     *                   custom_02: custom field 2, token: if this argument is set, it register payMethod with this token}
+     * @return Authorization: object that contain response of MDWR API
+     */
+    public JSONObject authorization(Object payMethod, Amount amount, JSONObject payload) {
+        // Validar metodo de pago
+        validatePayMethod(payMethod);
+
+        payload.put("amount", Double.parseDouble(amount.amount));
+        payload.put("currency", amount.currency);
+
+        // Actualizar con los datos de la tarjeta
+        payload = updatePayload(payMethod, payload);
+
+        return send(payload, "authorization");
+    }
+
+    /**
+     * Send a request of cancellation to Sipay.
+     *
+     * @param transactionId: identificator of transaction.
+     * @return Cancellation(Response): object that contain response of MDWR API
+     */
+    public JSONObject cancellation(String transactionId) {
+
+        JSONObject payload = new JSONObject();
+        payload.put("transaction_id", transactionId);
+
+        return send(payload, "cancellation");
+    }
+
+    /**
+     * Send a request of refund to Sipay.
+     *
+     * @param method:  payment method
+     * @param amount:  amount of the operation.
+     * @param payload: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
+     *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token,
+     *                 transactionId: identificator of transaction        }
+     * @return Refund: object that contain response of MDWR API.
+     */
+    public JSONObject refund(Object method, Amount amount, JSONObject payload) {
+
+        payload.put("amount", Double.parseDouble(amount.amount));
+        payload.put("currency", amount.currency);
+
+        String transactionId = ((String) payload.opt("transactionId"));
+        if (transactionId == null && method == null || transactionId != null && method != null) {
+            logger.severe("Incorrect identificator.");
+            throw new java.lang.RuntimeException("Incorrect identificator.");
+        } else if (transactionId != null) {
+            payload.put("transaction_id", transactionId);
+        } else {
+            payload = updatePayload(method, payload);
+        }
+
+        return send(payload, "refund");
+    }
+
+    /**
+     * Send a request of register to Sipay.
+     *
+     * @param card:  Card that register.
+     * @param token: token will be associate to card.
+     * @return Register: object that contain response of MDWR API.
+     */
+    public JSONObject register(Object card, String token) {
+
+        JSONObject payload = new JSONObject();
+        payload.put("token", token);
+        payload = updatePayload(card, payload);
+
+        return send(payload, "register");
+    }
+
+    /**
+     * Send a request of remove a registry of a token to Sipay.
+     *
+     * @param token: token of a card.
+     * @return Unregister: object that contain response of MDWR API.
+     */
+    public JSONObject unregister(String token) {
+
+        JSONObject payload = new JSONObject();
+        payload.put("token", token);
+
+        return send(payload, "unregister");
+    }
+
+    /**
+     * Send a request for search a card in Sipay.
+     *
+     * @param token: token of card.
+     * @return Card(Response): object that contain response of MDWR API.
+     */
+    public JSONObject card(String token) {
+
+        JSONObject payload = new JSONObject();
+        payload.put("token", token);
+
+        return send(payload, "card");
+    }
+
+    /**
+     * Send a query to Sipay.
+     *
+     * @param transactionId: identificator of transaction.
+     * @param order:         ticket of the operation.
+     * @return Query: object that contain response of MDWR API.
+     */
+    public JSONObject query(String transactionId, String order) {
+
+        JSONObject payload = new JSONObject();
+        payload.put("transaction_id", transactionId);
+        payload.put("order", order);
+
+        return send(payload, "query");
     }
 }
