@@ -44,4 +44,21 @@ public class Amount {
         this.amount = amount;
         this.currency = currency;
     }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public String get() {
+        String[] result = ((String[]) new Currency().find(this.currency));
+
+        StringBuilder str = new StringBuilder(Integer.toString(this.amount));
+        str.insert(Integer.parseInt(result[2]) - 1, '.');
+
+        return str.toString() + " " + this.currency;
+    }
 }

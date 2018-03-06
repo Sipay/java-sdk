@@ -1,5 +1,6 @@
 package ecommerce.responses;
 
+import ecommerce.Amount;
 import org.json.JSONObject;
 
 public class Refund extends Response {
@@ -12,6 +13,7 @@ public class Refund extends Response {
     String order;
     String reconciliation;
     String transactionId;
+    Amount amount;
 
     public Refund(JSONObject resp) {
         super(resp);
@@ -26,6 +28,10 @@ public class Refund extends Response {
             this.order = getValue(payload.opt("order"));
             this.reconciliation = getValue(payload.opt("reconciliation"));
             this.transactionId = getValue(payload.opt("transaction_id"));
+
+            if (getValue(payload.opt("amount")) != null && getValue(payload.opt("currency")) != null) {
+                this.amount = new Amount(Integer.parseInt(getValue(payload.opt("amount"))), getValue(payload.opt("currency")));
+            }
         }
     }
 }
