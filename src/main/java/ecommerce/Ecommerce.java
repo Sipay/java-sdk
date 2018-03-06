@@ -236,10 +236,11 @@ public class Ecommerce {
 
     /**
      * Send a request of refund to Sipay.
+     *
      * @param transactionId: transactionId: identificator of transaction
-     * @param amount:  amount of the operation.
-     * @param payload: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
-     *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token }
+     * @param amount:        amount of the operation.
+     * @param payload:       {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
+     *                       custom_02: custom field 2, token: if this argument is set, it register payMethod with this token }
      * @return Refund: object that contain response of MDWR API.
      */
     public Refund refund(String transactionId, Amount amount, JSONObject payload) {
@@ -317,16 +318,16 @@ public class Ecommerce {
     /**
      * Send a query to Sipay.
      *
-     * @param transactionId: identificator of transaction.
-     * @param order:         ticket of the operation.
+     * @param payload: {transactionId: identificator of transaction, order: ticket of the operation.}
      * @return Query: object that contain response of MDWR API.
      */
-    public Query query(String transactionId, String order) {
+    public Query query(JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
-        JSONObject payload = new JSONObject();
-        payload.put("transaction_id", transactionId);
-        payload.put("order", order);
+        if (payload.opt("transaction_id") == null && payload.opt("order") == null || payload.opt("transaction_id") != null && payload.opt("order") != null) {
+            logger.severe("Incorrect query.");
+            throw new java.lang.RuntimeException("Incorrect query.");
+        }
 
         validateSchema(methodName, payload);
 

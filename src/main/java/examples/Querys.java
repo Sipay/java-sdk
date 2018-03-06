@@ -4,6 +4,7 @@ import ecommerce.Ecommerce;
 import ecommerce.responses.Card;
 import ecommerce.responses.Query;
 import ecommerce.responses.Transaction;
+import org.json.JSONObject;
 
 public class Querys {
 
@@ -23,7 +24,10 @@ public class Querys {
         // endregion
 
         // region * Consultar operación por id
-        Query query = ecommerce.query("000097485106184565651", null);
+        JSONObject payload = new JSONObject();
+        payload.put("transaction_id", "000097485106184565651");
+
+        Query query = ecommerce.query(payload);
         if (query == null) {
             System.out.println("Fallo al consultar la tarjeta, Error al conectar con el servicio");
         } else if (query.getCode() != 0) {
@@ -38,7 +42,10 @@ public class Querys {
         // endregion
 
         // region * Consultar operación por ticket
-        Query query2 = ecommerce.query(null, "435890fb684443628152fb7ba998d1d0");
+        JSONObject payload2 = new JSONObject();
+        payload2.put("order", "435890fb684443628152fb7ba998d1d0");
+
+        Query query2 = ecommerce.query(payload2);
         if (query2 == null) {
             System.out.println("Fallo al consultar la tarjeta, Error al conectar con el servicio");
         } else if (query2.getCode() != 0) {
