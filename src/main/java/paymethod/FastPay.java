@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import java.util.regex.Pattern;
 
-public class FastPay {
+public class FastPay implements PayMethod {
     String token;
 
     public FastPay(String token) {

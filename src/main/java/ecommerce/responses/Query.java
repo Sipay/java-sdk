@@ -22,4 +22,8 @@ public class Query extends Response {
             }
         }
     }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
 }

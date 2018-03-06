@@ -2,6 +2,7 @@ package examples;
 
 import ecommerce.Amount;
 import ecommerce.Ecommerce;
+import ecommerce.responses.*;
 import org.json.JSONObject;
 import paymethod.Card;
 import paymethod.FastPay;
@@ -23,8 +24,15 @@ public class Operations {
         Amount amount = new Amount("100", "EUR");
         Card card = new Card(panExample, 2018, 3);
 
-        JSONObject auth = ecommerce.authorization(card, amount, payload);
-        printResult(auth);
+        Authorization auth = ecommerce.authorization(card, amount, payload);
+        if (auth == null) {
+            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+        } else if (auth.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + auth.getDescription());
+        } else {
+            System.out.println("Operación procesada correctamente");
+        }
+
         // endregion
 
         // region * Pago de 4.56 euros con tarjeta ya almacenada en Sipay
@@ -32,8 +40,14 @@ public class Operations {
         String token = "2977e78d1e3e4c9fa6b70";
         StoredCard card2 = new StoredCard(token);
 
-        JSONObject auth2 = ecommerce.authorization(card2, amount2, payload);
-        printResult(auth2);
+        Authorization auth2 = ecommerce.authorization(card2, amount2, payload);
+        if (auth2 == null) {
+            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+        } else if (auth2.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + auth2.getDescription());
+        } else {
+            System.out.println("Operación procesada correctamente");
+        }
         // endregion
 
         //region * Pago de 2.34 euros con tarjeta ya almacenada en Sipay mediante FastPay
@@ -41,52 +55,77 @@ public class Operations {
         String tokenFastPay = "6d4f7cc37275417f844f2bce8fd4ac55";
         FastPay card3 = new FastPay(tokenFastPay);
 
-        JSONObject auth3 = ecommerce.authorization(card3, amount3, payload);
-        printResult(auth3);
+        Authorization auth3 = ecommerce.authorization(card3, amount3, payload);
+        if (auth3 == null) {
+            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+        } else if (auth3.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + auth3.getDescription());
+        } else {
+            System.out.println("Operación procesada correctamente");
+        }
         // endregion
 
         // region * Cancelar el pago con tarjeta (auth)
-        JSONObject cancel = ecommerce.cancellation("000097485106184538988");
-        printResult(cancel);
+        Cancellation cancel = ecommerce.cancellation("000097485106184538988");
+        if (cancel == null) {
+            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+        } else if (cancel.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + cancel.getDescription());
+        } else {
+            System.out.println("Operación procesada correctamente");
+        }
         // endregion
 
         // region * Hacer una devolución con tarjeta de 28.60 euros
         Amount amount4 = new Amount("2860", "EUR");
         FastPay card5 = new FastPay("9f6f143b76f647599560e99975692628");
 
-        JSONObject refund2 = ecommerce.refund(card5, amount4, payload);
-        printResult(refund2);
+        Refund refund = ecommerce.refund(card5, amount4, payload);
+        if (refund == null) {
+            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+        } else if (refund.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + refund.getDescription());
+        } else {
+            System.out.println("Operación procesada correctamente");
+        }
         // endregion
 
         // region * Hacer una devolución con identificador de transacción de 8.34 euros
         Amount amount5 = new Amount("834", "EUR");
 
-        payload.put("transactionId", "000097485106184538982");
-        JSONObject refund = ecommerce.refund(null, amount5, payload);
-        printResult(refund);
+        Refund refund2 = ecommerce.refund("000097485106184538982", amount5, payload);
+        if (refund2 == null) {
+            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+        } else if (refund2.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + refund2.getDescription());
+        } else {
+            System.out.println("Operación procesada correctamente");
+        }
         // endregion
 
         // region * Almacenar tarjeta en Sipay
         FastPay card6 = new FastPay("9f6f143b76f647599560e99975692628");
         // Card card = new Card(panExample, 2018, 3);
 
-        JSONObject register = ecommerce.register(card, "newtoken");
-        printResult(register);
-        // endregion
-
-        // region * Borrar tarjeta de Sipay
-        JSONObject unregister = ecommerce.unregister("newtoken");
-        printResult(unregister);
-        // endregion
-    }
-
-    private static void printResult(JSONObject auth) {
-        if (auth == null) {
+        Register register = ecommerce.register(card, "newtoken");
+        if (register == null) {
             System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
-        } else if (Integer.parseInt(auth.optString("code")) != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + auth.opt("description").toString());
+        } else if (register.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + register.getDescription());
         } else {
             System.out.println("Operación procesada correctamente");
         }
+        // endregion
+
+        // region * Borrar tarjeta de Sipay
+        Unregister unregister = ecommerce.unregister("newtoken");
+        if (unregister == null) {
+            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+        } else if (unregister.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + unregister.getDescription());
+        } else {
+            System.out.println("Operación procesada correctamente");
+        }
+        // endregion
     }
 }

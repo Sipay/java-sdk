@@ -26,4 +26,28 @@ public class Response {
             return value.toString();
         }
     }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
 }

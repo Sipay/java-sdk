@@ -41,4 +41,56 @@ public class Transaction {
             return value.toString();
         }
     }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public String getInternalCode() {
+        return internalCode;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public String getAuthorizationId() {
+        return authorizationId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getMaskedCard() {
+        return maskedCard;
+    }
+
+    public String getOperationName() {
+        return operationName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }

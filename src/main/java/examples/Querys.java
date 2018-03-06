@@ -1,8 +1,9 @@
 package examples;
 
-import com.google.gson.JsonArray;
 import ecommerce.Ecommerce;
-import org.json.JSONObject;
+import ecommerce.responses.Card;
+import ecommerce.responses.Query;
+import ecommerce.responses.Transaction;
 
 public class Querys {
 
@@ -11,38 +12,44 @@ public class Querys {
         Ecommerce ecommerce = new Ecommerce(path);
 
         // region * Consultar tarjeta
-        JSONObject cardResp = ecommerce.card("2977e78d1e3e4c9fa6b70");
-        printResult(cardResp);
+        Card cardResp = ecommerce.card("2977e78d1e3e4c9fa6b70");
+        if (cardResp == null) {
+            System.out.println("Fallo al consultar la tarjeta, Error al conectar con el servicio");
+        } else if (cardResp.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + cardResp.getDescription());
+        } else {
+            System.out.println("Consulta procesada correctamente.");
+        }
         // endregion
 
         // region * Consultar operación por id
-        JSONObject query = ecommerce.query("000097485106184538992", null);
-        printResult(query);
+        Query query = ecommerce.query("000097485106184565651", null);
+        if (query == null) {
+            System.out.println("Fallo al consultar la tarjeta, Error al conectar con el servicio");
+        } else if (query.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + query.getDescription());
+        } else {
+            System.out.println("Consulta procesada correctamente.");
+        }
 
-        JsonArray items = ((JsonArray) query.opt("transactions"));
-        for (int i = 0; i < items.size(); i++) {
-            System.out.println(items.get(i));
+        for (Transaction item : query.getTransactions()) {
+            System.out.println("Transaction: " + item.getChannelName() + "," + item.getMethodName() + "," + item.getDescription());
         }
         // endregion
 
         // region * Consultar operación por ticket
-        JSONObject query2 = ecommerce.query(null, "0fbec7a7739f4164816a96406e63389a");
-        printResult(query2);
-
-        JsonArray items2 = ((JsonArray) query2.opt("transactions"));
-        for (int i = 0; i < items2.size(); i++) {
-            System.out.println(items2.get(i));
-        }
-        // endregion
-    }
-
-    private static void printResult(JSONObject query) {
-        if (query == null) {
+        Query query2 = ecommerce.query(null, "435890fb684443628152fb7ba998d1d0");
+        if (query2 == null) {
             System.out.println("Fallo al consultar la tarjeta, Error al conectar con el servicio");
-        } else if (Integer.parseInt(query.opt("code").toString()) != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + query.opt("description"));
+        } else if (query2.getCode() != 0) {
+            System.out.println("Fallo al realizar la operación, Error: " + query2.getDescription());
         } else {
             System.out.println("Consulta procesada correctamente.");
         }
+
+        for (Transaction item : query2.getTransactions()) {
+            System.out.println(item.getChannelName() + "," + item.getMethodName() + "," + item.getDescription());
+        }
+        // endregion
     }
 }

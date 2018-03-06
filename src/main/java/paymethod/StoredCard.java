@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import java.util.regex.Pattern;
 
-public class StoredCard {
+public class StoredCard implements PayMethod {
     String token;
 
     public StoredCard(String token) {

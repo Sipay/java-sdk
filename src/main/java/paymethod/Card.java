@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.regex.Pattern;
 
-public class Card {
+public class Card implements PayMethod {
 
     String cardNumber;
     int year;
@@ -18,6 +18,19 @@ public class Card {
 
         this.cardNumber = cardNumber;
         setExpirationDate(year, month);
+    }
+
+    private boolean isExpired() {
+        boolean error = false;
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH) + 1;
+        int year = cal.get(Calendar.YEAR);
+
+        if (this.year < year || (this.year == year && this.month < month)) {
+            error = true;
+        }
+
+        return error;
     }
 
     private void setExpirationDate(int year, int month) {
@@ -35,19 +48,6 @@ public class Card {
         if (isExpired()) {
             throw new java.lang.RuntimeException("Card is expired.");
         }
-    }
-
-    private boolean isExpired() {
-        boolean error = false;
-        Calendar cal = Calendar.getInstance();
-        int month = cal.get(Calendar.MONTH) + 1;
-        int year = cal.get(Calendar.YEAR);
-
-        if (this.year < year || (this.year == year && this.month < month)) {
-            error = true;
-        }
-
-        return error;
     }
 
     public JSONObject update(JSONObject payload) {

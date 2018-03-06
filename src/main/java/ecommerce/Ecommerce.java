@@ -6,8 +6,8 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
-import com.google.gson.Gson;
 import config.Config;
+import ecommerce.responses.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -17,13 +17,11 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+import paymethod.PayMethod;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
@@ -66,10 +64,6 @@ public class Ecommerce {
         this.logger = getLogger(this.file, this.level, this.maxFileSize, this.backupFileRotation);
     }
 
-    private static String capitalize(String input) {
-        return input.substring(0, 1).toUpperCase() + input.substring(1);
-    }
-
     private JSONObject send(JSONObject payload, String endpoint) {
 
         logger.info("Start send to endpoint " + endpoint);
@@ -91,11 +85,7 @@ public class Ecommerce {
 
             HttpResponse resp = client.execute(post);
 
-            Class<?> cls = Class.forName("ecommerce.responses." + capitalize(endpoint));
-            Constructor constructor = cls.getConstructor(JSONObject.class);
-            Object object = constructor.newInstance(new JSONObject(EntityUtils.toString(resp.getEntity())));
-            response = new JSONObject(new Gson().toJson(object));
-
+            response = new JSONObject(EntityUtils.toString(resp.getEntity()));
         } catch (Exception E) {
             logger.severe("Exception: " + E.getMessage());
             response.put("url", path);
@@ -118,30 +108,6 @@ public class Ecommerce {
         params.put("payload", payload);
 
         return params;
-    }
-
-    private void validatePayMethod(Object payMethod) {
-        try {
-            Class.forName("paymethod." + payMethod.getClass().getSimpleName());
-        } catch (ClassNotFoundException e) {
-            logger.severe("PayMethod isn't a PayMethod");
-            throw new java.lang.RuntimeException("PayMethod isn't a PayMethod");
-        }
-    }
-
-    private JSONObject updatePayload(Object payMethod, JSONObject payload) {
-        Class<?> payMethodClass = payMethod.getClass();
-        for (final Method method : payMethodClass.getDeclaredMethods()) {
-            try {
-                if (method.getName().equals("update")) {
-                    method.invoke(payMethod, payload);
-                }
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                logger.severe(e.getMessage());
-            }
-        }
-
-        return payload;
     }
 
     private String generateSignature(String body) {
@@ -211,21 +177,17 @@ public class Ecommerce {
      *                   custom_02: custom field 2, token: if this argument is set, it register payMethod with this token}
      * @return Authorization: object that contain response of MDWR API
      */
-    public JSONObject authorization(Object payMethod, Amount amount, JSONObject payload) {
+    public Authorization authorization(PayMethod payMethod, Amount amount, JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-
-        // Validar metodo de pago
-        validatePayMethod(payMethod);
 
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
 
         validateSchema(methodName, payload);
 
-        // Actualizar con los datos de la tarjeta
-        payload = updatePayload(payMethod, payload);
+        payload = payMethod.update(payload);
 
-        return send(payload, methodName);
+        return new Authorization(send(payload, methodName));
     }
 
     /**
@@ -234,7 +196,7 @@ public class Ecommerce {
      * @param transactionId: identificator of transaction.
      * @return Cancellation(Response): object that contain response of MDWR API
      */
-    public JSONObject cancellation(String transactionId) {
+    public Cancellation cancellation(String transactionId) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
@@ -242,7 +204,7 @@ public class Ecommerce {
 
         validateSchema(methodName, payload);
 
-        return send(payload, methodName);
+        return new Cancellation(send(payload, methodName));
     }
 
     /**
@@ -251,11 +213,10 @@ public class Ecommerce {
      * @param method:  payment method
      * @param amount:  amount of the operation.
      * @param payload: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
-     *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token,
-     *                 transactionId: identificator of transaction        }
+     *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token }
      * @return Refund: object that contain response of MDWR API.
      */
-    public JSONObject refund(Object method, Amount amount, JSONObject payload) {
+    public Refund refund(PayMethod method, Amount amount, JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         payload.put("amount", amount.amount);
@@ -263,17 +224,40 @@ public class Ecommerce {
 
         validateSchema(methodName, payload);
 
-        String transactionId = ((String) payload.opt("transactionId"));
-        if (transactionId == null && method == null || transactionId != null && method != null) {
+        if (payload.opt("transactionId") == null && method == null) {
             logger.severe("Incorrect identificator.");
             throw new java.lang.RuntimeException("Incorrect identificator.");
-        } else if (transactionId != null) {
-            payload.put("transaction_id", transactionId);
         } else {
-            payload = updatePayload(method, payload);
+            payload = method.update(payload);
         }
 
-        return send(payload, methodName);
+        return new Refund(send(payload, methodName));
+    }
+
+    /**
+     * Send a request of refund to Sipay.
+     * @param transactionId: transactionId: identificator of transaction
+     * @param amount:  amount of the operation.
+     * @param payload: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
+     *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token }
+     * @return Refund: object that contain response of MDWR API.
+     */
+    public Refund refund(String transactionId, Amount amount, JSONObject payload) {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        payload.put("amount", amount.amount);
+        payload.put("currency", amount.currency);
+
+        validateSchema(methodName, payload);
+
+        if (transactionId == null) {
+            logger.severe("Incorrect identificator.");
+            throw new java.lang.RuntimeException("Incorrect identificator.");
+        } else {
+            payload.put("transaction_id", transactionId);
+        }
+
+        return new Refund(send(payload, methodName));
     }
 
     /**
@@ -283,17 +267,17 @@ public class Ecommerce {
      * @param token: token will be associate to card.
      * @return Register: object that contain response of MDWR API.
      */
-    public JSONObject register(Object card, String token) {
+    public Register register(PayMethod card, String token) {
 
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
         payload.put("token", token);
-        payload = updatePayload(card, payload);
+        payload = card.update(payload);
 
         validateSchema(methodName, payload);
 
-        return send(payload, methodName);
+        return new Register(send(payload, methodName));
     }
 
     /**
@@ -302,7 +286,7 @@ public class Ecommerce {
      * @param token: token of a card.
      * @return Unregister: object that contain response of MDWR API.
      */
-    public JSONObject unregister(String token) {
+    public Unregister unregister(String token) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
@@ -310,7 +294,7 @@ public class Ecommerce {
 
         validateSchema(methodName, payload);
 
-        return send(payload, methodName);
+        return new Unregister(send(payload, methodName));
     }
 
     /**
@@ -319,7 +303,7 @@ public class Ecommerce {
      * @param token: token of card.
      * @return Card(Response): object that contain response of MDWR API.
      */
-    public JSONObject card(String token) {
+    public Card card(String token) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
@@ -327,7 +311,7 @@ public class Ecommerce {
 
         validateSchema(methodName, payload);
 
-        return send(payload, methodName);
+        return new Card(send(payload, methodName));
     }
 
     /**
@@ -337,7 +321,7 @@ public class Ecommerce {
      * @param order:         ticket of the operation.
      * @return Query: object that contain response of MDWR API.
      */
-    public JSONObject query(String transactionId, String order) {
+    public Query query(String transactionId, String order) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
@@ -346,6 +330,6 @@ public class Ecommerce {
 
         validateSchema(methodName, payload);
 
-        return send(payload, methodName);
+        return new Query(send(payload, methodName));
     }
 }
