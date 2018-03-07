@@ -37,7 +37,7 @@ public class Querys {
         }
 
         for (Transaction item : query.getTransactions()) {
-            System.out.println("Transaction: " + item.getChannelName() + "," + item.getMethodName() + "," + item.getDescription());
+            System.out.println(item.get());
         }
         // endregion
 
@@ -55,7 +55,7 @@ public class Querys {
         }
 
         for (Transaction item : query2.getTransactions()) {
-            System.out.println(item.getChannelName() + "," + item.getMethodName() + "," + item.getDescription());
+            System.out.println(item.get());
         }
         // endregion
     }

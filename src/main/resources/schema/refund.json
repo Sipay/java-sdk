@@ -4,12 +4,6 @@
   "description": "Send a request of refund to Sipay",
   "type": "object",
   "properties": {
-    "amount": {
-      "type": "integer"
-    },
-    "currency": {
-      "type": "string"
-    },
     "order": {
       "type": "string",
       "pattern": "^[\\w-]{6,64}$"
@@ -27,10 +21,10 @@
     "token": {
       "type": "string",
       "pattern": "^[\\w-]{6,128}$"
+    },
+    "transaction_id": {
+      "type": "string",
+      "pattern": "^[0-9]{6,22}$"
     }
-  },
-  "required": [
-    "amount",
-    "currency"
-  ]
+  }
 }

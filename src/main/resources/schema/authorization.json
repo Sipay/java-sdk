@@ -4,12 +4,6 @@
   "description": "Send a request of authorization to Sipay",
   "type": "object",
   "properties": {
-    "amount": {
-      "type": "integer"
-    },
-    "currency": {
-      "type": "string"
-    },
     "order": {
       "type": "string",
       "pattern": "^[\\w-]{6,64}$"
@@ -28,9 +22,5 @@
       "type": "string",
       "pattern": "^[\\w-]{6,128}$"
     }
-  },
-  "required": [
-    "amount",
-    "currency"
-  ]
+  }
 }

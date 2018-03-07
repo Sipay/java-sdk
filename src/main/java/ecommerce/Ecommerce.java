@@ -19,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import paymethod.PayMethod;
 
+import javax.annotation.Nonnull;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
@@ -32,10 +33,6 @@ import java.util.logging.SimpleFormatter;
 
 public class Ecommerce {
 
-    String file;
-    String level;
-    Integer maxFileSize;
-    Integer backupFileRotation;
     String key;
     String secret;
     String resource;
@@ -46,13 +43,9 @@ public class Ecommerce {
     Integer process;
     Logger logger;
 
-    public Ecommerce(String path) {
+    public Ecommerce(@Nonnull String path) {
         Config config = new Config(path);
 
-        this.file = config.getProperty("file");
-        this.level = config.getProperty("level");
-        this.maxFileSize = Integer.parseInt(config.getProperty("maxFileSize"));
-        this.backupFileRotation = Integer.parseInt(config.getProperty("backupFileRotation"));
         this.key = config.getProperty("key");
         this.secret = config.getProperty("secret");
         this.resource = config.getProperty("resource");
@@ -61,10 +54,15 @@ public class Ecommerce {
         this.mode = config.getProperty("mode");
         this.connection = Integer.parseInt(config.getProperty("connection"));
         this.process = Integer.parseInt(config.getProperty("process"));
-        this.logger = getLogger(this.file, this.level, this.maxFileSize, this.backupFileRotation);
+
+        this.logger = getLogger(
+                config.getProperty("file"),
+                config.getProperty("level"),
+                Integer.parseInt(config.getProperty("maxFileSize")),
+                Integer.parseInt(config.getProperty("backupFileRotation")));
     }
 
-    private JSONObject send(JSONObject payload, String endpoint) {
+    private JSONObject send(@Nonnull JSONObject payload, @Nonnull String endpoint) {
 
         logger.info("Start send to endpoint " + endpoint);
         RequestConfig config = RequestConfig.custom().
@@ -98,7 +96,7 @@ public class Ecommerce {
         return response;
     }
 
-    private JSONObject generateBody(JSONObject payload) {
+    private JSONObject generateBody(@Nonnull JSONObject payload) {
         JSONObject params = new JSONObject();
 
         params.put("key", key);
@@ -110,7 +108,7 @@ public class Ecommerce {
         return params;
     }
 
-    private String generateSignature(String body) {
+    private String generateSignature(@Nonnull String body) {
         try {
             Mac sha256_HMAC = Mac.getInstance("Hmac" + mode);
             SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
@@ -125,7 +123,7 @@ public class Ecommerce {
         }
     }
 
-    private Logger getLogger(String file, String level, Integer maxFileSize, Integer backupFileRotation) {
+    private Logger getLogger(@Nonnull String file, @Nonnull String level, @Nonnull Integer maxFileSize, @Nonnull Integer backupFileRotation) {
         Logger logger = Logger.getLogger(Ecommerce.class.getName());
         FileHandler fh;
 
@@ -144,7 +142,7 @@ public class Ecommerce {
         }
     }
 
-    private void validateSchema(String name, JSONObject payload) {
+    private void validateSchema(@Nonnull String name, @Nonnull JSONObject payload) {
 
         try {
             ProcessingReport report;
@@ -177,14 +175,13 @@ public class Ecommerce {
      *                   custom_02: custom field 2, token: if this argument is set, it register payMethod with this token}
      * @return Authorization: object that contain response of MDWR API
      */
-    public Authorization authorization(PayMethod payMethod, Amount amount, JSONObject payload) {
+    public Authorization authorization(@Nonnull PayMethod payMethod, @Nonnull Amount amount, @Nonnull JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-
-        payload.put("amount", amount.amount);
-        payload.put("currency", amount.currency);
 
         validateSchema(methodName, payload);
 
+        payload.put("amount", amount.amount);
+        payload.put("currency", amount.currency);
         payload = payMethod.update(payload);
 
         return new Authorization(send(payload, methodName));
@@ -196,7 +193,7 @@ public class Ecommerce {
      * @param transactionId: identificator of transaction.
      * @return Cancellation(Response): object that contain response of MDWR API
      */
-    public Cancellation cancellation(String transactionId) {
+    public Cancellation cancellation(@Nonnull String transactionId) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
@@ -216,20 +213,14 @@ public class Ecommerce {
      *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token }
      * @return Refund: object that contain response of MDWR API.
      */
-    public Refund refund(PayMethod method, Amount amount, JSONObject payload) {
+    public Refund refund(@Nonnull PayMethod method, @Nonnull Amount amount, @Nonnull JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-
-        payload.put("amount", amount.amount);
-        payload.put("currency", amount.currency);
 
         validateSchema(methodName, payload);
 
-        if (payload.opt("transactionId") == null && method == null) {
-            logger.severe("Incorrect identificator.");
-            throw new java.lang.RuntimeException("Incorrect identificator.");
-        } else {
-            payload = method.update(payload);
-        }
+        payload.put("amount", amount.amount);
+        payload.put("currency", amount.currency);
+        payload = method.update(payload);
 
         return new Refund(send(payload, methodName));
     }
@@ -243,20 +234,14 @@ public class Ecommerce {
      *                       custom_02: custom field 2, token: if this argument is set, it register payMethod with this token }
      * @return Refund: object that contain response of MDWR API.
      */
-    public Refund refund(String transactionId, Amount amount, JSONObject payload) {
+    public Refund refund(@Nonnull String transactionId, @Nonnull Amount amount, @Nonnull JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        payload.put("transaction_id", transactionId);
+        validateSchema(methodName, payload);
 
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
-
-        validateSchema(methodName, payload);
-
-        if (transactionId == null) {
-            logger.severe("Incorrect identificator.");
-            throw new java.lang.RuntimeException("Incorrect identificator.");
-        } else {
-            payload.put("transaction_id", transactionId);
-        }
 
         return new Refund(send(payload, methodName));
     }
@@ -268,7 +253,12 @@ public class Ecommerce {
      * @param token: token will be associate to card.
      * @return Register: object that contain response of MDWR API.
      */
-    public Register register(PayMethod card, String token) {
+    public Register register(@Nonnull PayMethod card, @Nonnull String token) {
+
+        if (card.getClass().getName().equals("paymethod.StoredCard")) {
+            logger.severe("Incorrect payment method.");
+            throw new java.lang.RuntimeException("Incorrect payment method.");
+        }
 
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
@@ -287,7 +277,7 @@ public class Ecommerce {
      * @param token: token of a card.
      * @return Unregister: object that contain response of MDWR API.
      */
-    public Unregister unregister(String token) {
+    public Unregister unregister(@Nonnull String token) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
@@ -304,7 +294,7 @@ public class Ecommerce {
      * @param token: token of card.
      * @return Card(Response): object that contain response of MDWR API.
      */
-    public Card card(String token) {
+    public Card card(@Nonnull String token) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
@@ -321,7 +311,7 @@ public class Ecommerce {
      * @param payload: {transactionId: identificator of transaction, order: ticket of the operation.}
      * @return Query: object that contain response of MDWR API.
      */
-    public Query query(JSONObject payload) {
+    public Query query(@Nonnull JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         if (payload.opt("transaction_id") == null && payload.opt("order") == null || payload.opt("transaction_id") != null && payload.opt("order") != null) {

@@ -4,25 +4,12 @@
   "description": "Send a request of register to Sipay",
   "type": "object",
   "properties": {
-    "pan": {
-      "type": "string",
-      "pattern": "^[\\w-]{14,19}$"
-    },
-    "year": {
-      "type": "integer"
-    },
-    "month": {
-      "type": "integer"
-    },
     "token": {
       "type": "string",
       "pattern": "^[\\w-]{6,128}$"
     }
   },
   "required": [
-    "pan",
-    "year",
-    "month",
     "token"
   ]
 }
