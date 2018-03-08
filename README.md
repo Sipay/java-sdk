@@ -22,7 +22,7 @@ dependencies {
 ```bash
 Ecommerce ecommerce = new Ecommerce("config.properties");
 Amount amount = new Amount("100", "EUR");
-Card card = new Card("4242424242424242", 2018, 3);
+Card card = new Card("4242424242424242", 2050, 3);
 
 Authorization auth = ecommerce.authorization(card, amount);
 if (auth.getCode() == 0) {
@@ -189,9 +189,10 @@ Para llevar a cabo de forma correcta las operativas Ecommerce, se requiere el do
 #### Definición
   Este objeto representa una cantidad monetaria, por tanto esta cantidad debe ser mayor que cero (0). Para instanciar un objeto de este tipo se necesita una cantidad (amount) y una moneda (currency) en formato ISO4217 (https://en.wikipedia.org/wiki/ISO_4217).
   La cantidad se puede especificar de dos formas:
-  * Con un `string` con la cantidad estandarizada y con el caracter punto (`.`) como separador de decimales , o
-  * Con un `int` que represente la cantidad en la unidad básica e indivisible de la moneda (por ejemplo de la moneda Euro sería el céntimo).
-
+  * -   Con un  `string`  con la cantidad estandarizada y con el carácter punto (`.`) como separador de decimales (Ejemplo:`"1.56"`).
+  * -   Con un  `string`  que represente la cantidad en la unidad básica e indivisible de la moneda (Ejemplo:  `"156"`).
+  * -   Con un  `int`  que represente la cantidad en la unidad básica e indivisible de la moneda, es decir, la moneda Euro sería el céntimo (Ejemplo:  `156`).
+  
 #### Parámetros
 * **`amount`:**  [_obligatorio_] Es la cantidad de dinero a procesar. Se puede representar con un `string` o un `int`. Supongamos que queremos procesar 1.56 €, la cantidad (1.56) como un `string` sería `'1.56'` ; como un `int` sería `156`.
 * **`currency`:** [_obligatorio_] Es un `string` que representa el código de la moneda (ISO4217).
@@ -199,6 +200,13 @@ Para llevar a cabo de forma correcta las operativas Ecommerce, se requiere el do
 #### Atributos
 * **`amount`:** `int` que representa la cantidad de procesamiento. Será este tipo de dato, independientemente de si se ha instanciado con un `string` previamente.
 * **`currency`:** `string` que representa el código de la moneda (ISO4217).
+
+#### Métodos
+
+-   **`Amount(amount, currency)`:**  Asigna un importe y moneda del tipo indicado en la sección de parámetros.
+-   **`getAmount()`:**  Devuelve el atributo amount.
+-   **`getCurrency()`:**  Devuelve el atributo currency.
+-   **`get()`:**  Devuelve el amount y el currency como un string.
 
 #### Ejemplo
   ```java
@@ -225,24 +233,30 @@ System.out.println(amount.get()); // Imprime 1.56 EUR
 
 **Nota:** En el caso de iniciarlo con el `string` es imprescindible que tenga el número de decimales que indica el estándar ISO4217.
 
-### **5.1.2. `Card(card_number, year, month)`**
+### **5.1.2. `Card(cardNumber, year, month)`**
 
 #### Definición
 Este objeto representa una tarjeta que se puede utilizar en las diferentes operativas de Ecommerce. Para obtener una instancia de `Card`, los parámetros se indican a continuación.
 
 #### Parámetros
-* **`card_number`:** [_obligatorio_] Es un `string` con  longitud entre 14 y 19 dígitos. Representa el número de la tarjeta.
+* **`cardNumber`:** [_obligatorio_] Es un `string` con  longitud entre 14 y 19 dígitos. Representa el número de la tarjeta.
 * **`year`:** [_obligatorio_] Es un `int` de 4 dígitos que indica el año de caducidad de la tarjeta.
 * **`month`:** [_obligatorio_] Es un `int` de 2 dígitos con valores entre 1 y 12 que correspondiente al mes de caducidad de la tarjeta.
 
 #### Atributos
-* **`card_number`:** Es el número de la tarjeta en una instancia de `Card`. Es un `string` con longitud entre 14 y 19 dígitos.
+* **`cardNumber`:** Es el número de la tarjeta en una instancia de `Card`. Es un `string` con longitud entre 14 y 19 dígitos.
 * **`year`:** Es al año de caducidad de la tarjeta en una instancia de `Card`. Es un  `int` de 4 dígitos.
 * **`month`:** Es el mes de caducidad de la tarjeta en una instancia de `Card`. Es un `int` de 2 dígitos entre 1 y 12.
 
 #### Métodos
-* **`set_expiration_date(year, month)`:** Permite asignar una fecha de caducidad sobre una instancia de `Card`. Los parámetros `year` y `month` son obligatorios.
-*  **`is_expired()`:** Permite evaluar si una instancia de `Card` tiene una fecha de caducidad válida. Retorna `True` si la tarjeta está expirada.  
+* **`setExpirationDate(year, month)`:** Permite asignar una fecha de caducidad sobre una instancia de `Card`. Los parámetros `year` y `month` son obligatorios.
+* **`isExpired()`:** Permite evaluar si una instancia de `Card` tiene una fecha de caducidad válida. Retorna `True` si la tarjeta está expirada.  
+* **`getCardNumber()`:**  Devuelve el atributo  PAN de la tarjeta.
+* **`getYear()`:**  Devuelve el año.
+* **`getMonth()`:**  Devuelve el mes.
+* **`setCardNumber(cardNumber)`:**  Permite asignar el PAN de la tarjeta.
+* **`setYear(year)`:**  Permite asignar año.
+* **`setMonth(month)`:** Permite asignar el mes.
 
 #### Ejemplo
 ```java
@@ -271,6 +285,10 @@ Este objeto representa una tarjeta almacenada en Sipay que puede utilizarse en o
 #### Atributos
 * **`token`:** `string` de longitud entre 6 y 128 caracteres.
 
+#### Métoddos
+* **`setToken()`:**  Permite asignar el token.
+* **`getToken()`:**  Devuelve el token.
+
 #### Ejemplo
   ```java
 java import paymethod.StoredCard; 
@@ -292,6 +310,11 @@ Este objeto representa una tarjeta obtenida mediante el método de pago FastPay.
 #### Atributos
 * **`token`:**`string` de longitud 32 caracteres de tipo hexadecimal.
 
+#### Métoddos
+
+* **`setToken`:**  Permite asignar el token.
+* **`getToken`:**  Devuelve el token.
+
 #### Ejemplo
 ```java
 import sipay.paymethod.FastPay;
@@ -303,13 +326,13 @@ card.setToken("new-token-fast-pay");
 System.out.println(card.getToken());
 ```
 
-## 5.2. Operativas de Ecommerce - `Ecommerce(config_file)`
+## 5.2. Operativas de Ecommerce - `Ecommerce(String path)`
 
 #### Descripción
 Las operativas de Ecommerce forman parte de los métodos definidos en la clase `Ecommerce`. Para instanciar un objeto de este tipo se requiere el archivo de configuración.
 
 #### Parámetros
-* **`config_file`** [_obligatorio_] Es un `string` con la ruta del archivo de configuraciones.
+* **`path`** [_obligatorio_] Es un `string` con la ruta del archivo de configuraciones.
 
 #### Ejemplo
 ```java
@@ -325,25 +348,27 @@ Los siguientes atributos se asignan en el archivo de configuraciones. Sin embarg
 * **`environment`:** corresponde al entorno al cual se está apuntando.
 * **`mode`:** corresponde el modo de cifrado de las peticiones.
 * **`version`:** corresponde a la versión de la API a la cual se apunta.
-* **`conn_timeout`:** Corresponde al tiempo de espera máximo en establecer una conexión.
-* **`process_timeout`:** Corresponde al tiempo de espera máximo en esperar la respuesta de un proceso.
+* **`connection`:** Corresponde al tiempo de espera máximo en establecer una conexión.
+* **`process`:** Corresponde al tiempo de espera máximo en esperar la respuesta de un proceso.
 
 #### Métodos
-* **`authorization(parameters)`:** Permite hacer peticiones de autorización haciendo uso de los diferentes métodos de pago (ver sección 5.2.1).
-* **`cancellation(parameters)`:** Permite enviar peticiones de cancelaciones (ver sección 5.2.2).
-* **`refund(parameters)`:** Permite hacer devoluciones (ver sección 5.2.3).
-* **`query(parameters)`:** Permite hacer peticiones de búsqueda de operaciones (ver sección 5.2.4).
-* **`register(parameters)`:** Permite tokenizar una tarjeta (ver sección 5.2.5).
-* **`card(parameters)`:** Se utiliza para buscar una tarjeta que fue tokenizada (ver sección 5.2.6).
-* **`unregister(parameters)`:** Se utiliza para dar de baja una tarjeta tokenizada (ver sección 5.2.7).
+Todos los atributos indicados tienen sus métodos de asignación con  `set[nombre_del_atributo]`  y sus métodos de consulta con  `get[nombre_del_atributo]`.
+
+* **`authorization(parameters)`:**  Permite hacer peticiones de autorización haciendo uso de los diferentes métodos de pago (ver sección 5.2.1).
+* **`cancellation(parameters)`:**  Permite enviar peticiones de cancelaciones (ver sección 5.2.2).
+* **`refund(parameters)`:**  Permite hacer devoluciones (ver sección 5.2.3).
+* **`query(parameters)`:**  Permite hacer peticiones de búsqueda de operaciones (ver sección 5.2.4).
+* **`register(parameters)`:**  Permite tokenizar una tarjeta (ver sección 5.2.5).
+* **`card(parameters)`:**  Se utiliza para buscar una tarjeta que fue tokenizada (ver sección 5.2.6).
+* **`unregister(parameters)`:**  Se utiliza para dar de baja una tarjeta tokenizada (ver sección 5.2.7).
 
 
-## 5.2.1 **`authorization(paymethod, amount, payload)`**
+## 5.2.1 **`authorization(payMethod, amount, payload)`**
 
 ### Definición
  Este método de `Ecommerce` permite enviar una petición de venta a Sipay.
 ### Parámetros
-* **`pay_method`:**[_obligatorio_] Corresponde a una instancia  `Card`, `StoredCard` o `FastPay` que indica el método de pago a utilizar.
+* **`payMethod`:**[_obligatorio_] Corresponde a una instancia  `Card`, `StoredCard` o `FastPay` que indica el método de pago a utilizar.
 * **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` que representa el importe de la operación.
 *  **`payload `:**  [_opcional_] Es un `JSONObject`  que puede contener los siguientes elementos:
 	* **`order `:** [_opcional_] Es un `string` que representa el ticket de la operación.	
@@ -363,7 +388,7 @@ import sipay.Amount;
 import sipay.paymethod.Card;
 
 Amount amount = new Amount("100", "EUR");
-Card card = new Card("4242424242424242", 2018, 3);
+Card card = new Card("4242424242424242", 2050, 3);
 
 Authorization auth = ecommerce.authorization(card, amount);
  ```
@@ -377,16 +402,16 @@ import sipay.paymethod.FastPay;
 Amount amount = new Amount(100, "EUR"); // 1€
 FastPay card = new FastPay("830dc0b45f8945fab229000347646ca5");
 
-Authorization auth = ecommerce.authorization(card, amount, payload);
+Authorization auth = ecommerce.authorization(card, amount);
  ```
 
-## 5.2.2 `cancellation(transaction_id)`
+## 5.2.2 `cancellation(transactionId)`
 
 ### Definición
 Este método permite enviar una petición de cancelación a Sipay.
  
 ### Parámetros
-* **`transaction_id`:** [_obligatorio_] Es un `string` con el identificador de la transacción.
+* **`transactionId`:** [_obligatorio_] Es un `string` con el identificador de la transacción.
 
 ### Salida
 El método `cancellation` devuelve un objeto `Cancellation`.
@@ -396,7 +421,7 @@ El método `cancellation` devuelve un objeto `Cancellation`.
   ```java
 import sipay.responses.Cancellation;
 
-Cancellation cancel = ecommerce.cancellation("transaction_id");
+Cancellation cancel = ecommerce.cancellation("transactionId");
   ```
 
 ## 5.2.3 `refund(identificator, amount, payload)`
@@ -430,25 +455,29 @@ StoredCard card = new StoredCard("bd6613acc6bd4ac7b6aa96fb92b2572a");
 Refund refund = ecommerce.refund(card, amount);
   ```
 
-**- Devolución con transaction_id**
+**- Devolución con transactionId**
   ```java
 import sipay.Amount;
 import sipay.responses.Refund;
 
+JSONObject payload = new JSONObject();  
+payload.put("custom_01", "custom_01");
+
 Amount amount = new Amount(100, "EUR"); // 1€
 
-Refund refund = ecommerce.refund("transaction_id", amount);
+Refund refund = ecommerce.refund("transactionId", amount, payload);
   ```
 
-## 5.2.5 `query(JSONObject)`
+## 5.2.5 `query(JSONObject payload)`
 
 ### Definición
 Este método `Ecommerce` permite enviar una petición a Sipay para buscar de una operación concreta.
 
 ### Parámetros
- El método requiere un JSONObject con al menos uno de los siguientes elementos:
-* **`order`:** [_opcional_] `string` que representa el ticket de la operación.
-* **`transaction_id`:** [_opcional_]  `string` que representa el identificador de la transacción.
+ 
+El método puede tener los siguientes parámetros:
+* **`order`:**  [_opcional_]  `string`  que representa el ticket de la operación.
+* **`transaction_id`:**  [_opcional_]  `string`  que representa el identificador de la transacción.
 
 ### Salida
 El método `query` devuelve un objeto `Query`.
@@ -458,7 +487,7 @@ El método `query` devuelve un objeto `Query`.
 
   ```java
 JSONObject payload = new JSONObject();  
-payload.put("order", "transaction_id");  
+payload.put("order", "order-reference");  
   
 Query query = ecommerce.query(payload);
   ```
@@ -540,19 +569,17 @@ Todos los objetos obtenidos como respuestas de operativas `Ecommerce` tienen los
 * **`detail`:**  Es un `string` con el código alfanumérico separado con guiones bajos y sin mayúsculas que identifica unívocamente la respuesta. Útil para la gestión de los diferentes casos de uso de una operación.
 * **`description`:** Es un `string` con la descripción literal del mensaje de respuesta.
 * **`uuid`:** Es un `string` con el identificador único de la petición, imprescindible para la trazabilidad.
-* **`request_id`:** Es un `string` utilizado en la finalización de algunas operaciones. Se indicarán aquellas en las que sea necesario.
-* **`_request`:** Es un `dictionary` que contiene los datos de la petición que se ha hecho al servidor.
-* **`_response`:** Es un `dictionary` que contiene los datos 'raw' de respuesta.
+* **`requestId`:** Es un `string` utilizado en la finalización de algunas operaciones. Se indicarán aquellas en las que sea necesario.
 
 #### 5.3.2 `Authorization`
 Este objeto añade los siguientes atributos:
 * **`amount`:** Objeto de de tipo `Amount` con el importe de la operación.
 * **`order`:** Es un `string` con el ticket de la operación.
-* **`card_trade`:** Es un `string` que describe el emisor de la tarjeta.
-* **`card_type`:**  Es un `string` con el tipo de la tarjeta.
-* **`masked_card`:**  Es un `string` con el número de la tarjeta enmascarado.
+* **`cardTrade`:** Es un `string` que describe el emisor de la tarjeta.
+* **`cardType`:**  Es un `string` con el tipo de la tarjeta.
+* **`maskedCard`:**  Es un `string` con el número de la tarjeta enmascarado.
 * **`reconciliation`:**  Es un `string` identificador para la conciliación bancaria (p37).
-* **`transaction_id`:**  Es un `string` identificador de la transacción.
+* **`transactionId`:**  Es un `string` identificador de la transacción.
 * **`aproval`:**  Es un `string` con el código de aprobación de la entidad.
 * **`authorizator`:**  Es un `string` con la entidad autorizadora de la operación.
 
@@ -560,11 +587,11 @@ Este objeto añade los siguientes atributos:
 Este objeto añade los atributos:
 * **`amount`** Objeto de tipo `Amount` con el importe de la operación.
 * **`order`:** Es un `string` con el ticket de la operación.
-* **`card_trade`:** Es un `string` con el emisor de la tarjeta.
-* **`card_type`:** Es un `string` con el tipo de la tarjeta.
-* **`masked_card`:** Es un `string` con con el número de la tarjeta enmascarado.
+* **`cardTrade`:** Es un `string` con el emisor de la tarjeta.
+* **`cardType`:** Es un `string` con el tipo de la tarjeta.
+* **`maskedCard`:** Es un `string` con con el número de la tarjeta enmascarado.
 * **`reconciliation`:** Es un `string` identificador para la conciliación bancaria (p37).
-* **`transaction_id`:** Es un `string` identificador de la transacción.
+* **`transactionId`:** Es un `string` identificador de la transacción.
 * **`aproval`:** Es un `string` con el código de aprobación de la entidad.
 * **`authorizator`:** Es un `string` con la entidad autorizadora de la operación.
 
@@ -574,30 +601,30 @@ Este objeto añade una lista de transacciones, cada objeto transacción tiene:
 **`Transaction`**
 * **`description`:**  Es un `string` con descripción literal del estado de la operación.
 * **`order`:** Es un `string` con el ticket de la operación.
-* **`masked_card`:** Es un `string` con el número de la tarjeta enmascarado.
-* **`operation_name`:** Es un `string` con el nombre literal del tipo de operación.
+* **`maskedCard`:** Es un `string` con el número de la tarjeta enmascarado.
+* **`operationName`:** Es un `string` con el nombre literal del tipo de operación.
 * **`operation`:** Es un `string` identificador del tipo de operación.
-* **`transaction_id`:** Es un `string` identificador de la transacción.
+* **`transactionId`:** Es un `string` identificador de la transacción.
 * **`status`:** Es un `string` identificador del estado de la operación.
 * **`amount`:** Es un objeto `Amount`  con el importe de la operación.
-* **`authorization_id`:** Es un `string`  identificador de la entidad autorizadora.
-* **`channel_name`:** Es un `string`  con el nombre literal del canal de pago.
+* **`authorizationId`:** Es un `string`  identificador de la entidad autorizadora.
+* **`channelName`:** Es un `string`  con el nombre literal del canal de pago.
 * **`channel`:** Es un `string`  identificador del canal de pago.
 * **`method`:** Es un `string`  identificador del método de pago.
-* **`method_name`:** Es un `string`  identificador literal del método de pago.
+* **`methodName`:** Es un `string`  identificador literal del método de pago.
 
 #### 5.3.5 `Register`
 Este objeto añade lo atributos:
-* **`card_mask`:** Es un `string` con el número de la tarjeta enmascarado.
-* **`expired_at`:** Es un `date` con fecha de la expiración.
+* **`cardMask`:** Es un `string` con el número de la tarjeta enmascarado.
+* **`expiredAt`:** Es un `date` con fecha de la expiración.
 * **`token`:** Es un `string` identificador de la tarjeta.
 
 #### 5.3.6 `Cancellation`
 Este objeto no añade nada a lo indicado en los atributos comunes.
 
 #### 5.3.7 `Card`
-* **`card_mask`:** Es un `string` con el número de la tarjeta enmascarado.
-* **`expired_at`:** Parámetro de tipo `date` con la fecha de expiración de la tarjeta.
+* **`cardMask`:** Es un `string` con el número de la tarjeta enmascarado.
+* **`expiredAt`:** Parámetro de tipo `date` con la fecha de expiración de la tarjeta.
 * **`token`:** Es un `string` identificador de la tarjeta.
 
 #### 5.3.8 `Unregister`
