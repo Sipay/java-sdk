@@ -93,4 +93,23 @@ public class Transaction {
     public String getStatus() {
         return status;
     }
+
+    public String get() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("channel_name: " + this.channelName + "\n");
+        sb.append("channel: " + this.channel + "\n");
+        sb.append("method: " + this.method + "\n");
+        sb.append("order: " + this.order + "\n");
+        sb.append("transaction_id: " + this.transactionId + "\n");
+        sb.append("internal_code: " + this.internalCode + "\n");
+        sb.append("method_name: " + this.methodName + "\n");
+        sb.append("operation: " + this.operation + "\n");
+        sb.append("authorization_id: " + this.authorizationId + "\n");
+        sb.append("description: " + this.description + "\n");
+        sb.append("masked_card: " + this.maskedCard + "\n");
+        sb.append("operation_name: " + this.operationName + "\n");
+        sb.append("status: " + this.status + "\n");
+
+        return sb.toString();
+    }
 }

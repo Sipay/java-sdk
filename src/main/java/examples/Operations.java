@@ -36,7 +36,7 @@ public class Operations {
         // endregion
 
         // region * Pago de 4.56 euros con tarjeta ya almacenada en Sipay
-        Amount amount2 = new Amount("456", "EUR");
+        Amount amount2 = new Amount(456, "EUR");
         String token = "2977e78d1e3e4c9fa6b70";
         StoredCard card2 = new StoredCard(token);
 
