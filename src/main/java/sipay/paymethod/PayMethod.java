@@ -1,4 +1,4 @@
-package paymethod;
+package sipay.paymethod;
 
 import org.json.JSONObject;
 

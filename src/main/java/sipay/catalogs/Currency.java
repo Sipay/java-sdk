@@ -1,4 +1,4 @@
-package catalogs;
+package sipay.catalogs;
 
 import org.json.JSONObject;
 

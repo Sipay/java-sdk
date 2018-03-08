@@ -1,4 +1,4 @@
-package ecommerce;
+package sipay;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
@@ -7,7 +7,7 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import config.Config;
-import ecommerce.responses.*;
+import sipay.responses.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -17,7 +17,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
-import paymethod.PayMethod;
+import sipay.paymethod.PayMethod;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Mac;

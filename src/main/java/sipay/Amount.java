@@ -1,6 +1,6 @@
-package ecommerce;
+package sipay;
 
-import catalogs.Currency;
+import sipay.catalogs.Currency;
 
 public class Amount {
     int amount;

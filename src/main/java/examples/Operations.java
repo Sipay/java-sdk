@@ -1,12 +1,12 @@
 package examples;
 
-import ecommerce.Amount;
-import ecommerce.Ecommerce;
-import ecommerce.responses.*;
+import sipay.Amount;
+import sipay.Ecommerce;
+import sipay.responses.*;
 import org.json.JSONObject;
-import paymethod.Card;
-import paymethod.FastPay;
-import paymethod.StoredCard;
+import sipay.paymethod.Card;
+import sipay.paymethod.FastPay;
+import sipay.paymethod.StoredCard;
 
 public class Operations {
 

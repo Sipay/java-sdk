@@ -1,6 +1,6 @@
-package ecommerce.responses;
+package sipay.responses;
 
-import ecommerce.Amount;
+import sipay.Amount;
 import org.json.JSONObject;
 
 public class Refund extends Response {
