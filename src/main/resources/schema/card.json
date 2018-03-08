@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Card",
+  "description": "Send a request for search a card in Sipay",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,128}$"
+    }
+  },
+  "required": [
+    "token"
+  ]
+}

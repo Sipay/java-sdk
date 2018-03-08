@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Unregister",
+  "description": "Send a request of remove a registry of a token to Sipay",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,128}$"
+    }
+  },
+  "required": [
+    "token"
+  ]
+}

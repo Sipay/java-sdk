@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Cancellation",
+  "description": "Send a request of cancellation to Sipay",
+  "type": "object",
+  "properties": {
+    "transaction_id": {
+      "type": "string",
+      "pattern": "^[0-9]{6,22}$"
+    }
+  }
+}
