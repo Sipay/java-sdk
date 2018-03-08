@@ -2,29 +2,23 @@ package examples;
 
 import sipay.Amount;
 import sipay.Ecommerce;
-import sipay.responses.*;
-import org.json.JSONObject;
 import sipay.paymethod.Card;
 import sipay.paymethod.FastPay;
 import sipay.paymethod.StoredCard;
+import sipay.responses.*;
 
 public class Operations {
 
     public static void main(String[] args) {
         String path = "config.properties";
-        Ecommerce ecommerce = new Ecommerce(path);
-
         String panExample = "4242424242424242";
-        JSONObject payload = new JSONObject();
-        payload.put("custom_01", "custom_01");
-        payload.put("token", "2977e78d1e3e4c9fa6b70");
-
+        Ecommerce ecommerce = new Ecommerce(path);
 
         // region * Pago de un Euro con tarjeta y almacenar en Sipay con un token
         Amount amount = new Amount("100", "EUR");
         Card card = new Card(panExample, 2018, 3);
 
-        Authorization auth = ecommerce.authorization(card, amount, payload);
+        Authorization auth = ecommerce.authorization(card, amount);
         if (auth == null) {
             System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
         } else if (auth.getCode() != 0) {
@@ -40,7 +34,7 @@ public class Operations {
         String token = "2977e78d1e3e4c9fa6b70";
         StoredCard card2 = new StoredCard(token);
 
-        Authorization auth2 = ecommerce.authorization(card2, amount2, payload);
+        Authorization auth2 = ecommerce.authorization(card2, amount2);
         if (auth2 == null) {
             System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
         } else if (auth2.getCode() != 0) {
@@ -55,7 +49,7 @@ public class Operations {
         String tokenFastPay = "6d4f7cc37275417f844f2bce8fd4ac55";
         FastPay card3 = new FastPay(tokenFastPay);
 
-        Authorization auth3 = ecommerce.authorization(card3, amount3, payload);
+        Authorization auth3 = ecommerce.authorization(card3, amount3);
         if (auth3 == null) {
             System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
         } else if (auth3.getCode() != 0) {
@@ -80,7 +74,7 @@ public class Operations {
         Amount amount4 = new Amount("2860", "EUR");
         FastPay card5 = new FastPay("9f6f143b76f647599560e99975692628");
 
-        Refund refund = ecommerce.refund(card5, amount4, payload);
+        Refund refund = ecommerce.refund(card5, amount4);
         if (refund == null) {
             System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
         } else if (refund.getCode() != 0) {
@@ -93,7 +87,7 @@ public class Operations {
         // region * Hacer una devolución con identificador de transacción de 8.34 euros
         Amount amount5 = new Amount("834", "EUR");
 
-        Refund refund2 = ecommerce.refund("000097485106184538982", amount5, payload);
+        Refund refund2 = ecommerce.refund("000097485106184538982", amount5);
         if (refund2 == null) {
             System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
         } else if (refund2.getCode() != 0) {

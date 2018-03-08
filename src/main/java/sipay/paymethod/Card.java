@@ -20,7 +20,7 @@ public class Card implements PayMethod {
         setExpirationDate(year, month);
     }
 
-    private boolean isExpired() {
+    public boolean isExpired() {
         boolean error = false;
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH) + 1;
@@ -33,7 +33,7 @@ public class Card implements PayMethod {
         return error;
     }
 
-    private void setExpirationDate(int year, int month) {
+    public void setExpirationDate(int year, int month) {
         if (year < 999 || year > 9999) {
             throw new java.lang.RuntimeException("Year doesn\'t have a correct value.");
         }
@@ -62,11 +62,23 @@ public class Card implements PayMethod {
         return cardNumber;
     }
 
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
     public int getYear() {
         return year;
     }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     public int getMonth() {
         return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 }

@@ -7,7 +7,6 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import config.Config;
-import sipay.responses.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -18,6 +17,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import sipay.paymethod.PayMethod;
+import sipay.responses.*;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Mac;
@@ -188,6 +188,24 @@ public class Ecommerce {
     }
 
     /**
+     * Send a request of authorization to Sipay.
+     *
+     * @param payMethod: payment method of authorization (it can be an object of Card, StoredCard or FastPay).
+     * @param amount:    amount of the operation.
+     * @return Authorization: object that contain response of MDWR API
+     */
+    public Authorization authorization(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        JSONObject payload = new JSONObject();
+        payload.put("amount", amount.amount);
+        payload.put("currency", amount.currency);
+        payload = payMethod.update(payload);
+
+        return new Authorization(send(payload, methodName));
+    }
+
+    /**
      * Send a request of cancellation to Sipay.
      *
      * @param transactionId: identificator of transaction.
@@ -228,6 +246,24 @@ public class Ecommerce {
     /**
      * Send a request of refund to Sipay.
      *
+     * @param method: payment method
+     * @param amount: amount of the operation.
+     * @return Refund: object that contain response of MDWR API.
+     */
+    public Refund refund(@Nonnull PayMethod method, @Nonnull Amount amount) {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        JSONObject payload = new JSONObject();
+        payload.put("amount", amount.amount);
+        payload.put("currency", amount.currency);
+        payload = method.update(payload);
+
+        return new Refund(send(payload, methodName));
+    }
+
+    /**
+     * Send a request of refund to Sipay.
+     *
      * @param transactionId: transactionId: identificator of transaction
      * @param amount:        amount of the operation.
      * @param payload:       {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
@@ -237,6 +273,26 @@ public class Ecommerce {
     public Refund refund(@Nonnull String transactionId, @Nonnull Amount amount, @Nonnull JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
+        payload.put("transaction_id", transactionId);
+        validateSchema(methodName, payload);
+
+        payload.put("amount", amount.amount);
+        payload.put("currency", amount.currency);
+
+        return new Refund(send(payload, methodName));
+    }
+
+    /**
+     * Send a request of refund to Sipay.
+     *
+     * @param transactionId: transactionId: identificator of transaction
+     * @param amount:        amount of the operation.
+     * @return Refund: object that contain response of MDWR API.
+     */
+    public Refund refund(@Nonnull String transactionId, @Nonnull Amount amount) {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        JSONObject payload = new JSONObject();
         payload.put("transaction_id", transactionId);
         validateSchema(methodName, payload);
 

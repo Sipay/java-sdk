@@ -1,7 +1,7 @@
 package sipay.responses;
 
-import sipay.Amount;
 import org.json.JSONObject;
+import sipay.Amount;
 
 public class Refund extends Response {
 
