@@ -554,8 +554,6 @@ Unregister unregister = ecommerce.unregister("newtoken");
 ### 5.3 Responses
 Todos los objetos obtenidos como respuestas de operativas `Ecommerce` tienen los siguientes atributos.
 
-**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`.
-
 #### 5.3.1 Atributos comunes
 * **`type`:** Es un `enum[string]` que identifica el tipo de respuesta:
     * success
@@ -570,6 +568,8 @@ Todos los objetos obtenidos como respuestas de operativas `Ecommerce` tienen los
 * **`uuid`:** Es un `string` con el identificador único de la petición, imprescindible para la trazabilidad.
 * **`requestId`:** Es un `string` utilizado en la finalización de algunas operaciones. Se indicarán aquellas en las que sea necesario.
 
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`.
+
 #### 5.3.2 `Authorization`
 Este objeto añade los siguientes atributos:
 * **`amount`:** Objeto de de tipo `Amount` con el importe de la operación.
@@ -582,6 +582,8 @@ Este objeto añade los siguientes atributos:
 * **`aproval`:**  Es un `string` con el código de aprobación de la entidad.
 * **`authorizator`:**  Es un `string` con la entidad autorizadora de la operación.
 
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`.
+
 #### 5.3.3 `Refund`
 Este objeto añade los atributos:
 * **`amount`** Objeto de tipo `Amount` con el importe de la operación.
@@ -593,6 +595,8 @@ Este objeto añade los atributos:
 * **`transactionId`:** Es un `string` identificador de la transacción.
 * **`aproval`:** Es un `string` con el código de aprobación de la entidad.
 * **`authorizator`:** Es un `string` con la entidad autorizadora de la operación.
+
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`.
 
 #### 5.3.4 `Query`
 Este objeto añade una lista de transacciones, cada objeto transacción tiene:
@@ -612,11 +616,15 @@ Este objeto añade una lista de transacciones, cada objeto transacción tiene:
 * **`method`:** Es un `string`  identificador del método de pago.
 * **`methodName`:** Es un `string`  identificador literal del método de pago.
 
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`.
+
 #### 5.3.5 `Register`
 Este objeto añade lo atributos:
 * **`cardMask`:** Es un `string` con el número de la tarjeta enmascarado.
 * **`expiredAt`:** Es un `date` con fecha de la expiración.
 * **`token`:** Es un `string` identificador de la tarjeta.
+
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`.
 
 #### 5.3.6 `Cancellation`
 Este objeto no añade nada a lo indicado en los atributos comunes.
@@ -625,6 +633,8 @@ Este objeto no añade nada a lo indicado en los atributos comunes.
 * **`cardMask`:** Es un `string` con el número de la tarjeta enmascarado.
 * **`expiredAt`:** Parámetro de tipo `date` con la fecha de expiración de la tarjeta.
 * **`token`:** Es un `string` identificador de la tarjeta.
+
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`.
 
 #### 5.3.8 `Unregister`
 Este objeto no añade nada a lo descrito en los atributos comunes.
