@@ -18,4 +18,16 @@ public class Register extends Response {
             this.token = getValue(payload.opt("token"));
         }
     }
+
+    public String getExpiredAt() {
+        return expiredAt;
+    }
+
+    public String getCardMask() {
+        return cardMask;
+    }
+
+    public String getToken() {
+        return token;
+    }
 }

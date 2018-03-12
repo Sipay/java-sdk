@@ -21,4 +21,20 @@ public class Card extends Response {
         }
 
     }
+
+    public String getExpiredAt() {
+        return expiredAt;
+    }
+
+    public String getCard() {
+        return card;
+    }
+
+    public String getCardMask() {
+        return cardMask;
+    }
+
+    public String getToken() {
+        return token;
+    }
 }

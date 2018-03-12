@@ -194,7 +194,7 @@ Para llevar a cabo de forma correcta las operativas Ecommerce, se requiere el do
   * -   Con un  `int`  que represente la cantidad en la unidad básica e indivisible de la moneda, es decir, la moneda Euro sería el céntimo (Ejemplo:  `156`).
   
 #### Parámetros
-* **`amount`:**  [_obligatorio_] Es la cantidad de dinero a procesar. Se puede representar con un `string` o un `int`. Supongamos que queremos procesar 1.56 €, la cantidad (1.56) como un `string` sería `'1.56'` ; como un `int` sería `156`.
+* **`amount`:**  [_obligatorio_] Es la cantidad de dinero a procesar. Se puede representar con un `string` o un `int`. Supongamos que queremos procesar 1.56 €, la cantidad (1.56) como un `string` sería `'1.56'` o  `'156'`; como un `int` sería `156`.
 * **`currency`:** [_obligatorio_] Es un `string` que representa el código de la moneda (ISO4217).
     
 #### Atributos
@@ -203,7 +203,6 @@ Para llevar a cabo de forma correcta las operativas Ecommerce, se requiere el do
 
 #### Métodos
 
--   **`Amount(amount, currency)`:**  Asigna un importe y moneda del tipo indicado en la sección de parámetros.
 -   **`getAmount()`:**  Devuelve el atributo amount.
 -   **`getCurrency()`:**  Devuelve el atributo currency.
 -   **`get()`:**  Devuelve el amount y el currency como un string.
@@ -231,7 +230,7 @@ System.out.println(amount.getCurrency())); // Imprime EUR
 System.out.println(amount.get()); // Imprime 1.56 EUR
   ```
 
-**Nota:** En el caso de iniciarlo con el `string` es imprescindible que tenga el número de decimales que indica el estándar ISO4217.
+**Nota:** En el caso de iniciarlo con un `string` que incluya un punto es imprescindible que tenga el número de decimales que indica el estándar ISO4217. Ejemplo para la moneda euro es correcto indicar un amount "1.40" pero no es correcto "1.4"
 
 ### **5.1.2. `Card(cardNumber, year, month)`**
 
@@ -255,8 +254,6 @@ Este objeto representa una tarjeta que se puede utilizar en las diferentes opera
 * **`getYear()`:**  Devuelve el año.
 * **`getMonth()`:**  Devuelve el mes.
 * **`setCardNumber(cardNumber)`:**  Permite asignar el PAN de la tarjeta.
-* **`setYear(year)`:**  Permite asignar año.
-* **`setMonth(month)`:** Permite asignar el mes.
 
 #### Ejemplo
 ```java
@@ -352,7 +349,7 @@ Los siguientes atributos se asignan en el archivo de configuraciones. Sin embarg
 * **`process`:** Corresponde al tiempo de espera máximo en esperar la respuesta de un proceso.
 
 #### Métodos
-Todos los atributos indicados tienen sus métodos de asignación con  `set[nombre_del_atributo]`  y sus métodos de consulta con  `get[nombre_del_atributo]`.
+Todos los atributos indicados tienen sus métodos de asignación con  `set[Nombre_del_atributo]`  y sus métodos de consulta con  `get[Nombre_del_atributo]`.
 
 * **`authorization(parameters)`:**  Permite hacer peticiones de autorización haciendo uso de los diferentes métodos de pago (ver sección 5.2.1).
 * **`cancellation(parameters)`:**  Permite enviar peticiones de cancelaciones (ver sección 5.2.2).
@@ -363,14 +360,14 @@ Todos los atributos indicados tienen sus métodos de asignación con  `set[nombr
 * **`unregister(parameters)`:**  Se utiliza para dar de baja una tarjeta tokenizada (ver sección 5.2.7).
 
 
-## 5.2.1 **`authorization(payMethod, amount, payload)`**
+## 5.2.1 **`authorization(payMethod, amount, options)`**
 
 ### Definición
  Este método de `Ecommerce` permite enviar una petición de venta a Sipay.
 ### Parámetros
 * **`payMethod`:**[_obligatorio_] Corresponde a una instancia  `Card`, `StoredCard` o `FastPay` que indica el método de pago a utilizar.
 * **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` que representa el importe de la operación.
-*  **`payload `:**  [_opcional_] Es un `JSONObject`  que puede contener los siguientes elementos:
+*  **`options `:**  [_opcional_] Es un `JSONObject`  que puede contener los siguientes elementos:
 	* **`order `:** [_opcional_] Es un `string` que representa el ticket de la operación.	
 	* **`reconciliation `:** [_opcional_] Es un `string` que identifica la conciliación bancaria.
 	* **`custom_01` :** [_opcional_] Es un `string` que representa un campo personalizable.
@@ -424,7 +421,7 @@ import sipay.responses.Cancellation;
 Cancellation cancel = ecommerce.cancellation("transactionId");
   ```
 
-## 5.2.3 `refund(identificator, amount, payload)`
+## 5.2.3 `refund(identificator, amount, options)`
 
 ### Definición
 Este método `Ecommerce` permite enviar una petición de devolución a Sipay.
@@ -432,7 +429,7 @@ Este método `Ecommerce` permite enviar una petición de devolución a Sipay.
 ### Parámetros
 * **`identificator`:** [_obligatorio_] Es una instancia del método de pago (`Card`, `StoredCard` o `FastPay`) o, un `string` que representa el identificador de transacción.
 * **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
-*  **`payload `:**  [_opcional_] Es un `JSONObject`  que puede contener los siguientes elementos:
+*  **`options `:**  [_opcional_] Es un `JSONObject`  que puede contener los siguientes elementos:
 	* **`order `:** [_opcional_] Es un `string` que representa el número de ticket o boleta de la operación.
 	* **`reconciliation `:** [_opcional_] Es un `string` que identifica la conciliación bancaria.
 	* **`custom_01` :** [_opcional_] Es un `string` que representa un campo personalizable.
@@ -460,15 +457,15 @@ Refund refund = ecommerce.refund(card, amount);
 import sipay.Amount;
 import sipay.responses.Refund;
 
-JSONObject payload = new JSONObject();  
-payload.put("custom_01", "custom_01");
+JSONObject options = new JSONObject();  
+options.put("custom_01", "custom_01");
 
 Amount amount = new Amount(100, "EUR"); // 1€
 
-Refund refund = ecommerce.refund("transactionId", amount, payload);
+Refund refund = ecommerce.refund("transactionId", amount, options);
   ```
 
-## 5.2.5 `query(JSONObject payload)`
+## 5.2.5 `query(JSONObject options)`
 
 ### Definición
 Este método `Ecommerce` permite enviar una petición a Sipay para buscar de una operación concreta.
@@ -486,10 +483,10 @@ El método `query` devuelve un objeto `Query`.
 **- Búsqueda de transacciones**
 
   ```java
-JSONObject payload = new JSONObject();  
-payload.put("order", "order-reference");  
+JSONObject options = new JSONObject();  
+options.put("order", "order-reference");  
   
-Query query = ecommerce.query(payload);
+Query query = ecommerce.query(options);
   ```
 
 ## 5.2.6 `register(card, token)`
@@ -556,6 +553,8 @@ Unregister unregister = ecommerce.unregister("newtoken");
 
 ### 5.3 Responses
 Todos los objetos obtenidos como respuestas de operativas `Ecommerce` tienen los siguientes atributos.
+
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`.
 
 #### 5.3.1 Atributos comunes
 * **`type`:** Es un `enum[string]` que identifica el tipo de respuesta:

@@ -34,4 +34,40 @@ public class Authorization extends Response {
             }
         }
     }
+
+    public String getApproval() {
+        return approval;
+    }
+
+    public String getAuthorizator() {
+        return authorizator;
+    }
+
+    public String getCardTrade() {
+        return cardTrade;
+    }
+
+    public String getCardType() {
+        return cardType;
+    }
+
+    public String getMaskedCard() {
+        return maskedCard;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public String getReconciliation() {
+        return reconciliation;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public Amount getAmount() {
+        return amount;
+    }
 }

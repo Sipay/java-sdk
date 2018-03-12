@@ -171,20 +171,20 @@ public class Ecommerce {
      *
      * @param payMethod: payment method of authorization (it can be an object of Card, StoredCard or FastPay).
      * @param amount:    amount of the operation.
-     * @param payload:   {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
+     * @param options:   {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
      *                   custom_02: custom field 2, token: if this argument is set, it register payMethod with this token}
      * @return Authorization: object that contain response of MDWR API
      */
-    public Authorization authorization(@Nonnull PayMethod payMethod, @Nonnull Amount amount, @Nonnull JSONObject payload) {
+    public Authorization authorization(@Nonnull PayMethod payMethod, @Nonnull Amount amount, @Nonnull JSONObject options) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
-        validateSchema(methodName, payload);
+        validateSchema(methodName, options);
 
-        payload.put("amount", amount.amount);
-        payload.put("currency", amount.currency);
-        payload = payMethod.update(payload);
+        options.put("amount", amount.amount);
+        options.put("currency", amount.currency);
+        options = payMethod.update(options);
 
-        return new Authorization(send(payload, methodName));
+        return new Authorization(send(options, methodName));
     }
 
     /**
@@ -227,20 +227,20 @@ public class Ecommerce {
      *
      * @param method:  payment method
      * @param amount:  amount of the operation.
-     * @param payload: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
+     * @param options: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
      *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token }
      * @return Refund: object that contain response of MDWR API.
      */
-    public Refund refund(@Nonnull PayMethod method, @Nonnull Amount amount, @Nonnull JSONObject payload) {
+    public Refund refund(@Nonnull PayMethod method, @Nonnull Amount amount, @Nonnull JSONObject options) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
-        validateSchema(methodName, payload);
+        validateSchema(methodName, options);
 
-        payload.put("amount", amount.amount);
-        payload.put("currency", amount.currency);
-        payload = method.update(payload);
+        options.put("amount", amount.amount);
+        options.put("currency", amount.currency);
+        options = method.update(options);
 
-        return new Refund(send(payload, methodName));
+        return new Refund(send(options, methodName));
     }
 
     /**
