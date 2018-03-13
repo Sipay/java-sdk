@@ -20,11 +20,11 @@ public class Operations {
 
         Authorization auth = ecommerce.authorization(card, amount);
         if (auth == null) {
-            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+            System.out.println("Failure in operation. Error connecting to the service");
         } else if (auth.getCode() != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + auth.getDescription());
+            System.out.println("Failure in operation. Error:" + auth.getDescription());
         } else {
-            System.out.println("Operación procesada correctamente");
+            System.out.println("Operation processed successfully");
         }
 
         // endregion
@@ -36,11 +36,11 @@ public class Operations {
 
         Authorization auth2 = ecommerce.authorization(card2, amount2);
         if (auth2 == null) {
-            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+            System.out.println("Failure in operation. Error connecting to the service");
         } else if (auth2.getCode() != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + auth2.getDescription());
+            System.out.println("Failure in operation. Error:" + auth2.getDescription());
         } else {
-            System.out.println("Operación procesada correctamente");
+            System.out.println("Operation processed successfully");
         }
         // endregion
 
@@ -51,22 +51,22 @@ public class Operations {
 
         Authorization auth3 = ecommerce.authorization(card3, amount3);
         if (auth3 == null) {
-            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+            System.out.println("Failure in operation. Error connecting to the service");
         } else if (auth3.getCode() != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + auth3.getDescription());
+            System.out.println("Failure in operation. Error:" + auth3.getDescription());
         } else {
-            System.out.println("Operación procesada correctamente");
+            System.out.println("Operation processed successfully");
         }
         // endregion
 
         // region * Cancellation
         Cancellation cancel = ecommerce.cancellation("000097485106184538988");
         if (cancel == null) {
-            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+            System.out.println("Failure in operation. Error connecting to the service");
         } else if (cancel.getCode() != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + cancel.getDescription());
+            System.out.println("Failure in operation. Error:" + cancel.getDescription());
         } else {
-            System.out.println("Operación procesada correctamente");
+            System.out.println("Operation processed successfully");
         }
         // endregion
 
@@ -76,11 +76,11 @@ public class Operations {
 
         Refund refund = ecommerce.refund(card5, amount4);
         if (refund == null) {
-            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+            System.out.println("Failure in operation. Error connecting to the service");
         } else if (refund.getCode() != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + refund.getDescription());
+            System.out.println("Failure in operation. Error:" + refund.getDescription());
         } else {
-            System.out.println("Operación procesada correctamente");
+            System.out.println("Operation processed successfully");
         }
         // endregion
 
@@ -89,36 +89,36 @@ public class Operations {
 
         Refund refund2 = ecommerce.refund("000097485106184538982", amount5);
         if (refund2 == null) {
-            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+            System.out.println("Failure in operation. Error connecting to the service");
         } else if (refund2.getCode() != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + refund2.getDescription());
+            System.out.println("Failure in operation. Error:" + refund2.getDescription());
         } else {
-            System.out.println("Operación procesada correctamente");
+            System.out.println("Operation processed successfully");
         }
         // endregion
 
         // region * Register card from FastPay to Sipay
         FastPay card6 = new FastPay("9f6f143b76f647599560e99975692628");
-       
+
 
         Register register = ecommerce.register(card, "newtoken");
         if (register == null) {
-            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+            System.out.println("Failure in operation. Error connecting to the service");
         } else if (register.getCode() != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + register.getDescription());
+            System.out.println("Failure in operation. Error:" + register.getDescription());
         } else {
-            System.out.println("Operación procesada correctamente");
+            System.out.println("Operation processed successfully");
         }
         // endregion
 
         // region * Unregister tokenized Card
         Unregister unregister = ecommerce.unregister("newtoken");
         if (unregister == null) {
-            System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
+            System.out.println("Failure in operation. Error connecting to the service");
         } else if (unregister.getCode() != 0) {
-            System.out.println("Fallo al realizar la operación, Error: " + unregister.getDescription());
+            System.out.println("Failure in operation. Error:" + unregister.getDescription());
         } else {
-            System.out.println("Operación procesada correctamente");
+            System.out.println("Operation processed successfully");
         }
         // endregion
     }
