@@ -4,10 +4,11 @@ El siguiente proyecto constituye una SDK en java, que simplifica la ejecución d
 
 # 2 . Quickstart
 Con el siguiente ejemplo podrás, en pocos pasos, instalar la SDK y efectuar una venta.
+
 ```bash
 git submodule add https://github.com/sipay/jsdk
 cd jsdk
-git checkout origin/master 
+git checkout origin/master
 ```
 #### * Añadimos a settings.gradle:
 ```bash
@@ -19,6 +20,7 @@ dependencies {
     compile project(':jsdk')
 }
 ```
+#### * En nuestro ejemplo añadimos
 ```bash
 Ecommerce ecommerce = new Ecommerce("config.properties");
 Amount amount = new Amount("100", "EUR");
@@ -30,17 +32,19 @@ if (auth.getCode() == 0) {
 }
 ```
 
+Por ultimo, compilamos y luego ejecutamos
+
 # 3. Instalación
 ## Pre-requisitos
 * Versión de java 1.8.
- 
+
 ## Pasos
 ### Gradle
 #### 1ª Opción
 ```bash
 git submodule add https://github.com/sipay/jsdk
 cd jsdk
-git checkout origin/master 
+git checkout origin/master
 ```
 
 #### * Añadimos a settings.gradle:
@@ -94,13 +98,13 @@ dependencies {
     </dependencies>
 ```
 ### Java
-##### * Añadimos el .jar y las siguientes las librerías: 
+##### * Añadimos el .jar y las siguientes las librerías:
 ```bash
 org.apache.httpcomponents:httpclient:4.5.5
 org.json:json:20160810
 com.github.java-json-tools:json-schema-validator:2.2.8
 ```
- 
+
 # 4. Configuración
 Una vez que se ha instalado la SDK, se deben actualizar los parámetros de configuración asociados a:
 * Sistema de trazas.
@@ -110,60 +114,60 @@ Una vez que se ha instalado la SDK, se deben actualizar los parámetros de confi
 
 Un ejemplo de configuraciones se muestra a continuación:
 ```ini
-# ************************************************************** 
-# LOGGER 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-# Configuración asociada al sistema de trazas. 
-# 
-# file: Nombre del archivo (Nota: Aconsejable usar rutas absolutas para que se pueda ejecutar l módulo desde diferentes localizaciones) 
-# level: nivel minimo de trazas [debug, info, warning, error, critical] 
-# maxFileSize: Tamaño máximo del fichero de trazas [bytes] 
-# backupFileRotation: Número de ficheros de backup 
-# ------------------------------------------------------------// 
-[logger] 
-file=/documentos/logs.log 
-level=warning 
-maxFileSize=51200000 
+# **************************************************************
+# LOGGER
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Configuración asociada al sistema de trazas.
+#
+# file: Nombre del archivo (Nota: Aconsejable usar rutas absolutas para que se pueda ejecutar l módulo desde diferentes localizaciones)
+# level: nivel minimo de trazas [debug, info, warning, error, critical]
+# maxFileSize: Tamaño máximo del fichero de trazas [bytes]
+# backupFileRotation: Número de ficheros de backup
+# ------------------------------------------------------------//
+[logger]
+file=/documentos/logs.log
+level=warning
+maxFileSize=51200000
 backupFileRotation=5
 
-# ************************************************************** 
-# CREDENTIALS 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-# Credenciales para obtener acceso al recurso. 
-# 
-# key: Key del cliente 
-# secret: Secret del cliente 
-# resouce: Recurso al que se quiere acceder 
+# **************************************************************
+# CREDENTIALS
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Credenciales para obtener acceso al recurso.
+#
+# key: Key del cliente
+# secret: Secret del cliente
+# resouce: Recurso al que se quiere acceder
 # ------------------------------------------------------------//
 [credentials]
 key=api-key
 secret=api-secret
 resource=resource
 
-# ************************************************************** 
-# API 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-# Configuracion de la API. 
-# 
-# environment: Entorno al que se deben enviar las peticiones ['sandbox', 'staging', 'live'] 
-# version: Versión de la api a usar actualmente solo existe v1 
-# mode: Modo de encriptacion de la firma, [sha256, sha512] 
-# ------------------------------------------------------------// 
+# **************************************************************
+# API
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Configuracion de la API.
+#
+# environment: Entorno al que se deben enviar las peticiones ['sandbox', 'staging', 'live']
+# version: Versión de la api a usar actualmente solo existe v1
+# mode: Modo de encriptacion de la firma, [sha256, sha512]
+# ------------------------------------------------------------//
 [api]
 environment=sandbox
 version=v1
 mode=sha256
 
-# ************************************************************** 
-# TIMEOUT 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-# Cofiguracion de los tiempos de timeout. 
-# 
-# connection: Timeout de connexión en segundos 
-# process: Timeout de procesamiento en segundos 
-# ------------------------------------------------------------// 
+# **************************************************************
+# TIMEOUT
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Cofiguracion de los tiempos de timeout.
+#
+# connection: Timeout de connexión en segundos
+# process: Timeout de procesamiento en segundos
+# ------------------------------------------------------------//
 [timeout]
-connection=3 
+connection=3
 process=27
 ```
 
@@ -192,11 +196,11 @@ Para llevar a cabo de forma correcta las operativas Ecommerce, se requiere el do
   * -   Con un  `string`  con la cantidad estandarizada y con el carácter punto (`.`) como separador de decimales (Ejemplo:`"1.56"`).
   * -   Con un  `string`  que represente la cantidad en la unidad básica e indivisible de la moneda (Ejemplo:  `"156"`).
   * -   Con un  `int`  que represente la cantidad en la unidad básica e indivisible de la moneda, es decir, la moneda Euro sería el céntimo (Ejemplo:  `156`).
-  
+
 #### Parámetros
 * **`amount`:**  [_obligatorio_] Es la cantidad de dinero a procesar. Se puede representar con un `string` o un `int`. Supongamos que queremos procesar 1.56 €, la cantidad (1.56) como un `string` sería `'1.56'` o  `'156'`; como un `int` sería `156`.
 * **`currency`:** [_obligatorio_] Es un `string` que representa el código de la moneda (ISO4217).
-    
+
 #### Atributos
 * **`amount`:** `int` que representa la cantidad de procesamiento. Será este tipo de dato, independientemente de si se ha instanciado con un `string` previamente.
 * **`currency`:** `string` que representa el código de la moneda (ISO4217).
@@ -211,22 +215,22 @@ Para llevar a cabo de forma correcta las operativas Ecommerce, se requiere el do
   ```java
 java import ecommerce.Amount;
 
-// Con string 
-Amount amount = new Amount("1.56", "EUR"); 
-System.out.println(amount.getAmount()); // Imprime 156 
+// Con string
+Amount amount = new Amount("1.56", "EUR");
+System.out.println(amount.getAmount()); // Imprime 156
 System.out.println(amount.getCurrency())); // Imprime EUR
 System.out.println(amount.get()); // Imprime 1.56 EUR
 
-// Con unidad indivisible 
-Amount amount = new Amount(156, "EUR"); 
-System.out.println(amount.getAmount()); // Imprime 156 
-System.out.println(amount.getCurrency())); // Imprime EUR 
+// Con unidad indivisible
+Amount amount = new Amount(156, "EUR");
+System.out.println(amount.getAmount()); // Imprime 156
+System.out.println(amount.getCurrency())); // Imprime EUR
 System.out.println(amount.get()); // Imprime 1.56 EUR
 
-// Con string en unidad indivisible 
-Amount amount = new Amount("156", "EUR"); 
-System.out.println(amount.getAmount()); // Imprime 156 
-System.out.println(amount.getCurrency())); // Imprime EUR 
+// Con string en unidad indivisible
+Amount amount = new Amount("156", "EUR");
+System.out.println(amount.getAmount()); // Imprime 156
+System.out.println(amount.getCurrency())); // Imprime EUR
 System.out.println(amount.get()); // Imprime 1.56 EUR
   ```
 
@@ -257,7 +261,7 @@ Este objeto representa una tarjeta que se puede utilizar en las diferentes opera
 
 #### Ejemplo
 ```java
-java import paymethod.Card; 
+java import paymethod.Card;
 
 Card card = new Card(panExample, 2020, 3);
 System.out.println(card.getCardNumber());
@@ -282,13 +286,13 @@ Este objeto representa una tarjeta almacenada en Sipay que puede utilizarse en o
 #### Atributos
 * **`token`:** `string` de longitud entre 6 y 128 caracteres.
 
-#### Métoddos
+#### Métodos
 * **`setToken()`:**  Permite asignar el token.
 * **`getToken()`:**  Devuelve el token.
 
 #### Ejemplo
   ```java
-java import paymethod.StoredCard; 
+java import paymethod.StoredCard;
 
 StoredCard card = new StoredCard("token");
 System.out.println(card.getToken());
@@ -307,7 +311,7 @@ Este objeto representa una tarjeta obtenida mediante el método de pago FastPay.
 #### Atributos
 * **`token`:**`string` de longitud 32 caracteres de tipo hexadecimal.
 
-#### Métoddos
+#### Métodos
 
 * **`setToken`:**  Permite asignar el token.
 * **`getToken`:**  Devuelve el token.
@@ -368,7 +372,7 @@ Todos los atributos indicados tienen sus métodos de asignación con  `set[Nombr
 * **`payMethod`:**[_obligatorio_] Corresponde a una instancia  `Card`, `StoredCard` o `FastPay` que indica el método de pago a utilizar.
 * **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` que representa el importe de la operación.
 *  **`options `:**  [_opcional_] Es un `JSONObject`  que puede contener los siguientes elementos:
-	* **`order `:** [_opcional_] Es un `string` que representa el ticket de la operación.	
+	* **`order `:** [_opcional_] Es un `string` que representa el ticket de la operación.
 	* **`reconciliation `:** [_opcional_] Es un `string` que identifica la conciliación bancaria.
 	* **`custom_01` :** [_opcional_] Es un `string` que representa un campo personalizable.
 	* **`custom_02` :** [_opcional_] Es un `string` que representa un campo personalizable.
@@ -406,13 +410,13 @@ Authorization auth = ecommerce.authorization(card, amount);
 
 ### Definición
 Este método permite enviar una petición de cancelación a Sipay.
- 
+
 ### Parámetros
 * **`transactionId`:** [_obligatorio_] Es un `string` con el identificador de la transacción.
 
 ### Salida
 El método `cancellation` devuelve un objeto `Cancellation`.
- 
+
 ### Ejemplo
 **- Cancelación de operación**
   ```java
@@ -425,7 +429,7 @@ Cancellation cancel = ecommerce.cancellation("transactionId");
 
 ### Definición
 Este método `Ecommerce` permite enviar una petición de devolución a Sipay.
- 
+
 ### Parámetros
 * **`identificator`:** [_obligatorio_] Es una instancia del método de pago (`Card`, `StoredCard` o `FastPay`) o, un `string` que representa el identificador de transacción.
 * **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
@@ -438,7 +442,7 @@ Este método `Ecommerce` permite enviar una petición de devolución a Sipay.
 
 ### Salida
 El método `refund` devuelve un objeto `Refund`.
- 
+
 ### Ejemplo
 **- Devolución con tarjeta**
   ```java
@@ -471,7 +475,7 @@ Refund refund = ecommerce.refund("transactionId", amount, options);
 Este método `Ecommerce` permite enviar una petición a Sipay para buscar de una operación concreta.
 
 ### Parámetros
- 
+
 El método puede tener los siguientes parámetros:
 * **`order`:**  [_opcional_]  `string`  que representa el ticket de la operación.
 * **`transaction_id`:**  [_opcional_]  `string`  que representa el identificador de la transacción.
@@ -485,7 +489,7 @@ El método `query` devuelve un objeto `Query`.
   ```java
 JSONObject options = new JSONObject();  
 options.put("order", "order-reference");  
-  
+
 Query query = ecommerce.query(options);
   ```
 
@@ -507,11 +511,11 @@ Este método `Ecommerce` permite enviar una petición de tokenización de tarjet
   ```java
 import sipay.responses.Register;
 import sipay.paymethod.Card;
-	
+
 Card card = new Card("4242424242424242", 2050, 2);
-Register register = ecommerce.register(card, "newtoken");	
+Register register = ecommerce.register(card, "newtoken");
   ```
-  
+
 ## 5.2.7 `card(token)`
 
 ### Definición
@@ -532,7 +536,7 @@ Card card = ecommerce.card("newtoken");
   ```
 
 ## 5.2.8 `unregister(token)`
- 
+
 ### Definición
 Este método `Ecommerce` permite enviar una petición a Sipay con la finalidad de dar de baja una tarjeta tokenizada.
 
