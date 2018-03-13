@@ -44,7 +44,7 @@ public class Operations {
         }
         // endregion
 
-        //region * Authorization whot FastPay  (2.34 €)
+        //region * Authorization whit FastPay  (2.34 €)
         Amount amount3 = new Amount("234", "EUR");
         String tokenFastPay = "6d4f7cc37275417f844f2bce8fd4ac55";
         FastPay card3 = new FastPay(tokenFastPay);
@@ -72,9 +72,8 @@ public class Operations {
 
         // region * Refund (28.6 €)
         Amount amount4 = new Amount("2860", "EUR");
-        FastPay card5 = new FastPay("9f6f143b76f647599560e99975692628");
 
-        Refund refund = ecommerce.refund(card5, amount4);
+        Refund refund = ecommerce.refund(card, amount4);
         if (refund == null) {
             System.out.println("Failure in operation. Error connecting to the service");
         } else if (refund.getCode() != 0) {
