@@ -29,7 +29,7 @@ public class Operations {
 
         // endregion
 
-        // region * Authorization whit token (4.56 €)
+        // region * Authorization with token (4.56 €)
         Amount amount2 = new Amount(456, "EUR");
         String token = "2977e78d1e3e4c9fa6b70";
         StoredCard card2 = new StoredCard(token);
@@ -44,7 +44,7 @@ public class Operations {
         }
         // endregion
 
-        //region * Authorization whit FastPay  (2.34 €)
+        //region * Authorization with FastPay  (2.34 €)
         Amount amount3 = new Amount("234", "EUR");
         String tokenFastPay = "6d4f7cc37275417f844f2bce8fd4ac55";
         FastPay card3 = new FastPay(tokenFastPay);
@@ -83,7 +83,7 @@ public class Operations {
         }
         // endregion
 
-        // region * Refund from id_transaction (8.34 euros)
+        // region * Refund from id_transaction (8.34 €)
         Amount amount5 = new Amount("834", "EUR");
 
         Refund refund2 = ecommerce.refund("000097485106184538982", amount5);
@@ -110,7 +110,7 @@ public class Operations {
         }
         // endregion
 
-        // region * Unregister tokenized Card
+        // region * Unregister tokenized card
         Unregister unregister = ecommerce.unregister("newtoken");
         if (unregister == null) {
             System.out.println("Failure in operation. Error connecting to the service");
