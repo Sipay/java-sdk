@@ -12,7 +12,7 @@ public class Querys {
         String path = "config.properties";
         Ecommerce ecommerce = new Ecommerce(path);
 
-        // region * Consultar tarjeta
+        // region * get card
         Card cardResp = ecommerce.card("2977e78d1e3e4c9fa6b70");
         if (cardResp == null) {
             System.out.println("Fallo al consultar la tarjeta, Error al conectar con el servicio");
@@ -23,7 +23,7 @@ public class Querys {
         }
         // endregion
 
-        // region * Consultar operación por id
+        // region * get transaction from transaction_id
         JSONObject payload = new JSONObject();
         payload.put("transaction_id", "000097485106184565651");
 
@@ -41,7 +41,7 @@ public class Querys {
         }
         // endregion
 
-        // region * Consultar operación por ticket
+        // region * Get transaction from ticket
         JSONObject payload2 = new JSONObject();
         payload2.put("order", "435890fb684443628152fb7ba998d1d0");
 

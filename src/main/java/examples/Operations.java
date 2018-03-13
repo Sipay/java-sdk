@@ -14,7 +14,7 @@ public class Operations {
         String panExample = "4242424242424242";
         Ecommerce ecommerce = new Ecommerce(path);
 
-        // region * Pago de un Euro con tarjeta y almacenar en Sipay con un token
+        // region * Authorization with card (1€)
         Amount amount = new Amount("100", "EUR");
         Card card = new Card(panExample, 2018, 3);
 
@@ -29,7 +29,7 @@ public class Operations {
 
         // endregion
 
-        // region * Pago de 4.56 euros con tarjeta ya almacenada en Sipay
+        // region * Authorization whit token (4.56 €)
         Amount amount2 = new Amount(456, "EUR");
         String token = "2977e78d1e3e4c9fa6b70";
         StoredCard card2 = new StoredCard(token);
@@ -44,7 +44,7 @@ public class Operations {
         }
         // endregion
 
-        //region * Pago de 2.34 euros con tarjeta ya almacenada en Sipay mediante FastPay
+        //region * Authorization whot FastPay  (2.34 €)
         Amount amount3 = new Amount("234", "EUR");
         String tokenFastPay = "6d4f7cc37275417f844f2bce8fd4ac55";
         FastPay card3 = new FastPay(tokenFastPay);
@@ -59,7 +59,7 @@ public class Operations {
         }
         // endregion
 
-        // region * Cancelar el pago con tarjeta (auth)
+        // region * Cancellation
         Cancellation cancel = ecommerce.cancellation("000097485106184538988");
         if (cancel == null) {
             System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
@@ -70,7 +70,7 @@ public class Operations {
         }
         // endregion
 
-        // region * Hacer una devolución con tarjeta de 28.60 euros
+        // region * Refund (28.6 €)
         Amount amount4 = new Amount("2860", "EUR");
         FastPay card5 = new FastPay("9f6f143b76f647599560e99975692628");
 
@@ -84,7 +84,7 @@ public class Operations {
         }
         // endregion
 
-        // region * Hacer una devolución con identificador de transacción de 8.34 euros
+        // region * Refund from id_transaction (8.34 euros)
         Amount amount5 = new Amount("834", "EUR");
 
         Refund refund2 = ecommerce.refund("000097485106184538982", amount5);
@@ -97,9 +97,9 @@ public class Operations {
         }
         // endregion
 
-        // region * Almacenar tarjeta en Sipay
+        // region * Register card from FastPay to Sipay
         FastPay card6 = new FastPay("9f6f143b76f647599560e99975692628");
-        // Card card = new Card(panExample, 2018, 3);
+       
 
         Register register = ecommerce.register(card, "newtoken");
         if (register == null) {
@@ -111,7 +111,7 @@ public class Operations {
         }
         // endregion
 
-        // region * Borrar tarjeta de Sipay
+        // region * Unregister tokenized Card
         Unregister unregister = ecommerce.unregister("newtoken");
         if (unregister == null) {
             System.out.println("Fallo al realizar la operación, Error al conectar con el servicio");
