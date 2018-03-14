@@ -6,7 +6,7 @@ El siguiente proyecto constituye una SDK en java, que simplifica la ejecución d
 Con el siguiente ejemplo podrás, en pocos pasos, instalar la SDK y efectuar una venta.
 
 ```bash
-git submodule add https://github.com/sipay/jsdk
+git submodule add https://github.com/Sipay/java-sdk
 cd jsdk
 git checkout origin/master
 ```
@@ -42,7 +42,7 @@ Por ultimo, compilamos y luego ejecutamos
 ### Gradle
 #### 1ª Opción
 ```bash
-git submodule add https://github.com/sipay/jsdk
+git submodule add https://github.com/Sipay/java-sdk
 cd jsdk
 git checkout origin/master
 ```
