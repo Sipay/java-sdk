@@ -7,17 +7,17 @@ Con el siguiente ejemplo podrás, en pocos pasos, instalar la SDK y efectuar una
 
 ```bash
 git submodule add https://github.com/Sipay/java-sdk
-cd jsdk
+cd java-sdk
 git checkout origin/master
 ```
 #### * Añadimos a settings.gradle:
 ```bash
-include 'jsdk'
+include 'java-sdk'
 ```
 #### * Añadimos a build.gradle:
 ```bash
 dependencies {
-    compile project(':jsdk')
+    compile project(':java-sdk')
 }
 ```
 #### * En nuestro ejemplo añadimos
@@ -43,13 +43,13 @@ Por ultimo, compilamos y luego ejecutamos
 #### 1ª Opción
 ```bash
 git submodule add https://github.com/Sipay/java-sdk
-cd jsdk
+cd java-sdk
 git checkout origin/master
 ```
 
 #### * Añadimos a settings.gradle:
 ```bash
-include 'jsdk'
+include 'java-sdk'
 ```
 
 #### * Añadimos a build.gradle:
@@ -57,7 +57,7 @@ include 'jsdk'
 dependencies {
    ...
    ...
-    compile project(':jsdk')
+    compile project(':java-sdk')
 }
 ```
 
