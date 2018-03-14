@@ -8,11 +8,7 @@ public class FastPay implements PayMethod {
     String token;
 
     public FastPay(String token) {
-        if (!Pattern.compile("^[a-fA-F0-9]{32}$").matcher(token).find()) {
-            throw new java.lang.RuntimeException("Token must have 32 hexadecimal characters.");
-        }
-
-        this.token = token;
+        setToken(token);
     }
 
     public JSONObject update(JSONObject payload) {
@@ -29,6 +25,10 @@ public class FastPay implements PayMethod {
     }
 
     public void setToken(String token) {
+        if (!Pattern.compile("^[a-fA-F0-9]{32}$").matcher(token).find()) {
+            throw new java.lang.RuntimeException("Token must have 32 hexadecimal characters.");
+        }
+
         this.token = token;
     }
 }

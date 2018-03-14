@@ -8,11 +8,7 @@ public class StoredCard implements PayMethod {
     String token;
 
     public StoredCard(String token) {
-        if (!Pattern.compile("^[\\w-]{6,128}$").matcher(token).find()) {
-            throw new java.lang.RuntimeException("Token doesn\'t have a correct value.");
-        }
-
-        this.token = token;
+        setToken(token);
     }
 
     public JSONObject update(JSONObject payload) {
@@ -26,6 +22,10 @@ public class StoredCard implements PayMethod {
     }
 
     public void setToken(String token) {
+        if (!Pattern.compile("^[\\w-]{6,128}$").matcher(token).find()) {
+            throw new java.lang.RuntimeException("Token doesn't have a correct value.");
+        }
+
         this.token = token;
     }
 }
