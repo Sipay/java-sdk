@@ -1,4 +1,4 @@
-package paymethod;
+package sipay.paymethod;
 
 import org.json.JSONObject;
 
@@ -13,14 +13,14 @@ public class Card implements PayMethod {
 
     public Card(String cardNumber, int year, int month) {
         if (!Pattern.compile("^[\\w-]{14,19}$").matcher(cardNumber).find()) {
-            throw new java.lang.RuntimeException("Card_number doesn\'t have a correct value.");
+            throw new java.lang.RuntimeException("Card_number doesn't have a correct value.");
         }
 
         this.cardNumber = cardNumber;
         setExpirationDate(year, month);
     }
 
-    private boolean isExpired() {
+    public boolean isExpired() {
         boolean error = false;
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH) + 1;
@@ -33,13 +33,13 @@ public class Card implements PayMethod {
         return error;
     }
 
-    private void setExpirationDate(int year, int month) {
+    public void setExpirationDate(int year, int month) {
         if (year < 999 || year > 9999) {
-            throw new java.lang.RuntimeException("Year doesn\'t have a correct value.");
+            throw new java.lang.RuntimeException("Year doesn't have a correct value.");
         }
 
         if (month < 0 || month > 12) {
-            throw new java.lang.RuntimeException("Month doesn\'t have a correct value.");
+            throw new java.lang.RuntimeException("Month doesn't have a correct value.");
         }
 
         this.year = year;
@@ -60,6 +60,10 @@ public class Card implements PayMethod {
 
     public String getCardNumber() {
         return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public int getYear() {

@@ -1,4 +1,4 @@
-package ecommerce.responses;
+package sipay.responses;
 
 import org.json.JSONObject;
 
@@ -9,7 +9,6 @@ public class Transaction {
     String method;
     String order;
     String transactionId;
-    String internalCode;
     String methodName;
     String operation;
     String authorizationId;
@@ -24,7 +23,6 @@ public class Transaction {
         this.method = getValue(resp.opt("method"));
         this.order = getValue(resp.opt("order"));
         this.transactionId = getValue(resp.opt("transaction_id"));
-        this.internalCode = getValue(resp.opt("internal_code"));
         this.methodName = getValue(resp.opt("method_name"));
         this.operation = getValue(resp.opt("operation"));
         this.authorizationId = getValue(resp.opt("authorization_id"));
@@ -62,10 +60,6 @@ public class Transaction {
         return transactionId;
     }
 
-    public String getInternalCode() {
-        return internalCode;
-    }
-
     public String getMethodName() {
         return methodName;
     }
@@ -101,7 +95,6 @@ public class Transaction {
         sb.append("method: " + this.method + "\n");
         sb.append("order: " + this.order + "\n");
         sb.append("transaction_id: " + this.transactionId + "\n");
-        sb.append("internal_code: " + this.internalCode + "\n");
         sb.append("method_name: " + this.methodName + "\n");
         sb.append("operation: " + this.operation + "\n");
         sb.append("authorization_id: " + this.authorizationId + "\n");

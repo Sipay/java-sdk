@@ -1,4 +1,4 @@
-package ecommerce.responses;
+package sipay.responses;
 
 import org.json.JSONObject;
 
@@ -17,5 +17,17 @@ public class Register extends Response {
             this.cardMask = getValue(payload.opt("card_mask"));
             this.token = getValue(payload.opt("token"));
         }
+    }
+
+    public String getExpiredAt() {
+        return expiredAt;
+    }
+
+    public String getCardMask() {
+        return cardMask;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

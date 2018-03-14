@@ -1,4 +1,4 @@
-package ecommerce;
+package sipay;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
@@ -7,7 +7,6 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import config.Config;
-import ecommerce.responses.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -17,7 +16,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
-import paymethod.PayMethod;
+import sipay.paymethod.PayMethod;
+import sipay.responses.*;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Mac;
@@ -171,15 +171,33 @@ public class Ecommerce {
      *
      * @param payMethod: payment method of authorization (it can be an object of Card, StoredCard or FastPay).
      * @param amount:    amount of the operation.
-     * @param payload:   {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
+     * @param options:   {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
      *                   custom_02: custom field 2, token: if this argument is set, it register payMethod with this token}
      * @return Authorization: object that contain response of MDWR API
      */
-    public Authorization authorization(@Nonnull PayMethod payMethod, @Nonnull Amount amount, @Nonnull JSONObject payload) {
+    public Authorization authorization(@Nonnull PayMethod payMethod, @Nonnull Amount amount, @Nonnull JSONObject options) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
-        validateSchema(methodName, payload);
+        validateSchema(methodName, options);
 
+        options.put("amount", amount.amount);
+        options.put("currency", amount.currency);
+        options = payMethod.update(options);
+
+        return new Authorization(send(options, methodName));
+    }
+
+    /**
+     * Send a request of authorization to Sipay.
+     *
+     * @param payMethod: payment method of authorization (it can be an object of Card, StoredCard or FastPay).
+     * @param amount:    amount of the operation.
+     * @return Authorization: object that contain response of MDWR API
+     */
+    public Authorization authorization(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
         payload = payMethod.update(payload);
@@ -209,15 +227,33 @@ public class Ecommerce {
      *
      * @param method:  payment method
      * @param amount:  amount of the operation.
-     * @param payload: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
+     * @param options: {reconciliation: identification for bank reconciliation, custom_01: custom field 1,
      *                 custom_02: custom field 2, token: if this argument is set, it register payMethod with this token }
      * @return Refund: object that contain response of MDWR API.
      */
-    public Refund refund(@Nonnull PayMethod method, @Nonnull Amount amount, @Nonnull JSONObject payload) {
+    public Refund refund(@Nonnull PayMethod method, @Nonnull Amount amount, @Nonnull JSONObject options) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
-        validateSchema(methodName, payload);
+        validateSchema(methodName, options);
 
+        options.put("amount", amount.amount);
+        options.put("currency", amount.currency);
+        options = method.update(options);
+
+        return new Refund(send(options, methodName));
+    }
+
+    /**
+     * Send a request of refund to Sipay.
+     *
+     * @param method: payment method
+     * @param amount: amount of the operation.
+     * @return Refund: object that contain response of MDWR API.
+     */
+    public Refund refund(@Nonnull PayMethod method, @Nonnull Amount amount) {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
         payload = method.update(payload);
@@ -237,6 +273,26 @@ public class Ecommerce {
     public Refund refund(@Nonnull String transactionId, @Nonnull Amount amount, @Nonnull JSONObject payload) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
+        payload.put("transaction_id", transactionId);
+        validateSchema(methodName, payload);
+
+        payload.put("amount", amount.amount);
+        payload.put("currency", amount.currency);
+
+        return new Refund(send(payload, methodName));
+    }
+
+    /**
+     * Send a request of refund to Sipay.
+     *
+     * @param transactionId: transactionId: identificator of transaction
+     * @param amount:        amount of the operation.
+     * @return Refund: object that contain response of MDWR API.
+     */
+    public Refund refund(@Nonnull String transactionId, @Nonnull Amount amount) {
+        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        JSONObject payload = new JSONObject();
         payload.put("transaction_id", transactionId);
         validateSchema(methodName, payload);
 
@@ -322,5 +378,69 @@ public class Ecommerce {
         validateSchema(methodName, payload);
 
         return new Query(send(payload, methodName));
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public String getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(String environment) {
+        this.environment = environment;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public Integer getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Integer connection) {
+        this.connection = connection;
+    }
+
+    public Integer getProcess() {
+        return process;
+    }
+
+    public void setProcess(Integer process) {
+        this.process = process;
     }
 }
