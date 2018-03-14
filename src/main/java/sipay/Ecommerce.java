@@ -379,4 +379,68 @@ public class Ecommerce {
 
         return new Query(send(payload, methodName));
     }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public String getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(String environment) {
+        this.environment = environment;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public Integer getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Integer connection) {
+        this.connection = connection;
+    }
+
+    public Integer getProcess() {
+        return process;
+    }
+
+    public void setProcess(Integer process) {
+        this.process = process;
+    }
 }

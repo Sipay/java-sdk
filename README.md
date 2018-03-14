@@ -353,7 +353,7 @@ Los siguientes atributos se asignan en el archivo de configuraciones. Sin embarg
 * **`process`:** Corresponde al tiempo de espera máximo en esperar la respuesta de un proceso.
 
 #### Métodos
-Todos los atributos indicados tienen sus métodos de asignación con  `set[Nombre_del_atributo]`  y sus métodos de consulta con  `get[Nombre_del_atributo]`.
+Todos los atributos indicados tienen sus métodos de asignación con  `set[Nombre_del_atributo]`  y sus métodos de consulta con  `get[Nombre_del_atributo]`. Ejemplo de get/set `getSecret()`, `setSecret('secret')` .
 
 * **`authorization(parameters)`:**  Permite hacer peticiones de autorización haciendo uso de los diferentes métodos de pago (ver sección 5.2.1).
 * **`cancellation(parameters)`:**  Permite enviar peticiones de cancelaciones (ver sección 5.2.2).
