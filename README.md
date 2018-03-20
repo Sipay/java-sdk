@@ -62,13 +62,14 @@ dependencies {
 ```
 
 #### 2ª Opción
+##### * Nota: el fichero .jar esta en la ruta jar/sipay-version.jar
 ##### * Copiamos el .jar en nuestro proyecto, en este ejemplo en la carpeta libs.
 ##### * Añadimos a build.gradle:
 ```bash
 dependencies {
    ...
    ...
-    compile files('libs/sipay-0.1.0.jar')
+    compile files('libs/sipay-version.jar')
     compile group: 'com.github.java-json-tools', name: 'json-schema-validator', version: '2.2.8'
     compile group: 'org.json', name: 'json', version: '20160810'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'

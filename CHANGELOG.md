@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - XXXX-XX-XX
-
+ - Añadir .jar al proyecto
+ 
 ## [1.0.0] - 2018-03-14
 ### Added
 - Implementación incial de la SDK con operativas:
