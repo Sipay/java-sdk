@@ -5,7 +5,7 @@ import sipay.Ecommerce;
 import sipay.paymethod.ecommerce.Card;
 import sipay.paymethod.ecommerce.FastPay;
 import sipay.paymethod.ecommerce.StoredCard;
-import sipay.responses.*;
+import sipay.responses.ecommerce.*;
 
 public class Operations {
 

@@ -2,11 +2,11 @@ package sipay;
 
 import org.json.JSONObject;
 import sipay.paymethod.PayMethod;
-import sipay.responses.*;
+import sipay.responses.ecommerce.*;
 
 import javax.annotation.Nonnull;
 
-public class Ecommerce extends Utils{
+public class Ecommerce extends Utils {
 
     String url;
 

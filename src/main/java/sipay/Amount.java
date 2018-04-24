@@ -3,8 +3,8 @@ package sipay;
 import sipay.catalogs.Currency;
 
 public class Amount {
-    int amount;
-    String currency;
+    public int amount;
+    public String currency;
 
     public Amount(String amount, String currency) {
         Currency currencies = new Currency();

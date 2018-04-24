@@ -16,6 +16,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+import sipay.altp.Paypal;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Mac;
@@ -30,15 +31,15 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class Utils {
-    String key;
-    String secret;
-    String resource;
-    String environment;
-    String version;
-    String mode;
-    Integer connection;
-    Integer process;
-    Logger logger;
+    public String key;
+    public String secret;
+    public String resource;
+    public String environment;
+    public String version;
+    public String mode;
+    public Integer connection;
+    public Integer process;
+    public Logger logger;
 
     public Utils(@Nonnull String path) {
         Config config = new Config(path);
@@ -120,7 +121,7 @@ public class Utils {
     }
 
     public Logger getLogger(@Nonnull String file, @Nonnull String level, @Nonnull Integer maxFileSize, @Nonnull Integer backupFileRotation) {
-        Logger logger = Logger.getLogger(Altp.class.getName());
+        Logger logger = Logger.getLogger(Paypal.class.getName());
         FileHandler fh;
 
         try {

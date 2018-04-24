@@ -2,9 +2,9 @@ package examples;
 
 import org.json.JSONObject;
 import sipay.Ecommerce;
-import sipay.responses.Card;
-import sipay.responses.Query;
-import sipay.responses.Transaction;
+import sipay.responses.ecommerce.Card;
+import sipay.responses.ecommerce.Query;
+import sipay.responses.ecommerce.Transaction;
 
 public class Querys {
 

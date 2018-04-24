@@ -1,8 +1,9 @@
-package sipay.responses;
+package sipay.responses.paypal;
 
 import org.json.JSONObject;
+import sipay.responses.Response;
 
-public class PaypalPayment extends Response {
+public class Payment extends Response {
     String transactionId;
     String amount;
     String billingId;
@@ -16,7 +17,7 @@ public class PaypalPayment extends Response {
     String requestId;
     String status;
 
-    public PaypalPayment(JSONObject resp) {
+    public Payment(JSONObject resp) {
         super(resp);
 
         JSONObject payload = ((JSONObject) resp.opt("payload"));
