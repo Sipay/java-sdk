@@ -11,7 +11,7 @@ public class Amount {
 
         String[] result = ((String[]) currencies.find(currency));
         if (result == null) {
-            throw new java.lang.RuntimeException("Value of currency is incorrect.");
+            throw new RuntimeException("Value of currency is incorrect.");
         }
 
         if (amount.matches("^([0-9]+\\.[0-9]{" + (Integer.parseInt(result[2])) + "})")) {
@@ -19,11 +19,11 @@ public class Amount {
         } else if (amount.matches("^([0-9]+)$")) {
             this.amount = Integer.parseInt(amount);
         } else {
-            throw new java.lang.RuntimeException("Value of " + amount + " is incorrect.");
+            throw new RuntimeException("Value of " + amount + " is incorrect.");
         }
 
-        if (this.amount <= 0) {
-            throw new java.lang.RuntimeException("Value of amount is incorrect.");
+        if (this.amount < 0) {
+            throw new RuntimeException("Value of amount is incorrect.");
         }
 
         this.currency = currency;
@@ -32,13 +32,13 @@ public class Amount {
     public Amount(int amount, String currency) {
         Currency currencies = new Currency();
 
-        if (amount <= 0) {
-            throw new java.lang.RuntimeException("Value of amount is incorrect.");
+        if (amount < 0) {
+            throw new RuntimeException("Value of amount is incorrect.");
         }
 
         Object result = currencies.find(currency);
         if (result == null) {
-            throw new java.lang.RuntimeException("Value of currency is incorrect.");
+            throw new RuntimeException("Value of currency is incorrect.");
         }
 
         this.amount = amount;
