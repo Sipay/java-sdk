@@ -143,7 +143,9 @@ backupFileRotation=5
 [credentials]
 key=api-key
 secret=api-secret
-resource=resource
+resource=resource-sipay
+resource-altp=resource-altp
+
 
 # **************************************************************
 # API
@@ -172,7 +174,7 @@ connection=3
 process=27
 ```
 
-# 5. Documentación extendida
+# 5. Documentación extendida Ecommerce
 
 A través de peticiones a Sipay mediante Ecommerce, se pueden realizar operativas de:
 * Autorizaciones (sección 5.2.1).
@@ -182,6 +184,7 @@ A través de peticiones a Sipay mediante Ecommerce, se pueden realizar operativa
 * Tokenización* de tarjetas (sección 5.2.5).
 * Búsqueda de tarjetas tokenizadas (sección 5.2.6).
 * Dar de baja una tarjeta tokenizada (sección 5.2.7).
+
 
 _* Tokenización_: Es un proceso por el cual el PAN (_Primary Account Number_ – Número Primario de Cuenta) de la tarjeta se sustituye por un valor llamado token. Esta funcionalidad permite que Sipay guarde los datos de la tarjeta del cliente, para agilizar el proceso de pagos y evitar que se deba introducir, cada vez, los datos de tarjeta, en pagos repetitivos. Sipay realiza el almacenamieno de los datos de forma segura, cumpliendo con las normativas PCI.
 
@@ -593,8 +596,7 @@ Este objeto añade los siguientes atributos:
 Este objeto añade los atributos:
 * **`amount`** Objeto de tipo `Amount` con el importe de la operación.
 * **`order`:** Es un `string` con el ticket de la operación.
-* **`cardTrade`:** Es un `string` con el emisor de la tarjeta.
-* **`cardType`:** Es un `string` con el tipo de la tarjeta.
+* **`cardTrade`:** Es un `string` con el emisor de la tarjeta.ú* **`cardType`:** Es un `string` con el tipo de la tarjeta.
 * **`maskedCard`:** Es un `string` con con el número de la tarjeta enmascarado.
 * **`reconciliation`:** Es un `string` identificador para la conciliación bancaria (p37).
 * **`transactionId`:** Es un `string` identificador de la transacción.
@@ -643,3 +645,451 @@ Este objeto no añade nada a lo indicado en los atributos comunes.
 
 #### 5.3.8 `Unregister`
 Este objeto no añade nada a lo descrito en los atributos comunes.
+
+
+# 6. Documentación extendida ALTP
+
+A través de peticiones a Sipay mediante ALTP, se pueden realizar operativas de:
+* Paypal (sección 6.1).
+* Movistar (sección 6.2).
+* Sofort (sección 6.3).
+* Paga más tarde (PMT) (sección 6.4).
+* Querys (sección 6.5).
+
+
+## 6.1. Paypal (path)
+
+
+### Definición
+Esta clase permite enviar peticiones de Paypal, mediante los siguientes métodos:
+ - GenericMethods expressCheckoutMethods  
+ - GenericConfirm   expressCheckoutConfirm 
+ - GenericMethods referenceTransactionMethods
+ - GenericConfirm referenceTransactionConfirm  
+ - Payment referenceTransactionPayment
+ 
+
+### 6.1.1 GenericMethods expressCheckoutMethods(@Nonnull ExpressCheckoutMethods body, @Nonnull Amount amount) 
+
+### Parámetros
+* **`body`:** [_obligatorio_] Es un objeto que contiene los campos que se envían al servicio de ALTP para obtener los métodos disponibles.  Para instanciar un `body` de tipo `ExpressCheckout`  se necesita de forma obligatoria los siguientes parámetros:  `string order`, `string reconciliation`,  `string title`,  `string logo`, `JSONObject notify`,  `JSONObject policyData`, cuya definición concreta está disponible en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales
+* **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
+
+### Salida
+El método `expressCheckoutMethods` devuelve un objeto `GenericMethods`, el cual contiene
+* Un Json con los métodos de pagos disponibles y,
+* Los mismos datos generales de las respuestas que se especificaron en la sección Ecommerce (Ver 5.3.1).
+
+### Ejemplo
+#### Solicitud de los métodos disponibles
+```java 
+Paypal paypal = new Paypal(path);
+
+JSONObject payload = new JSONObject();
+JSONObject notify = new JSONObject();
+
+// El campo order tiene que ser único
+payload.put("order", "prueba-order-00000000201");
+payload.put("reconciliation", "reconciliation");
+payload.put("title", "Sipay Pruebas");
+payload.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
+
+notify.put("result", "https://www.sipay.es");
+payload.put("notify", notify);
+payload.put("policyData", new JSONObject());
+
+Amount amount = new Amount("10000", "EUR");
+
+ExpressCheckoutMethods expressCheckout = new ExpressCheckoutMethods(payload);
+GenericMethods methods = paypal.expressCheckoutMethods(expressCheckout, amount);
+if (methods == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (methods.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + methods.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+### 6.1.2 GenericConfirm expressCheckoutConfirm(@Nonnull String requestId) 
+
+### Parámetros
+* **`String requestId)`:** [_obligatorio_] Es el identificador de la operación, obtenido de la respuesta de la llamada `expressCheckoutMethods`.
+
+### Salida
+El método `expressCheckoutConfirm` devuelve un objeto `GenericConfirm`,  que permite confirmar el pago. Es un Json con los parámetros de respuesta definidos en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales.
+
+### Ejemplo
+#### Petición de confirmación
+```java 
+GenericConfirm confirm = paypal.expressCheckoutConfirm("5ae726d81d65fb000196dad4");
+if (confirm == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (confirm.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + confirm.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+### 6.1.3 GenericMethods referenceTransactionMethods(@Nonnull ReferenceTransactionMethods body, @Nonnull Amount amount) 
+
+
+### Parámetros
+* **`body`:** [_obligatorio_] Es un objeto que contiene los campos que se envían al servicio de ALTP para obtener los métodos disponibles.  Para instanciar un `body` de tipo `ReferenceTransactionMethods`  se necesita de forma obligatoria los siguientes parámetros:  `string order`, `string reconciliation`,  `string title`,  `string logo`, `JSONObject notify`,  `JSONObject policyData`, `JSONObject billing` y, ` string customId` cuya definición concreta está disponible en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales
+* **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
+
+### Salida
+El método `referenceTransactionMethods` devuelve un objeto `GenericMethods`, el cual contiene:
+* Un Json con los métodos de pagos disponibles y,
+* Los mismos datos generales de las respuestas que se especificaron en la sección Ecommerce (Ver 5.3.1).
+
+### Ejemplo
+#### Solicitud de los métodos disponibles
+```java 
+JSONObject payload = new JSONObject();
+JSONObject billing = new JSONObject();
+JSONObject notify = new JSONObject();
+
+payload.put("order", "prueba-order-00000000202");
+payload.put("reconciliation", "reconciliation");
+payload.put("title", "Sipay Pruebas");
+payload.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
+payload.put("customId", "90");
+notify.put("result", "https://www.sipay.es");
+payload.put("notify", notify);
+
+billing.put("description", "prueba subscription");
+payload.put("billing", billing);
+payload.put("policyData", new JSONObject());
+
+Amount amount = new Amount("0", "EUR");
+ReferenceTransactionMethods referenceTransactionMethods = new ReferenceTransactionMethods(payload2);
+GenericMethods resp = paypal.referenceTransactionMethods(referenceTransactionMethods, amount2);
+if (resp == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (resp.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + resp.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+### 6.1.4 GenericConfirm referenceTransactionConfirm(@Nonnull String requestId) 
+
+### Parámetros
+* **`String requestId)`:** [_obligatorio_] Es el identificador de la operación, obtenido de la respuesta de la llamada `referenceTransactionMethods`.
+
+### Salida
+El método ` referenceTransactionConfirm` devuelve un objeto `GenericConfirm`,  que permite confirmar el pago. Es un Json con los parámetros de respuesta definidos en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales.
+
+### Ejemplo
+#### Petición de confirmación
+```java 
+GenericConfirm confirm = paypal.referenceTransactionConfirm("5ae728121d65fb000196dad6");
+if (confirm == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (confirm.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + confirm.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+### 6.1.5  Payment referenceTransactionPayment(@Nonnull ReferenceTransactionPayment body, @Nonnull Amount amount) 
+
+
+### Parámetros
+* **`body`:** [_obligatorio_] Es un objeto que contiene los campos que se envían al servicio de ALTP para concretar un pago, con previa realización de una suscripción.  Para instanciar un `body` de tipo `ReferenceTransactionPayment`  se necesita de forma obligatoria los siguientes parámetros:  `string order`, `string reconciliation`,    `JSONObject notify`,  `JSONObject billing` y, `string customId` cuya definición concreta está disponible en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales
+* **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
+
+### Salida
+El método `referenceTransactionPayment` devuelve un objeto `Payment`, el cual contiene
+* Un Json con los mismos datos generales de las respuestas que se especificaron en la sección Ecommerce (Ver 5.3.1) y, 
+* Los siguientes datos adicionales:    `String paymentType`,`String amount`, `String transactionId`, `String datetime`, `String pendingReason`, `String transactionType`,  `String currency`, `String reasonCode`,`String fee`,`String tax`,`String status`,`String billingId`,`String requestId`
+
+
+
+### Ejemplo
+#### Solicitud de llamada payment
+```java 
+JSONObject payload = new JSONObject();
+JSONObject notify = new JSONObject();
+
+payload.put("order", "prueba-order-00000000203");
+notify.put("result", "https://www.sipay.es");
+payload.put("notify", notify);
+payload.put("billingId", "B-1YF41782NT322241B");
+payload.put("reconciliation", "reconciliation");
+
+ReferenceTransactionPayment referenceTransactionPayment = new ReferenceTransactionPayment(payload3);
+Payment payment = paypal.referenceTransactionPayment(referenceTransactionPayment, amount);
+if (payment == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (payment.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + payment.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+## 6.2. Movistar (path)
+
+### Definición
+Esta clase permite enviar peticiones de Movistar, mediante los siguientes métodos:
+ - GenericMethods methods
+ - GenericConfirm confirm
+ - PurchaseFromToken purchaseFromToken
+ 
+
+### 6.2.1  GenericMethods methods(@Nonnull Methods body, @Nonnull Amount amount)
+
+
+### Parámetros
+* **`body`:** [_obligatorio_] Es un objeto que contiene los campos que se envían al servicio de ALTP para obtener los métodos disponibles.  Para instanciar un `body` de tipo `Methods`  se necesita de forma obligatoria los siguientes parámetros:  `String order`, `String msisdn`, `JSONObject notify`, `JSONObject policyData`, cuya definición concreta está disponible en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales
+* **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
+
+### Salida
+El método `methods` devuelve un objeto `GenericMethods`, el cual contiene
+* Un Json con los métodos de pagos disponibles y,
+* Los mismos datos generales de las respuestas que se especificaron en la sección Ecommerce (Ver 5.3.1).
+
+### Ejemplo
+#### Solicitud de los métodos disponibles
+```java 
+JSONObject payload = new JSONObject();
+JSONObject notify = new JSONObject();
+notify.put("result", "url");
+
+// El campo order tiene que ser único
+payload.put("order", "prueba-order-00000000200");
+payload.put("msisdn", "34611111111");
+payload.put("notify", notify);
+payload.put("policyData", new JSONObject());
+
+Methods methods = new Methods(payload);
+Amount amount = new Amount("100", "EUR");
+
+GenericMethods resp = movistar.methods(methods, amount);
+if (resp == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (resp.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + resp.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+### 6.2.2   GenericConfirm confirm(@Nonnull String requestId)
+
+
+### Parámetros
+* **`String requestId)`:** [_obligatorio_] Es el identificador de la operación, obtenido de la respuesta de la llamada `methods`.
+
+### Salida
+El método  `confirm` devuelve un objeto `GenericConfirm`,  que permite confirmar el pago. Es un Json con los parámetros de respuesta definidos en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales.
+
+### Ejemplo
+#### Petición de confirmación
+```java 
+GenericConfirm confirm = movistar.confirm("6a571dffcc3ac117e5aefced");
+if (confirm == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (confirm.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + confirm.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+### 6.2.3  PurchaseFromToken purchaseFromToken(@Nonnull Purchase body, @Nonnull Amount amount)
+
+
+### Parámetros
+* **`body`:** [_obligatorio_] Es un objeto que contiene los campos que se envían al servicio de ALTP para realizar un pago.  Para instanciar un `body` de tipo `Purchase`  se necesita de forma obligatoria los siguientes parámetros:  `String authToken`, `String clientIpAddress` cuyas definiciones concretas están disponibles en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales
+* **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
+
+### Salida
+El método  `purchaseFromToken` devuelve un objeto `PurchaseFromToken`, el cual contiene
+* Un Json con los datos generales de las respuestas que se especificaron en la sección Ecommerce (Ver 5.3.1) y, 
+* Los siguientes campos adicionales: `String authToken`, `String responseType`, `JSONObject userId`,`String purchaseCode`, `String amount`, `String order`, `String transactionId`, `String status`
+
+### Ejemplo
+#### Solicitud de purchase from token
+```java 
+JSONObject payload = new JSONObject();
+payload.put("authToken", "34611111111");
+payload.put("clientIpAddress", "127.0.0.1");
+
+Purchase purchase = new Purchase(payload);
+Amount amount = new Amount("100", "EUR");
+
+PurchaseFromToken resp = movistar.purchaseFromToken(purchase, amount);
+if (resp == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (resp.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + resp.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+
+## 6.3. Sofort (path)
+
+### Definición
+Esta clase permite enviar peticiones de Sofort, mediante los siguientes métodos:
+ - GenericMethods methods
+ - GenericConfirm confirm
+ 
+### 6.3.1   GenericMethods methods(@Nonnull Methods body, @Nonnull Amount amount)
+
+
+### Parámetros
+* **`body`:** [_obligatorio_] Es un objeto que contiene los campos que se envían al servicio de ALTP para obtener los métodos disponibles.  Para instanciar un `body` de tipo `Methods`  se necesita de forma obligatoria los siguientes parámetros:  `String order`, `String reconciliation`, `String title`, `String logo`, `String customId`, `JSONObject notify`, `JSONObject policyData`, cuya definición concreta está disponible en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales
+* **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
+
+### Salida
+El método  `methods` devuelve un objeto `GenericMethods`, el cual contiene:
+* Un Json con los métodos de pagos disponibles y,
+* Los mismos datos generales de las respuestas que se especificaron en la sección Ecommerce (Ver 5.3.1).
+
+### Ejemplo
+#### Solicitud de los métodos disponibles
+```java 
+JSONObject payload = new JSONObject();
+JSONObject notify = new JSONObject();
+
+// El campo order tiene que ser único
+payload.put("order", "prueba-order-0000000020");
+payload.put("reconciliation", "reconciliation");
+payload.put("title", "Sipay Pruebas");
+payload.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
+
+notify.put("result", "url");
+payload.put("notify", notify);
+payload.put("policyData", new JSONObject());
+
+Amount amount = new Amount("10000", "EUR");
+
+Methods methods = new Methods(payload);
+GenericMethods resp = sofort.methods(methods, amount);
+if (resp == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (resp.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + resp.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+### 6.3.2   GenericConfirm confirm(@Nonnull String requestId)
+
+
+### Parámetros
+* **`String requestId)`:** [_obligatorio_] Es el identificador de la operación, obtenido de la respuesta de la llamada `methods`.
+
+### Salida
+El método `confirm` devuelve un objeto `GenericConfirm`,  que permite confirmar el pago. Es un Json con los parámetros de respuesta definidos en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales.
+
+### Ejemplo
+#### Solicitud de confirmación
+```java 
+GenericConfirm confirm = sofort.confirm("6a571dffcc3ac117e5aefced");
+if (confirm == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (confirm.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + confirm.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+## 6.4. Pmt (path)
+
+### Definición
+Esta clase permite enviar peticiones de Pmt (Paga Más Tarde), mediante el siguiente método:
+ - GenericMethods methods
+ 
+### 6.4.1   GenericMethods methods(@Nonnull Methods body, @Nonnull Amount amount)
+
+
+### Parámetros
+* **`body`:** [_obligatorio_] Es un objeto que contiene los campos que se envían al servicio de ALTP para obtener los métodos disponibles.  Para instanciar un `body` de tipo `Methods`  se necesita de forma obligatoria los siguientes parámetros: `String order`, `String reconciliation`, `String title`, `String logo`, `JSONObject notify`, `JSONObject customer`, `JSONObject policyData` cuya definición concreta está disponible en https://sandbox.sipay.es/docm/altp/es/#/peticiones/listado-de-los-metodos-actuales
+* **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` con el importe de la operación.
+
+### Salida
+El método `methods` devuelve un objeto `GenericMethods`, el cual contiene:
+* Un Json con los métodos de pagos disponibles y,
+* Los mismos datos generales de las respuestas que se especificaron en la sección Ecommerce (Ver 5.3.1).
+
+### Ejemplo
+#### Solicitud de los métodos disponibles
+```java 
+JSONObject payload = new JSONObject();
+JSONObject notify = new JSONObject();
+JSONObject customer = new JSONObject();
+
+// El campo order tiene que ser único
+payload.put("order", "prueba-order-00000000204");
+payload.put("reconciliation", "reconciliation");
+payload.put("title", "Sipay Pruebas");
+payload.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
+
+notify.put("result", "url");
+payload.put("notify", notify);
+
+customer.put("email", "email@example.com");
+customer.put("full_name", "John Doe");
+
+payload.put("customer", customer);
+payload.put("policyData", new JSONObject());
+
+Methods methods = new Methods(payload);
+Amount amount = new Amount("100", "EUR");
+
+GenericMethods resp = pmt.methods(methods, amount);
+if (resp == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (resp.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + resp.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```
+
+
+## 6.5. Querys (path)
+
+### Definición
+Esta clase permite obtener el estado de cualquiera de las operaciones de ALTP. El método utilizado es:
+- getStatusOperation
+
+### 6.5.1  StatusOperation getStatusOperation(@Nonnull String requestId)
+
+### Parámetros
+* **`String requestId)`:** [_obligatorio_] Es el identificador de la operación, obtenido de la respuesta de la llamada `methods`.
+
+### Salida
+El método `getStatusOperation` devuelve un objeto `StatusOperation `,  con los datos del estado de la operación: `JSONObject request`, `JSONObject response`, `String status`, `String confirm`
+
+### Ejemplo
+#### Solicitud de estado de una operación
+```java 
+StatusOperation statusOperation = querys.getStatusOperation("5947b6f3e6129d0001e7dad6");
+if (statusOperation == null) {
+	System.out.println("Failure in operation. Error connecting to the service");
+} else if (statusOperation.getCode() != 0) {
+	System.out.println("Failure in operation. Error:" + statusOperation.getDescription());
+} else {
+	System.out.println("Operation processed successfully");
+}
+  ```

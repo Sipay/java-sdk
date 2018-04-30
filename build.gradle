@@ -6,7 +6,7 @@ repositories {
 
 jar {
     baseName = 'sipay'
-    version = '1.0.1'
+    version = '1.1.0'
 }
 
 sourceCompatibility = 1.8
