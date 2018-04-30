@@ -1,4 +1,4 @@
-package examples;
+package examples.ecommerce;
 
 import sipay.Amount;
 import sipay.Ecommerce;

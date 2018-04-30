@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Reference transaction payment",
+  "description": "Send a request of reference transaction payment to Paypal",
+  "type": "object",
+  "properties": {
+    "order": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,64}$"
+    },
+    "amount": {
+      "type": "integer"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "notify": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "format": "links"
+        }
+      }
+    },
+    "billing_id": {
+      "type": "string"
+    },
+    "reconciliation": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "order",
+    "amount",
+    "currency",
+    "notify",
+    "billing_id"
+  ]
+}

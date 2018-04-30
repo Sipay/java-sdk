@@ -1,12 +1,12 @@
-package sipay.responses.paypal;
+package sipay.responses.altp;
 
 import org.json.JSONObject;
 import sipay.responses.Response;
 
-public class BillingWithoutPayment extends Response {
-    JSONObject methods;
+public class Generic extends Response {
+    private JSONObject methods;
 
-    public BillingWithoutPayment(JSONObject resp) {
+    public Generic(JSONObject resp) {
         super(resp);
 
         JSONObject payload = ((JSONObject) resp.opt("payload"));

@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 public class FastPay implements PayMethod {
     String token;
-    String endpoint;
 
     public FastPay(String token) {
         setToken(token);
@@ -32,14 +31,5 @@ public class FastPay implements PayMethod {
         }
 
         this.token = token;
-    }
-
-    @Override
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
     }
 }

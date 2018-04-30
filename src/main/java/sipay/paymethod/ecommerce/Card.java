@@ -11,7 +11,6 @@ public class Card implements PayMethod {
     String cardNumber;
     int year;
     int month;
-    String endpoint;
 
     public Card(String cardNumber, int year, int month) {
         if (!Pattern.compile("^[\\w-]{14,19}$").matcher(cardNumber).find()) {
@@ -74,14 +73,5 @@ public class Card implements PayMethod {
 
     public int getMonth() {
         return month;
-    }
-
-    @Override
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
     }
 }

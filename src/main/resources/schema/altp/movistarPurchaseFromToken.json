@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Purchase from token",
+  "description": "Send a request of purchase from token to movistar",
+  "type": "object",
+  "properties": {
+    "auth_token": {},
+    "amount": {
+      "type": "integer"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "client_ip_address": {},
+    "notes": {},
+    "pe_notification_url":  {},
+    "channel":  {},
+    "custom_params":  {},
+    "language":  {},
+    "message_params": {}
+  },
+  "required": [
+    "auth_token",
+    "amount",
+    "currency",
+    "client_ip_address"
+  ]
+}

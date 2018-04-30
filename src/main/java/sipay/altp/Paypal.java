@@ -2,71 +2,97 @@ package sipay.altp;
 
 import org.json.JSONObject;
 import sipay.Amount;
-import sipay.Utils;
-import sipay.paymethod.paypal.Methods;
-import sipay.responses.paypal.BillingWithPayment;
-import sipay.responses.paypal.BillingWithoutPayment;
-import sipay.responses.paypal.Payment;
+import sipay.paymethod.PayMethod;
+import sipay.responses.altp.GenericConfirm;
+import sipay.responses.altp.GenericMethods;
+import sipay.responses.altp.paypal.Payment;
 
 import javax.annotation.Nonnull;
 
-public class Paypal extends Utils {
-
-    String url;
+public class Paypal extends Altp {
 
     public Paypal(String resp) {
         super(resp);
-        url = "https://" + environment + ".sipay.es/altp/" + version + "/";
     }
 
     /**
-     * Send a request of billing agreement with payment to paypal.
+     * Send a express checkout methods to Paypal.
      *
-     * @param methods: payment method.
-     * @param amount:  amount of the operation.
-     * @return PaypalMethods: object that contain response of ALTP API
+     * @param payMethod: payment with the message (it can be an object of paypal/expressCheckoutMethods)
+     * @param amount:    amount of the operation.
+     * @return GenericMethods: object that contain response of MDWR API.
      */
-    public BillingWithPayment billingWithPayment(@Nonnull Methods methods, @Nonnull Amount amount) {
+    public GenericMethods expressCheckoutMethods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+
+        String schema = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
-        payload = methods.update(payload);
+        payload = payMethod.update(payload);
 
-        return new BillingWithPayment(send(payload, url + methods.getEndpoint()));
+        return genericMethods(schema, payload);
     }
 
     /**
-     * Send a request of billing agreement without payment to paypal.
+     * Send a express checkout confirm to Paypal.
      *
-     * @param methods: payment method.
-     * @param amount:  amount of the operation.
-     * @return PaypalMethods: object that contain response of ALTP API
+     * @param requestId: identifier of the request.
+     * @return GenericConfirm: object that contain response of MDWR API.
      */
-    public BillingWithoutPayment billingWithoutPayment(@Nonnull Methods methods, @Nonnull Amount amount) {
+    public GenericConfirm expressCheckoutConfirm(@Nonnull String requestId) {
+
+        String endpoint = "pexp";
+        return genericConfirm(requestId, endpoint);
+    }
+
+    /**
+     * Send a reference transaction methods to Paypal.
+     *
+     * @param payMethod: payment with the message (it can be an object of paypal/referenceTransactionMethods)
+     * @param amount:    amount of the operation.
+     * @return GenericMethods: object that contain response of MDWR API.
+     */
+    public GenericMethods referenceTransactionMethods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+
+        String schema = Thread.currentThread().getStackTrace()[1].getMethodName();
 
         JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
-        payload = methods.update(payload);
+        payload = payMethod.update(payload);
 
-        return new BillingWithoutPayment(send(payload, url + methods.getEndpoint()));
+        return genericMethods(schema, payload);
     }
 
     /**
-     * Send a request of payment to paypal.
+     * Send a reference transaction confirm to Paypal.
      *
-     * @param payment: payment method.
-     * @param amount:  amount of the operation.
-     * @return PaypalPayment: object that contain response of ALTP API
+     * @param requestId: identifier of the request.
+     * @return GenericConfirm: object that contain response of MDWR API.
      */
-    public Payment payment(@Nonnull sipay.paymethod.paypal.Payment payment, @Nonnull Amount amount) {
+    public GenericConfirm referenceTransactionConfirm(@Nonnull String requestId) {
+
+        String endpoint = "pref";
+        return genericConfirm(requestId, endpoint);
+    }
+
+    /**
+     * Send a reference transaction payment to Paypal.
+     *
+     * @param payMethod: payment with the message (it can be an object of movistar/referenceTransactionPayment)
+     * @param amount:    amount of the operation.
+     * @return Payment: object that contain response of MDWR API.
+     */
+    public Payment referenceTransactionPayment(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+
+        String endpoint = "pref/payment";
 
         JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
-        payload = payment.update(payload);
+        payload = payMethod.update(payload);
 
-        return new Payment(send(payload, url + payment.getEndpoint()));
+        return new Payment(send(payload, url + endpoint));
     }
 }

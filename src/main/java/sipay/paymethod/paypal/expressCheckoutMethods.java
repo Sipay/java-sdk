@@ -3,27 +3,21 @@ package sipay.paymethod.paypal;
 import org.json.JSONObject;
 import sipay.paymethod.PayMethod;
 
-public class Methods implements PayMethod {
+public class expressCheckoutMethods implements PayMethod {
     String order;
     String reconciliation;
     String title;
     String logo;
-    String customId;
     JSONObject notify;
-    JSONObject billing;
     JSONObject policyData;
-    String endpoint;
 
-    public Methods(JSONObject payload) {
+    public expressCheckoutMethods(JSONObject payload) {
         this.order = ((String) payload.opt("order"));
         this.reconciliation = ((String) payload.opt("reconciliation"));
         this.title = ((String) payload.opt("title"));
         this.logo = ((String) payload.opt("logo"));
-        this.customId = ((String) payload.opt("customId"));
         this.notify = ((JSONObject) payload.opt("notify"));
-        this.billing = ((JSONObject) payload.opt("billing"));
         this.policyData = ((JSONObject) payload.opt("policyData"));
-        this.endpoint = "methods";
     }
 
     public JSONObject update(JSONObject payload) {
@@ -31,9 +25,7 @@ public class Methods implements PayMethod {
         payload.put("reconciliation", this.reconciliation);
         payload.put("title", this.title);
         payload.put("logo", this.logo);
-        payload.put("custom_id", this.customId);
         payload.put("notify", this.notify);
-        payload.put("billing", this.billing);
         payload.put("policy_data", this.policyData);
 
         return payload;
@@ -71,14 +63,6 @@ public class Methods implements PayMethod {
         this.logo = logo;
     }
 
-    public String getCustomId() {
-        return customId;
-    }
-
-    public void setCustomId(String customId) {
-        this.customId = customId;
-    }
-
     public JSONObject getNotify() {
         return notify;
     }
@@ -87,28 +71,11 @@ public class Methods implements PayMethod {
         this.notify = notify;
     }
 
-    public JSONObject getBilling() {
-        return billing;
-    }
-
-    public void setBilling(JSONObject billing) {
-        this.billing = billing;
-    }
-
     public JSONObject getPolicyData() {
         return policyData;
     }
 
     public void setPolicyData(JSONObject policyData) {
         this.policyData = policyData;
-    }
-
-    @Override
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
     }
 }

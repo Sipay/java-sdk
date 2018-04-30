@@ -1,4 +1,4 @@
-package sipay;
+package sipay.altp;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
@@ -16,7 +16,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
-import sipay.altp.Paypal;
+import sipay.responses.altp.GenericConfirm;
+import sipay.responses.altp.GenericMethods;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Mac;
@@ -30,7 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-public class Utils {
+public class Altp {
     public String key;
     public String secret;
     public String resource;
@@ -40,18 +41,20 @@ public class Utils {
     public Integer connection;
     public Integer process;
     public Logger logger;
+    String url;
 
-    public Utils(@Nonnull String path) {
+    Altp(@Nonnull String path) {
         Config config = new Config(path);
 
         this.key = config.getProperty("key");
         this.secret = config.getProperty("secret");
-        this.resource = config.getProperty("resource");
+        this.resource = config.getProperty("resource-altp");
         this.environment = config.getProperty("environment");
         this.version = config.getProperty("version");
         this.mode = config.getProperty("mode");
         this.connection = Integer.parseInt(config.getProperty("connection"));
         this.process = Integer.parseInt(config.getProperty("process"));
+        this.url = "https://" + environment + ".sipay.es/altp/" + version + "/";
 
         this.logger = getLogger(
                 config.getProperty("file"),
@@ -68,10 +71,12 @@ public class Utils {
                 setConnectionRequestTimeout(process * 1000).build();
         CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 
+        System.out.println(path);
         HttpPost post = new HttpPost(path);
 
         JSONObject response = new JSONObject();
         JSONObject params = generateBody(payload);
+        System.out.println(params);
         try {
             post.setEntity(new StringEntity(params.toString(), "UTF8"));
             post.setHeader("Content-type", "application/json");
@@ -80,7 +85,7 @@ public class Utils {
             HttpResponse resp = client.execute(post);
 
             response = new JSONObject(EntityUtils.toString(resp.getEntity()));
-
+            System.out.println(response);
         } catch (Exception E) {
             logger.severe("Exception: " + E.getMessage());
             response.put("url", path);
@@ -143,7 +148,7 @@ public class Utils {
 
         try {
             ProcessingReport report;
-            JsonNode value = JsonLoader.fromURL(this.getClass().getResource("/schema/" + name + ".json"));
+            JsonNode value = JsonLoader.fromURL(this.getClass().getResource("/schema/altp/" + name + ".json"));
             final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
             final JsonSchema schema = factory.getJsonSchema(value);
 
@@ -163,4 +168,37 @@ public class Utils {
         }
     }
 
+    /**
+     * Send a methods to Altp.
+     *
+     * @param schema:  name schema
+     * @param payload: JSONObject with the message
+     * @return GenericMethods: object that contain response of MDWR API.
+     */
+    public GenericMethods genericMethods(@Nonnull String schema, @Nonnull JSONObject payload) {
+
+        String endpoint = "methods";
+        validateSchema(schema, payload);
+
+        return new GenericMethods(send(payload, getPath(endpoint)));
+    }
+
+    /**
+     * Send a confirm to Altp.
+     *
+     * @param requestId: identifier of the request.
+     * @param endpoint   to which the request is sent
+     * @return GenericConfirm: object that contain response of MDWR API.
+     */
+    public GenericConfirm genericConfirm(@Nonnull String requestId, String endpoint) {
+
+        JSONObject payload = new JSONObject();
+        payload.put("request_id", requestId);
+
+        return new GenericConfirm(send(payload, getPath(endpoint + "/confirm")));
+    }
+
+    public String getPath(String endpoint) {
+        return this.url + endpoint;
+    }
 }

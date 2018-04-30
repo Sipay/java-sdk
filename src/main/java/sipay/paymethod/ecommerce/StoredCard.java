@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 public class StoredCard implements PayMethod {
     String token;
-    String endpoint;
 
     public StoredCard(String token) {
         setToken(token);
@@ -29,14 +28,5 @@ public class StoredCard implements PayMethod {
         }
 
         this.token = token;
-    }
-
-    @Override
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
     }
 }

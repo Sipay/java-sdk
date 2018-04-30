@@ -1,4 +1,4 @@
-package examples;
+package examples.ecommerce;
 
 import org.json.JSONObject;
 import sipay.Ecommerce;
