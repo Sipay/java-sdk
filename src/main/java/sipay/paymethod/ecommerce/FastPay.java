@@ -1,6 +1,7 @@
-package sipay.paymethod;
+package sipay.paymethod.ecommerce;
 
 import org.json.JSONObject;
+import sipay.paymethod.PayMethod;
 
 import java.util.regex.Pattern;
 
@@ -26,7 +27,7 @@ public class FastPay implements PayMethod {
 
     public void setToken(String token) {
         if (!Pattern.compile("^[a-fA-F0-9]{32}$").matcher(token).find()) {
-            throw new java.lang.RuntimeException("Token must have 32 hexadecimal characters.");
+            throw new RuntimeException("Token must have 32 hexadecimal characters.");
         }
 
         this.token = token;

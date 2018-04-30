@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Express checkout methods",
+  "description": "Send a request of express checkout methods to Paypal",
+  "type": "object",
+  "properties": {
+    "order": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,64}$"
+    },
+    "amount": {
+      "type": "integer"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "reconciliation": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "logo": {
+      "type": "string",
+      "format": "links"
+    },
+    "notify": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "format": "links"
+        }
+      }
+    },
+    "policy_data": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "required": [
+    "order",
+    "amount",
+    "currency",
+    "reconciliation",
+    "title",
+    "logo",
+    "notify",
+    "policy_data"
+  ]
+}

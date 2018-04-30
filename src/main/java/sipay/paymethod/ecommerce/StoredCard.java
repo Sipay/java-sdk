@@ -1,6 +1,7 @@
-package sipay.paymethod;
+package sipay.paymethod.ecommerce;
 
 import org.json.JSONObject;
+import sipay.paymethod.PayMethod;
 
 import java.util.regex.Pattern;
 
@@ -23,7 +24,7 @@ public class StoredCard implements PayMethod {
 
     public void setToken(String token) {
         if (!Pattern.compile("^[\\w-]{6,128}$").matcher(token).find()) {
-            throw new java.lang.RuntimeException("Token doesn't have a correct value.");
+            throw new RuntimeException("Token doesn't have a correct value.");
         }
 
         this.token = token;

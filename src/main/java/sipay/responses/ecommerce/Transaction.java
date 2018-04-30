@@ -1,4 +1,4 @@
-package sipay.responses;
+package sipay.responses.ecommerce;
 
 import org.json.JSONObject;
 

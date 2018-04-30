@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Movistar methods",
+  "description": "Send a request of methods to Movistar",
+  "type": "object",
+  "properties": {
+    "order": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,64}$"
+    },
+    "msisdn": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "integer"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "notify": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "format": "links"
+        }
+      }
+    },
+    "policy_data": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "required": [
+    "amount",
+    "currency",
+    "notify",
+    "policy_data"
+  ]
+}

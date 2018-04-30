@@ -1,9 +1,10 @@
-package sipay.responses;
+package sipay.responses.ecommerce;
 
 import org.json.JSONObject;
 import sipay.Amount;
+import sipay.responses.Response;
 
-public class Authorization extends Response {
+public class Refund extends Response {
 
     String approval;
     String authorizator;
@@ -15,11 +16,11 @@ public class Authorization extends Response {
     String transactionId;
     Amount amount;
 
-    public Authorization(JSONObject resp) {
+    public Refund(JSONObject resp) {
         super(resp);
 
         JSONObject payload = ((JSONObject) resp.opt("payload"));
-        if (payload != null && payload.length() > 0) {
+        if (payload.length() > 0) {
             this.approval = getValue(payload.opt("approval"));
             this.authorizator = getValue(payload.opt("authorizator"));
             this.cardTrade = getValue(payload.opt("card_trade"));
