@@ -16,10 +16,11 @@ public class OperationsSofort {
         JSONObject payload = new JSONObject();
         JSONObject notify = new JSONObject();
 
-        payload.put("order", "aaa-order-223457009877483");
+        // El campo order tiene que ser único
+        payload.put("order", "prueba-order-00000000205");
         payload.put("reconciliation", "reconciliation");
         payload.put("title", "Sipay Pruebas");
-        payload.put("logo", "https://url/images/prueba.png");
+        payload.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
 
         notify.put("result", "url");
         payload.put("notify", notify);
@@ -27,12 +28,12 @@ public class OperationsSofort {
 
         Amount amount = new Amount("10000", "EUR");
 
-        Methods expressCheckout = new Methods(payload);
-        GenericMethods methods = sofort.methods(expressCheckout, amount);
-        if (methods == null) {
+        Methods methods = new Methods(payload);
+        GenericMethods resp = sofort.methods(methods, amount);
+        if (resp == null) {
             System.out.println("Failure in operation. Error connecting to the service");
-        } else if (methods.getCode() != 0) {
-            System.out.println("Failure in operation. Error:" + methods.getDescription());
+        } else if (resp.getCode() != 0) {
+            System.out.println("Failure in operation. Error:" + resp.getDescription());
         } else {
             System.out.println("Operation processed successfully");
         }

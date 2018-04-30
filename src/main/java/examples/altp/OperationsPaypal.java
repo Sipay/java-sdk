@@ -19,12 +19,13 @@ public class OperationsPaypal {
         JSONObject payload = new JSONObject();
         JSONObject notify = new JSONObject();
 
-        payload.put("order", "prueba-order-00000000060");
+        // El campo order tiene que ser único
+        payload.put("order", "prueba-order-00000000201");
         payload.put("reconciliation", "reconciliation");
         payload.put("title", "Sipay Pruebas");
-        payload.put("logo", "https://url/images/prueba.png");
+        payload.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
 
-        notify.put("result", "url");
+        notify.put("result", "https://www.sipay.es");
         payload.put("notify", notify);
         payload.put("policyData", new JSONObject());
 
@@ -43,10 +44,10 @@ public class OperationsPaypal {
         JSONObject payload2 = new JSONObject();
         JSONObject billing = new JSONObject();
 
-        payload2.put("order", "prueba-order-00000000060");
+        payload2.put("order", "prueba-order-00000000202");
         payload2.put("reconciliation", "reconciliation");
         payload2.put("title", "Sipay Pruebas");
-        payload2.put("logo", "https://url/images/prueba.png");
+        payload2.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
         payload2.put("customId", "90");
         payload2.put("notify", notify);
 
@@ -65,7 +66,7 @@ public class OperationsPaypal {
             System.out.println("Operation processed successfully");
         }
 
-        GenericConfirm confirm = paypal.expressCheckoutConfirm("5ae6f2ee1d65fb000196dabd");
+        GenericConfirm confirm = paypal.expressCheckoutConfirm("5ae726d81d65fb000196dad4");
         if (confirm == null) {
             System.out.println("Failure in operation. Error connecting to the service");
         } else if (confirm.getCode() != 0) {
@@ -74,7 +75,7 @@ public class OperationsPaypal {
             System.out.println("Operation processed successfully");
         }
 
-        GenericConfirm confirm2 = paypal.referenceTransactionConfirm("5a571dffcc3ac117e5aefced");
+        GenericConfirm confirm2 = paypal.referenceTransactionConfirm("5ae728121d65fb000196dad6");
         if (confirm2 == null) {
             System.out.println("Failure in operation. Error connecting to the service");
         } else if (confirm2.getCode() != 0) {
@@ -84,9 +85,9 @@ public class OperationsPaypal {
         }
 
         JSONObject payload3 = new JSONObject();
-        payload3.put("order", "prueba-order-00000000060");
+        payload3.put("order", "prueba-order-00000000203");
         payload3.put("notify", notify);
-        payload3.put("billingId", "B-4SV21231JL8117522");
+        payload3.put("billingId", "B-1YF41782NT322241B");
         payload3.put("reconciliation", "reconciliation");
 
         ReferenceTransactionPayment referenceTransactionPayment = new ReferenceTransactionPayment(payload3);

@@ -19,7 +19,8 @@ public class OperationsMovistar {
         JSONObject notify = new JSONObject();
         notify.put("result", "url");
 
-        payload.put("order", "prueba-order-00000000060");
+        // El campo order tiene que ser único
+        payload.put("order", "prueba-order-00000000200");
         payload.put("msisdn", "34611111111");
         payload.put("notify", notify);
         payload.put("policyData", new JSONObject());

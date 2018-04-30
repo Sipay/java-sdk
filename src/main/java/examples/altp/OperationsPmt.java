@@ -16,10 +16,11 @@ public class OperationsPmt {
         JSONObject notify = new JSONObject();
         JSONObject customer = new JSONObject();
 
-        payload.put("order", "prueba-order-00000000120");
+        // El campo order tiene que ser único
+        payload.put("order", "prueba-order-00000000204");
         payload.put("reconciliation", "reconciliation");
         payload.put("title", "Sipay Pruebas");
-        payload.put("logo", "https://url/images/prueba.png");
+        payload.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
 
         notify.put("result", "url");
         payload.put("notify", notify);

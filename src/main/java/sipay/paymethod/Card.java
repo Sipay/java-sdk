@@ -1,7 +1,6 @@
-package sipay.paymethod.ecommerce;
+package sipay.paymethod;
 
 import org.json.JSONObject;
-import sipay.paymethod.PayMethod;
 
 import java.util.Calendar;
 import java.util.regex.Pattern;
