@@ -2,9 +2,9 @@ package examples.ecommerce;
 
 import sipay.Amount;
 import sipay.Ecommerce;
-import sipay.paymethod.ecommerce.Card;
-import sipay.paymethod.ecommerce.FastPay;
-import sipay.paymethod.ecommerce.StoredCard;
+import sipay.paymethod.Card;
+import sipay.paymethod.FastPay;
+import sipay.paymethod.StoredCard;
 import sipay.responses.ecommerce.*;
 
 public class Operations {
@@ -16,7 +16,7 @@ public class Operations {
 
         // region * Authorization with card (1€)
         Amount amount = new Amount("100", "EUR");
-        Card card = new Card(panExample, 2018, 8);
+        Card card = new Card(panExample, 2020, 12);
 
         Authorization auth = ecommerce.authorization(card, amount);
         if (auth == null) {
