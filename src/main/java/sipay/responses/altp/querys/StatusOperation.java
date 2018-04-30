@@ -1,13 +1,15 @@
 package sipay.responses.altp.querys;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
 import sipay.responses.Response;
 
 public class StatusOperation extends Response {
-    private JSONObject request;
-    private JSONObject response;
-    private String status;
-    private String confirm;
+    @Getter @Setter private JSONObject request;
+    @Getter @Setter private JSONObject response;
+    @Getter @Setter private String status;
+    @Getter @Setter private String confirm;
 
     public StatusOperation(JSONObject resp) {
         super(resp);
@@ -19,38 +21,6 @@ public class StatusOperation extends Response {
             this.status = getValue(payload.opt("status"));
             this.confirm = getValue(payload.opt("confirm"));
         }
-    }
-
-    public JSONObject getRequest() {
-        return request;
-    }
-
-    public void setRequest(JSONObject request) {
-        this.request = request;
-    }
-
-    public JSONObject getResponse() {
-        return response;
-    }
-
-    public void setResponse(JSONObject response) {
-        this.response = response;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getConfirm() {
-        return confirm;
-    }
-
-    public void setConfirm(String confirm) {
-        this.confirm = confirm;
     }
 }
 

@@ -1,10 +1,12 @@
 package sipay.responses.altp;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
 import sipay.responses.Response;
 
 public class GenericMethods extends Response {
-    private JSONObject methods;
+    @Getter @Setter private JSONObject methods;
 
     public GenericMethods(JSONObject resp) {
         super(resp);
@@ -13,13 +15,5 @@ public class GenericMethods extends Response {
         if (payload != null && payload.length() > 0) {
             this.methods = ((JSONObject) payload.opt("methods"));
         }
-    }
-
-    public JSONObject getMethods() {
-        return methods;
-    }
-
-    public void setMethods(JSONObject methods) {
-        this.methods = methods;
     }
 }

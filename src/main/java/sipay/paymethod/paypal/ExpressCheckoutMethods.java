@@ -3,7 +3,7 @@ package sipay.paymethod.paypal;
 import org.json.JSONObject;
 import sipay.paymethod.PayMethod;
 
-public class expressCheckoutMethods implements PayMethod {
+public class ExpressCheckoutMethods implements PayMethod {
     String order;
     String reconciliation;
     String title;
@@ -11,7 +11,7 @@ public class expressCheckoutMethods implements PayMethod {
     JSONObject notify;
     JSONObject policyData;
 
-    public expressCheckoutMethods(JSONObject payload) {
+    public ExpressCheckoutMethods(JSONObject payload) {
         this.order = ((String) payload.opt("order"));
         this.reconciliation = ((String) payload.opt("reconciliation"));
         this.title = ((String) payload.opt("title"));

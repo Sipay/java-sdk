@@ -15,7 +15,7 @@ public class Querys extends Altp {
      * Send a get status operation to Altp.
      *
      * @param requestId: identifier of the request.
-     * @return StatusOperation: object that contain response of MDWR API.
+     * @return StatusOperation: object that contain response of ALTP API.
      */
     public StatusOperation getStatusOperation(@Nonnull String requestId) {
         String uri = "status/operation";

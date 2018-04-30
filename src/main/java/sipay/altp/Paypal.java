@@ -20,7 +20,7 @@ public class Paypal extends Altp {
      *
      * @param payMethod: payment with the message (it can be an object of paypal/expressCheckoutMethods)
      * @param amount:    amount of the operation.
-     * @return GenericMethods: object that contain response of MDWR API.
+     * @return GenericMethods: object that contain response of ALTP API.
      */
     public GenericMethods expressCheckoutMethods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
 
@@ -38,7 +38,7 @@ public class Paypal extends Altp {
      * Send a express checkout confirm to Paypal.
      *
      * @param requestId: identifier of the request.
-     * @return GenericConfirm: object that contain response of MDWR API.
+     * @return GenericConfirm: object that contain response of ALTP API.
      */
     public GenericConfirm expressCheckoutConfirm(@Nonnull String requestId) {
 
@@ -51,7 +51,7 @@ public class Paypal extends Altp {
      *
      * @param payMethod: payment with the message (it can be an object of paypal/referenceTransactionMethods)
      * @param amount:    amount of the operation.
-     * @return GenericMethods: object that contain response of MDWR API.
+     * @return GenericMethods: object that contain response of ALTP API.
      */
     public GenericMethods referenceTransactionMethods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
 
@@ -69,7 +69,7 @@ public class Paypal extends Altp {
      * Send a reference transaction confirm to Paypal.
      *
      * @param requestId: identifier of the request.
-     * @return GenericConfirm: object that contain response of MDWR API.
+     * @return GenericConfirm: object that contain response of ALTP API.
      */
     public GenericConfirm referenceTransactionConfirm(@Nonnull String requestId) {
 
@@ -82,7 +82,7 @@ public class Paypal extends Altp {
      *
      * @param payMethod: payment with the message (it can be an object of movistar/referenceTransactionPayment)
      * @param amount:    amount of the operation.
-     * @return Payment: object that contain response of MDWR API.
+     * @return Payment: object that contain response of ALTP API.
      */
     public Payment referenceTransactionPayment(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
 

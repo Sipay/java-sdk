@@ -13,6 +13,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
     compile group: 'com.github.java-json-tools', name: 'json-schema-validator', version: '2.2.8'
     compile group: 'org.json', name: 'json', version: '20160810'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'

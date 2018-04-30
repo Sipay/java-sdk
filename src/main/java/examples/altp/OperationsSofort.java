@@ -19,13 +19,12 @@ public class OperationsSofort {
         payload.put("order", "aaa-order-223457009877483");
         payload.put("reconciliation", "reconciliation");
         payload.put("title", "Sipay Pruebas");
-        payload.put("logo", "https://seeklogo.com/images/H/Hello_Kitty-logo-CD765E4F74-seeklogo.com.png");
+        payload.put("logo", "https://url/images/prueba.png");
 
-        notify.put("result", "https://requestb.in/uhdq21uh");
+        notify.put("result", "url");
         payload.put("notify", notify);
         payload.put("policyData", new JSONObject());
 
-        // region * Petición donde se solicite un token para una suscripción de Pay Pal (sin pago en ese momento).
         Amount amount = new Amount("10000", "EUR");
 
         Methods expressCheckout = new Methods(payload);
@@ -37,7 +36,6 @@ public class OperationsSofort {
         } else {
             System.out.println("Operation processed successfully");
         }
-        // endregion
 
         GenericConfirm confirm = sofort.confirm("6a571dffcc3ac117e5aefced");
         if (confirm == null) {

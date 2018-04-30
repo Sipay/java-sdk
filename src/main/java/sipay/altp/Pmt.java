@@ -9,11 +9,8 @@ import javax.annotation.Nonnull;
 
 public class Pmt extends Altp {
 
-    private String app;
-
     public Pmt(String resp) {
         super(resp);
-        this.app = "pmt";
     }
 
     /**
@@ -21,7 +18,7 @@ public class Pmt extends Altp {
      *
      * @param payMethod: payment with the message (it can be an object of PMT/methods)
      * @param amount:    amount of the operation.
-     * @return GenericMethods: object that contain response of MDWR API.
+     * @return GenericMethods: object that contain response of ALTP API.
      */
     public GenericMethods methods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
 

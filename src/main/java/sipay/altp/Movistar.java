@@ -19,11 +19,11 @@ public class Movistar extends Altp {
     }
 
     /**
-     * Send a methods to Paypal.
+     * Send a methods to Movistar.
      *
      * @param payMethod: payment with the message (it can be an object of movistar/methods)
      * @param amount:    amount of the operation.
-     * @return GenericMethods: object that contain response of MDWR API.
+     * @return GenericMethods: object that contain response of ALTP API.
      */
     public GenericMethods methods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
 
@@ -38,10 +38,10 @@ public class Movistar extends Altp {
     }
 
     /**
-     * Send a confirm to Paypal.
+     * Send a confirm to Movistar.
      *
      * @param requestId: identifier of the request.
-     * @return GenericConfirm: object that contain response of MDWR API.
+     * @return GenericConfirm: object that contain response of ALTP API.
      */
     public GenericConfirm confirm(@Nonnull String requestId) {
 
@@ -49,11 +49,11 @@ public class Movistar extends Altp {
     }
 
     /**
-     * Send a purchase from token to Paypal.
+     * Send a purchase from token to Movistar.
      *
      * @param payMethod: payment with the message (it can be an object of movistar/purchase)
      * @param amount:    amount of the operation.
-     * @return Generic: object that contain response of MDWR API.
+     * @return Generic: object that contain response of ALTP API.
      */
     public PurchaseFromToken purchaseFromToken(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
         String endpoint = this.app + "/purchase_from_token";

@@ -5,7 +5,7 @@ import sipay.Amount;
 import sipay.altp.Paypal;
 import sipay.paymethod.paypal.ReferenceTransactionMethods;
 import sipay.paymethod.paypal.ReferenceTransactionPayment;
-import sipay.paymethod.paypal.expressCheckoutMethods;
+import sipay.paymethod.paypal.ExpressCheckoutMethods;
 import sipay.responses.altp.GenericConfirm;
 import sipay.responses.altp.GenericMethods;
 import sipay.responses.altp.paypal.Payment;
@@ -30,7 +30,7 @@ public class OperationsPaypal {
 
         Amount amount = new Amount("10000", "EUR");
 
-        expressCheckoutMethods expressCheckout = new expressCheckoutMethods(payload);
+        ExpressCheckoutMethods expressCheckout = new ExpressCheckoutMethods(payload);
         GenericMethods methods = paypal.expressCheckoutMethods(expressCheckout, amount);
         if (methods == null) {
             System.out.println("Failure in operation. Error connecting to the service");

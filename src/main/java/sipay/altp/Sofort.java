@@ -19,7 +19,7 @@ public class Sofort extends Altp {
      *
      * @param payMethod: payment with the message (it can be an object of sofort/methods)
      * @param amount:    amount of the operation.
-     * @return GenericMethods: object that contain response of MDWR API.
+     * @return GenericMethods: object that contain response of ALTP API.
      */
     public GenericMethods methods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
 
@@ -35,7 +35,7 @@ public class Sofort extends Altp {
      * Send a express checkout methods to Paypal.
      *
      * @param requestId: identifier of the request.
-     * @return GenericConfirm: object that contain response of MDWR API.
+     * @return GenericConfirm: object that contain response of ALTP API.
      */
     public GenericConfirm confirm(@Nonnull String requestId) {
 

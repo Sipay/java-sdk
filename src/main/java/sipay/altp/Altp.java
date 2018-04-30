@@ -71,12 +71,10 @@ public class Altp {
                 setConnectionRequestTimeout(process * 1000).build();
         CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 
-        System.out.println(path);
         HttpPost post = new HttpPost(path);
 
         JSONObject response = new JSONObject();
         JSONObject params = generateBody(payload);
-        System.out.println(params);
         try {
             post.setEntity(new StringEntity(params.toString(), "UTF8"));
             post.setHeader("Content-type", "application/json");
@@ -85,7 +83,6 @@ public class Altp {
             HttpResponse resp = client.execute(post);
 
             response = new JSONObject(EntityUtils.toString(resp.getEntity()));
-            System.out.println(response);
         } catch (Exception E) {
             logger.severe("Exception: " + E.getMessage());
             response.put("url", path);
@@ -173,7 +170,7 @@ public class Altp {
      *
      * @param schema:  name schema
      * @param payload: JSONObject with the message
-     * @return GenericMethods: object that contain response of MDWR API.
+     * @return GenericMethods: object that contain response of ALTP API.
      */
     public GenericMethods genericMethods(@Nonnull String schema, @Nonnull JSONObject payload) {
 
@@ -188,7 +185,7 @@ public class Altp {
      *
      * @param requestId: identifier of the request.
      * @param endpoint   to which the request is sent
-     * @return GenericConfirm: object that contain response of MDWR API.
+     * @return GenericConfirm: object that contain response of ALTP API.
      */
     public GenericConfirm genericConfirm(@Nonnull String requestId, String endpoint) {
 
