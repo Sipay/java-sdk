@@ -1,25 +1,40 @@
-package sipay.paymethod.pmt;
+package sipay.body.paypal;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
-import sipay.paymethod.PayMethod;
 
-public class Methods implements PayMethod {
+public class ExpressCheckoutMethods {
+    @Getter
+    @Setter
+    private String order;
 
-    String order;
-    String reconciliation;
-    String title;
-    String logo;
-    JSONObject notify;
-    JSONObject customer;
-    JSONObject policyData;
+    @Getter
+    @Setter
+    private String reconciliation;
 
-    public Methods(JSONObject payload) {
+    @Getter
+    @Setter
+    private String title;
+
+    @Getter
+    @Setter
+    private String logo;
+
+    @Getter
+    @Setter
+    private JSONObject notify;
+
+    @Getter
+    @Setter
+    private JSONObject policyData;
+
+    public ExpressCheckoutMethods(JSONObject payload) {
         this.order = ((String) payload.opt("order"));
         this.reconciliation = ((String) payload.opt("reconciliation"));
         this.title = ((String) payload.opt("title"));
         this.logo = ((String) payload.opt("logo"));
         this.notify = ((JSONObject) payload.opt("notify"));
-        this.customer = ((JSONObject) payload.opt("customer"));
         this.policyData = ((JSONObject) payload.opt("policyData"));
     }
 
@@ -29,7 +44,6 @@ public class Methods implements PayMethod {
         payload.put("title", this.title);
         payload.put("logo", this.logo);
         payload.put("notify", this.notify);
-        payload.put("customer", this.customer);
         payload.put("policy_data", this.policyData);
 
         return payload;

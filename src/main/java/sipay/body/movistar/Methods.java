@@ -1,14 +1,26 @@
-package sipay.paymethod.movistar;
+package sipay.body.movistar;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
-import sipay.paymethod.PayMethod;
 
-public class Methods implements PayMethod {
+public class Methods {
 
-    String order;
-    String msisdn;
-    JSONObject notify;
-    JSONObject policyData;
+    @Getter
+    @Setter
+    private String order;
+
+    @Getter
+    @Setter
+    private String msisdn;
+
+    @Getter
+    @Setter
+    private JSONObject notify;
+
+    @Getter
+    @Setter
+    private JSONObject policyData;
 
     public Methods(JSONObject payload) {
         this.order = ((String) payload.opt("order"));

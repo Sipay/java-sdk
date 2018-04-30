@@ -3,7 +3,7 @@ package examples.altp;
 import org.json.JSONObject;
 import sipay.Amount;
 import sipay.altp.Sofort;
-import sipay.paymethod.sofort.Methods;
+import sipay.body.sofort.Methods;
 import sipay.responses.altp.GenericConfirm;
 import sipay.responses.altp.GenericMethods;
 

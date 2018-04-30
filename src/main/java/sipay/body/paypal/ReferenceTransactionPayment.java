@@ -1,13 +1,25 @@
-package sipay.paymethod.paypal;
+package sipay.body.paypal;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
-import sipay.paymethod.PayMethod;
 
-public class ReferenceTransactionPayment implements PayMethod {
-    String order;
-    JSONObject notify;
-    String billingId;
-    String reconciliation;
+public class ReferenceTransactionPayment {
+    @Getter
+    @Setter
+    private String order;
+
+    @Getter
+    @Setter
+    private JSONObject notify;
+
+    @Getter
+    @Setter
+    private String billingId;
+
+    @Getter
+    @Setter
+    private String reconciliation;
 
     public ReferenceTransactionPayment(JSONObject payload) {
         this.order = ((String) payload.opt("order"));

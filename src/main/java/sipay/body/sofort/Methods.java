@@ -1,26 +1,45 @@
-package sipay.paymethod.paypal;
+package sipay.body.sofort;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
-import sipay.paymethod.PayMethod;
 
-public class ReferenceTransactionMethods implements PayMethod {
-    String order;
-    String reconciliation;
-    String title;
-    String logo;
-    String customId;
-    JSONObject notify;
-    JSONObject billing;
-    JSONObject policyData;
+public class Methods {
+    @Getter
+    @Setter
+    private String order;
 
-    public ReferenceTransactionMethods(JSONObject payload) {
+    @Getter
+    @Setter
+    private String reconciliation;
+
+    @Getter
+    @Setter
+    private String title;
+
+    @Getter
+    @Setter
+    private String logo;
+
+    @Getter
+    @Setter
+    private String customId;
+
+    @Getter
+    @Setter
+    private JSONObject notify;
+
+    @Getter
+    @Setter
+    private JSONObject policyData;
+
+    public Methods(JSONObject payload) {
         this.order = ((String) payload.opt("order"));
         this.reconciliation = ((String) payload.opt("reconciliation"));
         this.title = ((String) payload.opt("title"));
         this.logo = ((String) payload.opt("logo"));
         this.customId = ((String) payload.opt("customId"));
         this.notify = ((JSONObject) payload.opt("notify"));
-        this.billing = ((JSONObject) payload.opt("billing"));
         this.policyData = ((JSONObject) payload.opt("policyData"));
     }
 
@@ -31,7 +50,6 @@ public class ReferenceTransactionMethods implements PayMethod {
         payload.put("logo", this.logo);
         payload.put("custom_id", this.customId);
         payload.put("notify", this.notify);
-        payload.put("billing", this.billing);
         payload.put("policy_data", this.policyData);
 
         return payload;

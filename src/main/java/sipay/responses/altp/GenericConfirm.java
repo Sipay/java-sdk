@@ -7,18 +7,53 @@ import org.json.JSONObject;
 import sipay.responses.Response;
 
 public class GenericConfirm extends Response {
-    @Getter @Setter private String datetime;
-    @Getter @Setter private String country;
-    @Getter @Setter private String requestId;
-    @Getter @Setter private String countryCode;
-    @Getter @Setter private String token;
-    @Getter @Setter private String billingId;
-    @Getter @Setter private JSONArray paymentInfo;
-    @Getter @Setter private String authToken;
-    @Getter @Setter private String responseType;
-    @Getter @Setter private String userId;
-    @Getter @Setter private JSONObject msisdn;
-    @Getter @Setter private String status;
+    @Getter
+    @Setter
+    private String datetime;
+
+    @Getter
+    @Setter
+    private String country;
+
+    @Getter
+    @Setter
+    private String requestId;
+
+    @Getter
+    @Setter
+    private String countryCode;
+
+    @Getter
+    @Setter
+    private String token;
+
+    @Getter
+    @Setter
+    private String billingId;
+
+    @Getter
+    @Setter
+    private JSONArray paymentInfo;
+
+    @Getter
+    @Setter
+    private String authToken;
+
+    @Getter
+    @Setter
+    private String responseType;
+
+    @Getter
+    @Setter
+    private String userId;
+
+    @Getter
+    @Setter
+    private JSONObject msisdn;
+
+    @Getter
+    @Setter
+    private String status;
 
     public GenericConfirm(JSONObject resp) {
         super(resp);

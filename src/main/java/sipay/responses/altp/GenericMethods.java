@@ -6,7 +6,9 @@ import org.json.JSONObject;
 import sipay.responses.Response;
 
 public class GenericMethods extends Response {
-    @Getter @Setter private JSONObject methods;
+    @Getter
+    @Setter
+    private JSONObject methods;
 
     public GenericMethods(JSONObject resp) {
         super(resp);

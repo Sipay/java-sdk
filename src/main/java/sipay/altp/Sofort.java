@@ -2,7 +2,7 @@ package sipay.altp;
 
 import org.json.JSONObject;
 import sipay.Amount;
-import sipay.paymethod.PayMethod;
+import sipay.body.sofort.Methods;
 import sipay.responses.altp.GenericConfirm;
 import sipay.responses.altp.GenericMethods;
 
@@ -17,16 +17,16 @@ public class Sofort extends Altp {
     /**
      * Send a methods to Sofort.
      *
-     * @param payMethod: payment with the message (it can be an object of sofort/methods)
-     * @param amount:    amount of the operation.
+     * @param body:   payment with the message (it can be an object of sofort/methods)
+     * @param amount: amount of the operation.
      * @return GenericMethods: object that contain response of ALTP API.
      */
-    public GenericMethods methods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+    public GenericMethods methods(@Nonnull Methods body, @Nonnull Amount amount) {
 
         JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
-        payload = payMethod.update(payload);
+        payload = body.update(payload);
 
         return genericMethods("s", payload);
     }

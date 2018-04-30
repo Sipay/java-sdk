@@ -13,10 +13,10 @@
     },
     "client_ip_address": {},
     "notes": {},
-    "pe_notification_url":  {},
-    "channel":  {},
-    "custom_params":  {},
-    "language":  {},
+    "pe_notification_url": {},
+    "channel": {},
+    "custom_params": {},
+    "language": {},
     "message_params": {}
   },
   "required": [

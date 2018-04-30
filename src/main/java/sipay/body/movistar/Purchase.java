@@ -1,12 +1,17 @@
-package sipay.paymethod.movistar;
+package sipay.body.movistar;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
-import sipay.paymethod.PayMethod;
 
-public class Purchase implements PayMethod {
+public class Purchase {
+    @Getter
+    @Setter
+    private String authToken;
 
-    String authToken;
-    String clientIpAddress;
+    @Getter
+    @Setter
+    private String clientIpAddress;
 
     public Purchase(JSONObject payload) {
         this.authToken = ((String) payload.opt("authToken"));

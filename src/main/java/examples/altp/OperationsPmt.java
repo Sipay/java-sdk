@@ -3,7 +3,7 @@ package examples.altp;
 import org.json.JSONObject;
 import sipay.Amount;
 import sipay.altp.Pmt;
-import sipay.paymethod.pmt.Methods;
+import sipay.body.pmt.Methods;
 import sipay.responses.altp.GenericMethods;
 
 public class OperationsPmt {

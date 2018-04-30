@@ -6,15 +6,37 @@ import org.json.JSONObject;
 import sipay.responses.Response;
 
 public class PurchaseFromToken extends Response {
-    @Getter @Setter private String authToken;
-    @Getter @Setter private String responseType;
-    @Getter @Setter private JSONObject userId;
-    @Getter @Setter private String purchaseCode;
-    @Getter @Setter private String amount;
-    @Getter @Setter private String order;
-    @Getter @Setter private String transactionId;
-    @Getter @Setter private String status;
+    @Getter
+    @Setter
+    private String authToken;
 
+    @Getter
+    @Setter
+    private String responseType;
+
+    @Getter
+    @Setter
+    private JSONObject userId;
+
+    @Getter
+    @Setter
+    private String purchaseCode;
+
+    @Getter
+    @Setter
+    private String amount;
+
+    @Getter
+    @Setter
+    private String order;
+
+    @Getter
+    @Setter
+    private String transactionId;
+
+    @Getter
+    @Setter
+    private String status;
 
     public PurchaseFromToken(JSONObject resp) {
         super(resp);

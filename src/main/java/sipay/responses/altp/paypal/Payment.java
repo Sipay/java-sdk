@@ -6,19 +6,57 @@ import org.json.JSONObject;
 import sipay.responses.Response;
 
 public class Payment extends Response {
-    @Getter @Setter private String paymentType;
-    @Getter @Setter private String amount;
-    @Getter @Setter private String transactionId;
-    @Getter @Setter private String datetime;
-    @Getter @Setter private String pendingReason;
-    @Getter @Setter private String transactionType;
-    @Getter @Setter private String currency;
-    @Getter @Setter private String reasonCode;
-    @Getter @Setter private String fee;
-    @Getter @Setter private String tax;
-    @Getter @Setter private String status;
-    @Getter @Setter private String billingId;
-    @Getter @Setter private String requestId;
+    @Getter
+    @Setter
+    private String paymentType;
+
+    @Getter
+    @Setter
+    private String amount;
+
+    @Getter
+    @Setter
+    private String transactionId;
+
+    @Getter
+    @Setter
+    private String datetime;
+
+    @Getter
+    @Setter
+    private String pendingReason;
+
+    @Getter
+    @Setter
+    private String transactionType;
+
+    @Getter
+    @Setter
+    private String currency;
+
+    @Getter
+    @Setter
+    private String reasonCode;
+
+    @Getter
+    @Setter
+    private String fee;
+
+    @Getter
+    @Setter
+    private String tax;
+
+    @Getter
+    @Setter
+    private String status;
+
+    @Getter
+    @Setter
+    private String billingId;
+
+    @Getter
+    @Setter
+    private String requestId;
 
     public Payment(JSONObject resp) {
         super(resp);

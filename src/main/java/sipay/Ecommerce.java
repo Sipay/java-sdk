@@ -17,7 +17,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import sipay.paymethod.PayMethod;
-import sipay.responses.*;
 import sipay.responses.ecommerce.*;
 
 import javax.annotation.Nonnull;

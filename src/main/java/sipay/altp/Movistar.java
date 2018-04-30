@@ -2,7 +2,8 @@ package sipay.altp;
 
 import org.json.JSONObject;
 import sipay.Amount;
-import sipay.paymethod.PayMethod;
+import sipay.body.movistar.Methods;
+import sipay.body.movistar.Purchase;
 import sipay.responses.altp.GenericConfirm;
 import sipay.responses.altp.GenericMethods;
 import sipay.responses.altp.movistar.PurchaseFromToken;
@@ -21,18 +22,18 @@ public class Movistar extends Altp {
     /**
      * Send a methods to Movistar.
      *
-     * @param payMethod: payment with the message (it can be an object of movistar/methods)
-     * @param amount:    amount of the operation.
+     * @param body:   payment with the message (it can be an object of movistar/methods)
+     * @param amount: amount of the operation.
      * @return GenericMethods: object that contain response of ALTP API.
      */
-    public GenericMethods methods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+    public GenericMethods methods(@Nonnull Methods body, @Nonnull Amount amount) {
 
         String schema = "movistarMethods";
 
         JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
-        payload = payMethod.update(payload);
+        payload = body.update(payload);
 
         return genericMethods(schema, payload);
     }
@@ -51,17 +52,17 @@ public class Movistar extends Altp {
     /**
      * Send a purchase from token to Movistar.
      *
-     * @param payMethod: payment with the message (it can be an object of movistar/purchase)
-     * @param amount:    amount of the operation.
+     * @param body:   payment with the message (it can be an object of movistar/purchase)
+     * @param amount: amount of the operation.
      * @return Generic: object that contain response of ALTP API.
      */
-    public PurchaseFromToken purchaseFromToken(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+    public PurchaseFromToken purchaseFromToken(@Nonnull Purchase body, @Nonnull Amount amount) {
         String endpoint = this.app + "/purchase_from_token";
 
         JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
-        payload = payMethod.update(payload);
+        payload = body.update(payload);
 
         return new PurchaseFromToken(send(payload, getPath(endpoint)));
     }

@@ -3,8 +3,8 @@ package examples.altp;
 import org.json.JSONObject;
 import sipay.Amount;
 import sipay.altp.Movistar;
-import sipay.paymethod.movistar.Methods;
-import sipay.paymethod.movistar.Purchase;
+import sipay.body.movistar.Methods;
+import sipay.body.movistar.Purchase;
 import sipay.responses.altp.GenericConfirm;
 import sipay.responses.altp.GenericMethods;
 import sipay.responses.altp.movistar.PurchaseFromToken;
@@ -60,6 +60,5 @@ public class OperationsMovistar {
         } else {
             System.out.println("Operation processed successfully");
         }
-
     }
 }

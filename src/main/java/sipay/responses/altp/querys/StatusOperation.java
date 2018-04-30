@@ -6,10 +6,21 @@ import org.json.JSONObject;
 import sipay.responses.Response;
 
 public class StatusOperation extends Response {
-    @Getter @Setter private JSONObject request;
-    @Getter @Setter private JSONObject response;
-    @Getter @Setter private String status;
-    @Getter @Setter private String confirm;
+    @Getter
+    @Setter
+    private JSONObject request;
+
+    @Getter
+    @Setter
+    private JSONObject response;
+
+    @Getter
+    @Setter
+    private String status;
+
+    @Getter
+    @Setter
+    private String confirm;
 
     public StatusOperation(JSONObject resp) {
         super(resp);
@@ -23,4 +34,3 @@ public class StatusOperation extends Response {
         }
     }
 }
-

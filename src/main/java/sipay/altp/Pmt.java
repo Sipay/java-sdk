@@ -2,7 +2,7 @@ package sipay.altp;
 
 import org.json.JSONObject;
 import sipay.Amount;
-import sipay.paymethod.PayMethod;
+import sipay.body.pmt.Methods;
 import sipay.responses.altp.GenericMethods;
 
 import javax.annotation.Nonnull;
@@ -16,21 +16,19 @@ public class Pmt extends Altp {
     /**
      * Send a methods to PMT.
      *
-     * @param payMethod: payment with the message (it can be an object of PMT/methods)
-     * @param amount:    amount of the operation.
+     * @param body:   payment with the message (it can be an object of PMT/methods)
+     * @param amount: amount of the operation.
      * @return GenericMethods: object that contain response of ALTP API.
      */
-    public GenericMethods methods(@Nonnull PayMethod payMethod, @Nonnull Amount amount) {
+    public GenericMethods methods(@Nonnull Methods body, @Nonnull Amount amount) {
 
         String schema = "pmtMethods";
 
         JSONObject payload = new JSONObject();
         payload.put("amount", amount.amount);
         payload.put("currency", amount.currency);
-        payload = payMethod.update(payload);
+        payload = body.update(payload);
 
         return genericMethods(schema, payload);
     }
 }
-
-
