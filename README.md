@@ -652,7 +652,7 @@ Este objeto no añade nada a lo descrito en los atributos comunes.
 A través de peticiones a Sipay mediante ALTP, se pueden realizar operativas de:
 * Paypal (sección 6.1).
 * Movistar (sección 6.2).
-*  Sofort (sección 6.3).
+* Sofort (sección 6.3).
 * Paga más tarde (PMT) (sección 6.4).
 * Querys (sección 6.5).
 
