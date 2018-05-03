@@ -5,7 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - XXXX-XX-XX
- - Añadir .jar al proyecto
+## [1.1.0] - 2018-05-03
+### Added
+ - Operativas ALTP: paypal, sofort, movistar y pmt
+ - .jar al proyecto
+
  
 ## [1.0.0] - 2018-03-14
 ### Added
@@ -19,7 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Ejemplos para el uso de la SDK
 
 
-[Unreleased]: https://github.com/Sipay/java-sdk/compare/1.0.0...develop
+[Unreleased]: https://github.com/Sipay/java-sdk/compare/1.1.0...develop
+[1.1.0]: https://github.com/Sipay/java-sdk/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/Sipay/java-sdk/compare/738dac36fbd061fc11cdf99944694ff16852be43...1.0.0
 
 
