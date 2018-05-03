@@ -13,7 +13,7 @@ public class Card implements PayMethod {
 
     public Card(String cardNumber, int year, int month) {
         if (!Pattern.compile("^[\\w-]{14,19}$").matcher(cardNumber).find()) {
-            throw new java.lang.RuntimeException("Card_number doesn't have a correct value.");
+            throw new RuntimeException("Card_number doesn't have a correct value.");
         }
 
         this.cardNumber = cardNumber;
@@ -35,18 +35,18 @@ public class Card implements PayMethod {
 
     public void setExpirationDate(int year, int month) {
         if (year < 999 || year > 9999) {
-            throw new java.lang.RuntimeException("Year doesn't have a correct value.");
+            throw new RuntimeException("Year doesn't have a correct value.");
         }
 
         if (month < 0 || month > 12) {
-            throw new java.lang.RuntimeException("Month doesn't have a correct value.");
+            throw new RuntimeException("Month doesn't have a correct value.");
         }
 
         this.year = year;
         this.month = month;
 
         if (isExpired()) {
-            throw new java.lang.RuntimeException("Card is expired.");
+            throw new RuntimeException("Card is expired.");
         }
     }
 

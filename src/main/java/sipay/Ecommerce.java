@@ -17,7 +17,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import sipay.paymethod.PayMethod;
-import sipay.responses.*;
+import sipay.responses.ecommerce.*;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Mac;
@@ -146,7 +146,7 @@ public class Ecommerce {
 
         try {
             ProcessingReport report;
-            JsonNode value = JsonLoader.fromURL(this.getClass().getResource("/schema/" + name + ".json"));
+            JsonNode value = JsonLoader.fromURL(this.getClass().getResource("/schema/ecommerce/" + name + ".json"));
             final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
             final JsonSchema schema = factory.getJsonSchema(value);
 
