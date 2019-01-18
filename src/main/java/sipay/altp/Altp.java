@@ -181,7 +181,7 @@ public class Altp {
     }
 
     /**
-     * Send a confirm to Altp.
+     * Send a confirm to Altp. 
      *
      * @param requestId: identifier of the request.
      * @param endpoint   to which the request is sent

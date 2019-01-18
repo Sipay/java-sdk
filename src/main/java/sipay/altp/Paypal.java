@@ -37,6 +37,16 @@ public class Paypal extends Altp {
     }
 
     /**
+     * Get express checkout method URL
+     *
+     * @param methods: object that contain response of ALTP API.
+     * @return String: Url of the webpay request 
+     */
+    public String getExpressCheckoutMethod(@Nonnull GenericMethods methods) {
+    	return methods.getMethods().getJSONObject("paypal_express_checkout").getString("url");
+    }
+
+    /**
      * Send a express checkout confirm to Paypal.
      *
      * @param requestId: identifier of the request.
@@ -65,6 +75,16 @@ public class Paypal extends Altp {
         payload = body.update(payload);
 
         return genericMethods(schema, payload);
+    }
+    
+    /**
+     * Get reference transaction method URL
+     *
+     * @param methods: object that contain response of ALTP API.
+     * @return String: Url of the webpay request 
+     */
+    public String getReferenceTransactionMethod(@Nonnull GenericMethods methods) {
+    	return methods.getMethods().getJSONObject("paypal_reference_transaction").getString("url");
     }
 
     /**

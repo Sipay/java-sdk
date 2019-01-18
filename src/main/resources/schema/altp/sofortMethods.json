@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Transbank sofort methods",
+    "description": "Send a request of methods to Sofort",
+    "type": "object",
+    "properties": {
+      "order": {
+        "type": "string",
+        "pattern": "^[\\w-]{6,64}$"
+      },
+      "amount": {
+        "type": "integer"
+      },
+      "currency": {
+        "type": "string"
+      },
+      "notify": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "format": "links"
+          }
+        }
+      },
+      "policy_data": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    "required": [
+      "amount",
+      "currency",
+      "notify",
+      "order",
+      "policy_data"
+    ]
+  }

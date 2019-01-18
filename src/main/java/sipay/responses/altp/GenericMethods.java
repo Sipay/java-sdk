@@ -9,6 +9,9 @@ public class GenericMethods extends Response {
     @Getter
     @Setter
     private JSONObject methods;
+    
+    @Getter
+    private String requestId;
 
     public GenericMethods(JSONObject resp) {
         super(resp);
@@ -17,5 +20,6 @@ public class GenericMethods extends Response {
         if (payload != null && payload.length() > 0) {
             this.methods = ((JSONObject) payload.opt("methods"));
         }
+        this.requestId = resp.optString("request_id");
     }
 }
