@@ -38,9 +38,25 @@ public class OperationsPaypal {
         } else if (methods.getCode() != 0) {
             System.out.println("Failure in operation. Error:" + methods.getDescription());
         } else {
+            System.out.println("Success getting Paypal methods");
+        }
+        // Get redirect URL
+        String expressCheckoutUri = paypal.getExpressCheckoutMethod(methods);
+        System.out.println("Redirect client browser to this URL: " + expressCheckoutUri);
+        
+        String expressCheckoutRequestId = methods.getRequestId();
+
+        GenericConfirm confirm = paypal.expressCheckoutConfirm(expressCheckoutRequestId);
+        if (confirm == null) {
+            System.out.println("Failure in operation. Error connecting to the service");
+        } else if (confirm.getCode() != 0) {
+            System.out.println("Failure in operation. Error:" + confirm.getDescription());
+        } else {
             System.out.println("Operation processed successfully");
         }
 
+
+        // DO PAYPAL REFERENCE TRANSACTION
         JSONObject payload2 = new JSONObject();
         JSONObject billing = new JSONObject();
 
@@ -63,19 +79,16 @@ public class OperationsPaypal {
         } else if (methods2.getCode() != 0) {
             System.out.println("Failure in operation. Error:" + methods2.getDescription());
         } else {
-            System.out.println("Operation processed successfully");
+            System.out.println("Success getting Paypal methods");
         }
+        
+        // Get redirect URL
+        String referenceTransactionUri = paypal.getReferenceTransactionMethod(methods);
+        System.out.println("Redirect client browser to this URL: " + referenceTransactionUri);
 
-        GenericConfirm confirm = paypal.expressCheckoutConfirm("5ae726d81d65fb000196dad4");
-        if (confirm == null) {
-            System.out.println("Failure in operation. Error connecting to the service");
-        } else if (confirm.getCode() != 0) {
-            System.out.println("Failure in operation. Error:" + confirm.getDescription());
-        } else {
-            System.out.println("Operation processed successfully");
-        }
+        String referenceTransactionRequestId = methods2.getRequestId();
 
-        GenericConfirm confirm2 = paypal.referenceTransactionConfirm("5ae728121d65fb000196dad6");
+        GenericConfirm confirm2 = paypal.referenceTransactionConfirm(referenceTransactionRequestId);
         if (confirm2 == null) {
             System.out.println("Failure in operation. Error connecting to the service");
         } else if (confirm2.getCode() != 0) {

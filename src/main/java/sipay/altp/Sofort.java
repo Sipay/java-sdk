@@ -28,7 +28,17 @@ public class Sofort extends Altp {
         payload.put("currency", amount.currency);
         payload = body.update(payload);
 
-        return genericMethods("s", payload);
+        return genericMethods("sofortMethods", payload);
+    }
+    
+    /**
+     * Get sofort method URL
+     *
+     * @param methods: object that contain response of ALTP API.
+     * @return String: Url of the webpay request 
+     */
+    public String getSofortMethod(@Nonnull GenericMethods methods) {
+    	return methods.getMethods().getJSONObject("sofort").getString("url");
     }
 
     /**

@@ -22,7 +22,7 @@ public class OperationsSofort {
         payload.put("title", "Sipay Pruebas");
         payload.put("logo", "https://www.sipay.es/wp-content/uploads/Sipay_payment-solutions_1DEBAJO-min.png");
 
-        notify.put("result", "url");
+        notify.put("result", "https://www.sipay.es");
         payload.put("notify", notify);
         payload.put("policyData", new JSONObject());
 
@@ -35,10 +35,15 @@ public class OperationsSofort {
         } else if (resp.getCode() != 0) {
             System.out.println("Failure in operation. Error:" + resp.getDescription());
         } else {
-            System.out.println("Operation processed successfully");
+            System.out.println("Success getting Sofort methods");
         }
-
-        GenericConfirm confirm = sofort.confirm("6a571dffcc3ac117e5aefced");
+        
+        // Get redirect URL
+        String referenceTransactionUri = sofort.getSofortMethod(resp);
+        System.out.println("Redirect client browser to this URL: " + referenceTransactionUri);
+        
+        String requestId = resp.getRequestId();
+        GenericConfirm confirm = sofort.confirm(requestId);
         if (confirm == null) {
             System.out.println("Failure in operation. Error connecting to the service");
         } else if (confirm.getCode() != 0) {

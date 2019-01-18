@@ -31,4 +31,14 @@ public class Pmt extends Altp {
 
         return genericMethods(schema, payload);
     }
+    
+    /**
+     * Get PMT method URL
+     *
+     * @param methods: object that contain response of ALTP API.
+     * @return String: Url of the webpay request 
+     */
+    public String getPmtMethod(@Nonnull GenericMethods methods) {
+    	return methods.getMethods().getJSONObject("pmt").getString("url");
+    }
 }
