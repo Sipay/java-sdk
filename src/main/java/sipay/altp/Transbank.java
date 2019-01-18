@@ -3,6 +3,7 @@ package sipay.altp;
 import org.json.JSONObject;
 import sipay.Amount;
 import sipay.body.transbank.WebpayMethods;
+import sipay.responses.Response;
 import sipay.responses.altp.GenericConfirm;
 import sipay.responses.altp.GenericMethods;
 
@@ -41,6 +42,27 @@ public class Transbank extends Altp{
      */
     public String getWebpayMethod(@Nonnull GenericMethods methods) {
     	return methods.getMethods().getJSONObject("transbank").getString("url");
+    }
+
+    /**
+     * Perform refund to webpay
+     * @param authorizationCode: The authorizationCode of the transaction
+     * @param buyOrder: The order of the transaction
+     * @param originalAmount: Original amount of the transaction
+     * @param nullifyAmount: Refund amount of the transaction
+     * @return Response: Response of the refund
+     */
+    public Response refundWebpay(@Nonnull String authorizationCode, @Nonnull String buyOrder,
+    		@Nonnull Amount originalAmount, @Nonnull Amount nullifyAmount) {
+
+    	JSONObject payload = new JSONObject();
+    	payload.put("authorizationCode", authorizationCode);
+    	payload.put("buyOrder", buyOrder);
+    	payload.put("authorizedAmount", originalAmount.amount);
+    	payload.put("nullifyAmount", nullifyAmount.amount);
+
+		Response response = new Response(this.send(payload, this.getPath("trans/refund")));
+		return response;
     }
 
     /**
