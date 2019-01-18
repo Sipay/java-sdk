@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import sipay.Amount;
 import sipay.altp.Transbank;
 import sipay.body.transbank.WebpayMethods;
+import sipay.responses.Response;
 import sipay.responses.altp.GenericMethods;
 
 public class OperationsTransbank {
@@ -16,7 +17,7 @@ public class OperationsTransbank {
         JSONObject notify = new JSONObject();
 
         // El campo order tiene que ser único
-        payload.put("order", "prueba-order-00000000201");
+        payload.put("order", "prueba-order-sdk-transbank");
 
         notify.put("result", "https://www.sipay.es");
         payload.put("notify", notify);
@@ -40,5 +41,20 @@ public class OperationsTransbank {
         System.out.println("Redirect client browser to this URL: " + webpayUri);
 
         // Final result of the transaction will be sent to the notify result URL
+
+
+        // PERFORM A WEBPAY REFUND
+        String authorizationCode = "1213";
+        String buyOrder = "prueba-order-sdk-transbank";
+        Amount refundAmount = new Amount("5000", "EUR");
+
+        Response res = transbank.refundWebpay(authorizationCode, buyOrder, amount, refundAmount);
+        if (res == null) {
+            System.out.println("Failure in operation. Error connecting to the service");
+        } else if (res.getCode() != 0) {
+            System.out.println("Failure in operation. Error:" + res.getDescription());
+        } else {
+            System.out.println("Success performing webpay refund");
+        }
 	}
 }
