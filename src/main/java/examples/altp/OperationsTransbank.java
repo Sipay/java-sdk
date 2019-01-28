@@ -23,7 +23,7 @@ public class OperationsTransbank {
         payload.put("notify", notify);
         payload.put("policyData", new JSONObject());
 
-        Amount amount = new Amount("10000", "EUR");
+        Amount amount = new Amount("10000", "CLP");
 
         WebpayMethods expressCheckout = new WebpayMethods(payload);
         // Request ALTP methods
@@ -46,7 +46,7 @@ public class OperationsTransbank {
         // PERFORM A WEBPAY REFUND
         String authorizationCode = "1213";
         String buyOrder = "prueba-order-sdk-transbank";
-        Amount refundAmount = new Amount("5000", "EUR");
+        Amount refundAmount = new Amount("5000", "CLP");
 
         Response res = transbank.refundWebpay(authorizationCode, buyOrder, amount, refundAmount);
         if (res == null) {
