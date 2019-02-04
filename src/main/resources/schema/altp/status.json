@@ -1,0 +1,12 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Altp status",
+    "description": "Send a request of status to Altp",
+    "type": "object",
+    "properties": {
+      "request_id": {
+        "type": "string",
+        "pattern": "^[\\w-]{6,64}$"
+      }
+    }
+}

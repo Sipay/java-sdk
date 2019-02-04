@@ -4,7 +4,6 @@ import org.json.JSONObject;
 import sipay.Amount;
 import sipay.body.transbank.WebpayMethods;
 import sipay.responses.Response;
-import sipay.responses.altp.GenericConfirm;
 import sipay.responses.altp.GenericMethods;
 
 import javax.annotation.Nonnull;
@@ -33,15 +32,27 @@ public class Transbank extends Altp{
 
         return genericMethods(schema, payload);
     }
-    
+
     /**
      * Get webpay method URL
      *
      * @param methods: object that contain response of ALTP API.
-     * @return String: Url of the webpay request 
+     * @return String: Url of the webpay request
      */
     public String getWebpayMethod(@Nonnull GenericMethods methods) {
-    	return methods.getMethods().getJSONObject("transbank").getString("url");
+        return methods.getMethods().getJSONObject("transbank").getString("url");
+    }
+
+    /**
+     * Check webpay transaction from Status
+     *
+     * @param status: status of the Altp transaction.
+     * @return boolean: Transaction succesful
+     */
+    public Boolean getWebpayResult(@Nonnull JSONObject status) {
+        // Check status is completed and the result code was 200
+        return status.getJSONObject("payload").getString("status").equals("completed") &&
+                status.getJSONObject("payload").getJSONObject("response").getInt("code") == 200;
     }
 
     /**
@@ -53,27 +64,15 @@ public class Transbank extends Altp{
      * @return Response: Response of the refund
      */
     public Response refundWebpay(@Nonnull String authorizationCode, @Nonnull String buyOrder,
-    		@Nonnull Amount originalAmount, @Nonnull Amount nullifyAmount) {
+            @Nonnull Amount originalAmount, @Nonnull Amount nullifyAmount) {
 
-    	JSONObject payload = new JSONObject();
-    	payload.put("authorizationCode", authorizationCode);
-    	payload.put("buyOrder", buyOrder);
-    	payload.put("authorizedAmount", originalAmount.amount);
-    	payload.put("nullifyAmount", nullifyAmount.amount);
+        JSONObject payload = new JSONObject();
+        payload.put("authorizationCode", authorizationCode);
+        payload.put("buyOrder", buyOrder);
+        payload.put("authorizedAmount", originalAmount.amount);
+        payload.put("nullifyAmount", nullifyAmount.amount);
 
-		Response response = new Response(this.send(payload, this.getPath("trans/refund")));
-		return response;
-    }
-
-    /**
-     * Send a express checkout confirm to Paypal.
-     *
-     * @param requestId: identifier of the request.
-     * @return GenericConfirm: object that contain response of ALTP API.
-     */
-    public GenericConfirm expressCheckoutConfirm(@Nonnull String requestId) {
-
-        String endpoint = "pexp";
-        return genericConfirm(requestId, endpoint);
+        Response response = new Response(this.send(payload, this.getPath("trans/refund")));
+        return response;
     }
 }

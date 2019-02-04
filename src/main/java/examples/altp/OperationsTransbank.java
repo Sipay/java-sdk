@@ -23,12 +23,12 @@ public class OperationsTransbank {
         payload.put("notify", notify);
         payload.put("policyData", new JSONObject());
 
-        Amount amount = new Amount("10000", "EUR");
+        Amount amount = new Amount("10000", "CLP");
 
-        WebpayMethods expressCheckout = new WebpayMethods(payload);
+        WebpayMethods webpayPayload = new WebpayMethods(payload);
         // Request ALTP methods
-        GenericMethods methods = transbank.webpayMethods(expressCheckout, amount);
-        
+        GenericMethods methods = transbank.webpayMethods(webpayPayload, amount);
+
         if (methods == null) {
             System.out.println("Failure in operation. Error connecting to the service");
         } else if (methods.getCode() != 0) {
@@ -42,11 +42,19 @@ public class OperationsTransbank {
 
         // Final result of the transaction will be sent to the notify result URL
 
+        JSONObject status = transbank.getStatus(methods.getRequestId());
+        Boolean success = transbank.getWebpayResult(status);
+        /* This example will always return false, since there is no redirection to the transaction URL, so the transaction is never done */
+        if (success) {
+            System.out.println("Transaction finished succesfully");
+        } else {
+            System.out.println("The transaction didnt finish");
+        }
 
         // PERFORM A WEBPAY REFUND
         String authorizationCode = "1213";
         String buyOrder = "prueba-order-sdk-transbank";
-        Amount refundAmount = new Amount("5000", "EUR");
+        Amount refundAmount = new Amount("5000", "CLP");
 
         Response res = transbank.refundWebpay(authorizationCode, buyOrder, amount, refundAmount);
         if (res == null) {
@@ -56,5 +64,5 @@ public class OperationsTransbank {
         } else {
             System.out.println("Success performing webpay refund");
         }
-	}
+    }
 }
