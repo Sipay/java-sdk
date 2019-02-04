@@ -176,12 +176,27 @@ public class Altp {
 
         String endpoint = "methods";
         validateSchema(schema, payload);
-
         return new GenericMethods(send(payload, getPath(endpoint)));
     }
 
     /**
-     * Send a confirm to Altp. 
+     * Send status request to Altp
+     * @param request_id: Request ID of the transaction
+     * @return Request status
+     */
+    public JSONObject getStatus(@Nonnull String request_id) {
+
+        String endpoint = "status/operation";
+        JSONObject payload = new JSONObject();
+        payload.put("request_id", request_id);
+
+        validateSchema("status", payload);
+
+        return send(payload, getPath(endpoint));
+    }
+
+    /**
+     * Send a confirm to Altp.
      *
      * @param requestId: identifier of the request.
      * @param endpoint   to which the request is sent
