@@ -52,7 +52,8 @@ public class Transbank extends Altp{
     public Boolean getWebpayResult(@Nonnull JSONObject status) {
         // Check status is completed and the result code was 200
         return status.getJSONObject("payload").getString("status").equals("completed") &&
-                status.getJSONObject("payload").getJSONObject("response").getInt("code") == 200;
+                status.getJSONObject("payload").getJSONObject("response").getInt("code") == 200 && 
+                status.getJSONObject("payload").getJSONObject("response").getJSONObject("detailOutput").getInt("responseCode") == 0;
     }
 
     /**
