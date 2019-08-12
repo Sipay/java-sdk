@@ -184,7 +184,8 @@ A través de peticiones a Sipay mediante Ecommerce, se pueden realizar operativa
 * Tokenización* de tarjetas (sección 5.2.5).
 * Búsqueda de tarjetas tokenizadas (sección 5.2.6).
 * Dar de baja una tarjeta tokenizada (sección 5.2.7).
-
+* Autenticar una tarjeta con 3D Secure (sección 5.2.8).
+* Confirmar una compra previamente autenticada (sección 5.2.9).
 
 _* Tokenización_: Es un proceso por el cual el PAN (_Primary Account Number_ – Número Primario de Cuenta) de la tarjeta se sustituye por un valor llamado token. Esta funcionalidad permite que Sipay guarde los datos de la tarjeta del cliente, para agilizar el proceso de pagos y evitar que se deba introducir, cada vez, los datos de tarjeta, en pagos repetitivos. Sipay realiza el almacenamieno de los datos de forma segura, cumpliendo con las normativas PCI.
 
@@ -473,7 +474,7 @@ Amount amount = new Amount(100, "EUR"); // 1€
 Refund refund = ecommerce.refund("transactionId", amount, options);
   ```
 
-## 5.2.5 `query(JSONObject options)`
+## 5.2.4 `query(JSONObject options)`
 
 ### Definición
 Este método `Ecommerce` permite enviar una petición a Sipay para buscar de una operación concreta.
@@ -497,7 +498,7 @@ options.put("order", "order-reference");
 Query query = ecommerce.query(options);
   ```
 
-## 5.2.6 `register(card, token)`
+## 5.2.5 `register(card, token)`
 
 ### Definición
 Este método `Ecommerce` permite enviar una petición de tokenización de tarjeta a Sipay.
@@ -520,7 +521,7 @@ Card card = new Card("4242424242424242", 2050, 2);
 Register register = ecommerce.register(card, "newtoken");
   ```
 
-## 5.2.7 `card(token)`
+## 5.2.6 `card(token)`
 
 ### Definición
 Este método `Ecommerce` permite enviar una petición a Sipay con la finalidad de obtener información de una tarjeta que está tokenenizada.
@@ -539,7 +540,7 @@ import sipay.responses.Card;
 Card card = ecommerce.card("newtoken");
   ```
 
-## 5.2.8 `unregister(token)`
+## 5.2.7 `unregister(token)`
 
 ### Definición
 Este método `Ecommerce` permite enviar una petición a Sipay con la finalidad de dar de baja una tarjeta tokenizada.
@@ -557,6 +558,71 @@ El método `unregister` devuelve un objeto `Unregister`.
 import sipay.responses.Unregister;
 
 Unregister unregister = ecommerce.unregister("newtoken");
+  ```
+
+## 5.2.8 `authentication(payMethod, amount, options)`
+
+### Definición
+Este método `Ecommerce` permite enviar una petición a Sipay con la finalidad de autenticar una tarjeta con 3D secure.
+
+### Parámetros
+* **`payMethod`:**[_obligatorio_] Corresponde a una instancia  `Card`, `StoredCard` o `FastPay` que indica el método de pago a utilizar.
+* **`amount `:** [_obligatorio_] Corresponde a una instancia de `Amount` que representa el importe de la operación.
+*  **`options `:**  [_opcional_] Es un `JSONObject`  que puede contener los siguientes elementos:
+	* **`order `:** [_opcional_] Es un `string` que representa el ticket de la operación.
+	* **`reconciliation `:** [_opcional_] Es un `string` que identifica la conciliación bancaria.
+	* **`custom_01` :** [_opcional_] Es un `string` que representa un campo personalizable.
+	* **`custom_02` :** [_opcional_] Es un `string` que representa un campo personalizable.
+	* **`token`:** [_opcional_] Es un `string` que representa un token a almacenar. Se utiliza cuando el método de pago es de tipo `Card` o `Fpay`, y se desea asignar un token específico a la tarjeta utilizada.
+    * **`operation`:** [_obligatorio_] Es un `string` que representa el tipo de operacion a realizar, puede ser `authorization` o `preauthorization`
+    * **`url_ko`:** [_obligatorio_] Es un `string` que representa la url de redireccion en caso de haber un error en la autenticación. Al redireccionar a la url se le agrega el query string `request_id`. 
+    * **`url_ok`:** [_obligatorio_] Es un `string` que representa la url de redireccion en caso de una autenticación correcta. Al redireccionar a la url se le agrega el query string `request_id`. 
+
+### Salida
+El método `authentication` devuelve un objeto `Authentication`, contiene el atributo `url` que es la URL a la cual tiene que redireccional al cliente para completar la autenticacion.
+
+
+###  Ejemplo
+**- Autenticar una tarjeta**
+
+  ```java
+import sipay.responses.Authentication;
+import sipay.Amount;
+import sipay.paymethod.Card;
+import org.json.JSONObject;
+
+Amount amount = new Amount("100", "EUR");
+Card card = new Card("4242424242424242", 2050, 3);
+
+JSONObject options = new JSONObject();
+options.put("url_ok", "http://google.com");
+options.put("url_ko", "http://google.com/error");
+options.put("order", UUID.randomUUID().toString());
+options.put("custom_01", "custom-001");
+options.put("custom_02", "custom-002");
+options.put("operation", "authorization");
+options.put("reference", UUID.randomUUID().toString());
+
+Authorization auth = ecommerce.authorization(card, amount, options);
+  ```
+## 5.2.9 `confirm(requestId)`
+
+### Definición
+Este método `Ecommerce` permite enviar una petición a Sipay con la finalidad de confirmar una compra previamente autenticada.
+
+### Parámetros
+* `rquestId` : [_obligatorio_] `string` obtenido en la autenticación.
+
+### Salida
+El método `confirm` devuelve un objeto `Confirm`.
+
+###  Ejemplo
+**- Confirmar una compra**
+
+  ```java
+import sipay.responses.Confirm;
+
+Confirm confirm = ecommerce.confirm("5d514909ba220400019cbb44");
   ```
 
 ### 5.3 Responses
@@ -645,6 +711,26 @@ Este objeto no añade nada a lo indicado en los atributos comunes.
 
 #### 5.3.8 `Unregister`
 Este objeto no añade nada a lo descrito en los atributos comunes.
+
+#### 5.3.9 `Authentication`
+
+* **`url`:** Es un `string` que contiene la url a la cual hay que redireccionar al usuario para completar la autentication
+
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`. Ejemplo `getExpiredAt()`.
+
+#### 5.4.0 `Confirm`
+
+* **`amount`:** Objeto de de tipo `Amount` con el importe de la operación.
+* **`order`:** Es un `string` con el ticket de la operación.
+* **`cardTrade`:** Es un `string` que describe el emisor de la tarjeta.
+* **`cardType`:**  Es un `string` con el tipo de la tarjeta.
+* **`maskedCard`:**  Es un `string` con el número de la tarjeta enmascarado.
+* **`reconciliation`:**  Es un `string` identificador para la conciliación bancaria (p37).
+* **`transactionId`:**  Es un `string` identificador de la transacción.
+* **`aproval`:**  Es un `string` con el código de aprobación de la entidad.
+* **`authorizator`:**  Es un `string` con la entidad autorizadora de la operación.
+
+**Nota:** Los atributos indicados tienen sus métodos de consulta con `get[Nombre_del_atributo]`. Ejemplo `getExpiredAt()`.
 
 
 # 6. Documentación extendida ALTP
