@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Authorization",
+  "description": "Send a request of authorization to Sipay",
+  "type": "object",
+  "required": ["request_id"],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,64}$"
+    }
+  }
+}
