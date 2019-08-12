@@ -205,6 +205,44 @@ public class Ecommerce {
         return new Authorization(send(payload, methodName));
     }
 
+
+    /**
+     * Send a request of authentication to Sipay
+     *
+     * @param payMethod payment method of authentication
+     * @param amount amount of the operation
+     * @param options {
+     *                  operation: type of operation (authorization/preauthorization)
+     *                  reconciliation: identification for bank reconciliation,
+     *                  custom_01: custom field 1,
+     *                  custom_02: custom field 2,
+     *                  token: if this argument is set, it register payMethod with this token,
+     *                  url_ko: url on fail operation,
+     *                  url_ok: url on correct operation,
+     *                  url_allow_fragments: TODO: DOCUMENT IT
+     *                }
+     * @return
+     */
+    public Authentication authentication(@Nonnull PayMethod payMethod, @Nonnull Amount amount, @Nonnull JSONObject options) {
+        String methodName = "authentication";
+        validateSchema(methodName, options);
+
+        options.put("amount", amount.amount);
+        options.put("currency", amount.currency);
+        options = payMethod.update(options);
+
+        return new Authentication(send(options, methodName));
+    }
+
+    public Confirm confirm(@Nonnull  String requestId) {
+        JSONObject payload = new JSONObject();
+        payload.put("request_id", requestId);
+
+        validateSchema("confirm", payload);
+
+        return new Confirm(send(payload, "authentication/confirm"));
+    }
+
     /**
      * Send a request of cancellation to Sipay.
      *
@@ -310,7 +348,6 @@ public class Ecommerce {
      * @return Register: object that contain response of MDWR API.
      */
     public Register register(@Nonnull PayMethod card, @Nonnull String token) {
-
         if (card.getClass().getName().equals("paymethod.StoredCard")) {
             logger.severe("Incorrect payment method.");
             throw new java.lang.RuntimeException("Incorrect payment method.");

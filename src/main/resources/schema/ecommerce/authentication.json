@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Authentication",
+  "description": "Send a request of authentication to Sipay",
+  "type": "object",
+  "required": ["operation", "url_ko", "url_ok"],
+  "properties": {
+    "order": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,64}$"
+    },
+    "reconciliation": {
+      "type": "string",
+      "pattern": "^[0-9]{4}[a-zA-Z0-9]{0,8}$"
+    },
+    "custom_01": {
+      "type": "string"
+    },
+    "custom_02": {
+      "type": "string"
+    },
+    "token": {
+      "type": "string",
+      "pattern": "^[\\w-]{6,128}$"
+    },
+    "operation": {
+      "type": "string",
+      "enum": ["authorization", "preauthorization"]
+    },
+    "url_ok": {
+      "type": "string"
+    },
+    "url_ko": {
+      "type": "string"
+    },
+    "catcher": {
+      "type": "object",
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "pattern": "^[\\w-]{6,64}$"
+        }
+      }
+    }
+  }
+}
