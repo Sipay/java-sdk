@@ -12,7 +12,7 @@ public class Operations {
     public static void main(String[] args) {
         String path = "config.properties";
         String panExample = "4242424242424242";
-        Ecommerce ecommerce = new Ecommerce(path);
+        Ecommerce ecommerce = new Ecommerce(path, "", "");
 
         // region * Authorization with card (1€)
         Amount amount = new Amount("100", "EUR");
