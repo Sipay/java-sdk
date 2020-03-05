@@ -33,6 +33,7 @@ import java.util.logging.SimpleFormatter;
 
 public class Ecommerce {
 
+    String url;
     String key;
     String secret;
     String resource;
@@ -43,13 +44,13 @@ public class Ecommerce {
     Integer process;
     Logger logger;
 
-    public Ecommerce(@Nonnull String path) {
+    public Ecommerce(@Nonnull String path, @Nonnull String url, @Nonnull String secret) {
         Config config = new Config(path);
 
+        this.url = url;
         this.key = config.getProperty("key");
-        this.secret = config.getProperty("secret");
+        this.secret = secret;
         this.resource = config.getProperty("resource");
-        this.environment = config.getProperty("environment");
         this.version = config.getProperty("version");
         this.mode = config.getProperty("mode");
         this.connection = Integer.parseInt(config.getProperty("connection"));
@@ -70,7 +71,7 @@ public class Ecommerce {
                 setConnectionRequestTimeout(process * 1000).build();
         CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 
-        String path = "https://" + environment + ".sipay.es/mdwr/" + version + "/" + endpoint;
+        String path = url + "/" + endpoint;
         HttpPost post = new HttpPost(path);
 
         JSONObject response = new JSONObject();
