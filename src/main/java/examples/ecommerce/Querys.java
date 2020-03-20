@@ -10,7 +10,7 @@ public class Querys {
 
     public static void main(String[] args) {
         String path = "config.properties";
-        Ecommerce ecommerce = new Ecommerce(path, "", "");
+        Ecommerce ecommerce = new Ecommerce(path, "", "", "", "");
 
         // region * get card
         Card cardResp = ecommerce.card("2977e78d1e3e4c9fa6b70");
