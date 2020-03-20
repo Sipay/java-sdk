@@ -44,13 +44,13 @@ public class Ecommerce {
     Integer process;
     Logger logger;
 
-    public Ecommerce(@Nonnull String path, @Nonnull String url, @Nonnull String secret) {
+    public Ecommerce(@Nonnull String path, @Nonnull String url, @Nonnull String secret, @Nonnull String key, @Nonnull String resource) {
         Config config = new Config(path);
 
         this.url = url;
-        this.key = config.getProperty("key");
+        this.key = key;
         this.secret = secret;
-        this.resource = config.getProperty("resource");
+        this.resource = resource;
         this.version = config.getProperty("version");
         this.mode = config.getProperty("mode");
         this.connection = Integer.parseInt(config.getProperty("connection"));
