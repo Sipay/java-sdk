@@ -74,23 +74,26 @@ public class Ecommerce {
         String path = url + "/" + endpoint;
         HttpPost post = new HttpPost(path);
 
-        JSONObject response = new JSONObject();
+        JSONObject response;
         JSONObject params = generateBody(payload);
 
+        post.setEntity(new StringEntity(params.toString(), "UTF8"));
+        post.setHeader("Content-type", "application/json");
+        post.addHeader("Content-Signature", generateSignature(params.toString()));
+
+        HttpResponse resp;
         try {
-            post.setEntity(new StringEntity(params.toString(), "UTF8"));
-            post.setHeader("Content-type", "application/json");
-            post.addHeader("Content-Signature", generateSignature(params.toString()));
+            resp = client.execute(post);
+        } catch (IOException exception) {
+            logger.severe("Exception: " + exception.getMessage());
+            throw new HttpRequestException();
+        }
 
-            HttpResponse resp = client.execute(post);
-
+        try {
             response = new JSONObject(EntityUtils.toString(resp.getEntity()));
-        } catch (Exception E) {
-            logger.severe("Exception: " + E.getMessage());
-            response.put("url", path);
-            response.put("body", params);
-            response.put("code", -1);
-            response.put("description", E.getMessage());
+        } catch (IOException exception) {
+            logger.severe("Exception: " + exception.getMessage());
+            throw new RuntimeException();
         }
 
         logger.info("End send to endpoint " + endpoint);
